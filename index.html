@@ -3,20 +3,21 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AssetIQ — مقایسه هوشمند ارزش</title>
+<title>HardAnalyzer — ارزش واقعی هر دارایی با Vera</title>
+<script src="https://cdn.jsdelivr.net/npm/marked@12.0.2/marked.min.js"></script>
 <style>
-:root{--bg:#0a0a0a;--panel:#141414;--card:#1e1e1e;--bd:#2a2a2a;--win:#27ae60;--los:#f39c12;--bad:#e74c3c;--blu:#3498db;--pur:#9b59b6;--tx:#e8e8e8;--mut:#888}
+:root{--bg:#0a0a0a;--panel:#141414;--card:#1e1e1e;--bd:#2a2a2a;--win:#27ae60;--los:#f39c12;--bad:#e74c3c;--blu:#3498db;--pur:#9b59b6;--tx:#e8e8e8;--mut:#888;
+--emerald:#1f8a6f;--emerald-bright:#34d3a6;--gold:#d4a24e;--vpanel:#143029;--vline:#21463c}
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:var(--bg);color:var(--tx);font-family:'Segoe UI',Tahoma,sans-serif;padding-bottom:40px}
-header{background:#000;border-bottom:2px solid #222;padding:14px 18px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
-.logo{font-size:1.4rem;font-weight:900;letter-spacing:1px}.logo span{color:var(--blu)}
-.tag-badge{background:linear-gradient(90deg,#9b59b6,#3498db);color:#fff;font-size:.6rem;padding:3px 10px;border-radius:12px;font-weight:bold}
+header{background:#000;border-bottom:2px solid #222;padding:14px 18px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;position:sticky;top:0;z-index:50}
+.logo{font-size:1.4rem;font-weight:900;letter-spacing:1px}.logo span{color:var(--emerald-bright)}
+.tag-badge{background:linear-gradient(90deg,#1f8a6f,#34d3a6);color:#04150f;font-size:.6rem;padding:3px 10px;border-radius:12px;font-weight:bold}
 .hbtn{background:#1a1a1a;border:1px solid #3a3a3a;color:#ddd;padding:6px 14px;border-radius:18px;cursor:pointer;font-size:.8rem}
 .disc{background:#161616;border-bottom:1px solid #2c2c2c;color:#9a9a9a;font-size:.64rem;padding:6px 12px;text-align:center;line-height:1.5}
-/* hero */
 .hero{text-align:center;padding:30px 16px 10px}
 .hero h1{font-size:1.5rem;margin-bottom:10px;line-height:1.5}
-.hero h1 b{color:var(--blu)}
+.hero h1 b{color:var(--emerald-bright)}
 .hero p{color:var(--mut);font-size:.85rem;max-width:560px;margin:0 auto;line-height:1.8}
 .value-props{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:18px auto;max-width:680px}
 .vp{flex:1;min-width:180px;background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:14px;text-align:center}
@@ -24,13 +25,64 @@ header{background:#000;border-bottom:2px solid #222;padding:14px 18px;display:fl
 .vp b{display:block;color:#fff;font-size:.82rem;margin:6px 0 4px}
 .vp span{font-size:.7rem;color:var(--mut);line-height:1.6}
 .wrap{max-width:760px;margin:0 auto;padding:0 14px}
-/* chips */
+
+/* ===== LIVE VERA SECTION ===== */
+.vera-live{max-width:820px;margin:26px auto 0;padding:0 14px}
+.vera-card{background:radial-gradient(900px 400px at 80% -20%,#14332b 0%,transparent 60%),var(--vpanel);border:1px solid var(--vline);border-radius:18px;overflow:hidden}
+.vera-head{display:flex;align-items:center;gap:12px;padding:16px 20px;border-bottom:1px solid var(--vline)}
+.vera-logo{width:40px;height:40px;border-radius:11px;background:linear-gradient(135deg,var(--emerald-bright),var(--emerald));display:grid;place-items:center;font-weight:900;font-size:20px;color:#04150f}
+.vera-head h2{font-size:1rem;color:#fff}
+.vera-head p{font-size:.7rem;color:var(--mut);margin-top:2px}
+.vera-live-badge{margin-inline-start:auto;display:flex;align-items:center;gap:6px;font-size:.66rem;color:var(--emerald-bright)}
+.vera-live-badge .d{width:8px;height:8px;border-radius:50%;background:var(--emerald-bright);animation:vpulse 2s infinite}
+@keyframes vpulse{0%{box-shadow:0 0 0 0 rgba(52,211,166,.5)}70%{box-shadow:0 0 0 8px rgba(52,211,166,0)}100%{box-shadow:0 0 0 0 rgba(52,211,166,0)}}
+.vera-chat{min-height:120px;max-height:460px;overflow-y:auto;padding:18px 20px;display:flex;flex-direction:column;gap:16px}
+.vera-chat::-webkit-scrollbar{width:7px}.vera-chat::-webkit-scrollbar-thumb{background:var(--vline);border-radius:8px}
+.vmsg{display:flex;gap:10px;max-width:92%}
+.vmsg.user{margin-inline-start:auto;flex-direction:row-reverse}
+.vmsg .av{width:30px;height:30px;border-radius:9px;flex-shrink:0;display:grid;place-items:center;font-weight:700;font-size:12px}
+.vmsg.bot .av{background:linear-gradient(135deg,var(--emerald-bright),var(--emerald));color:#04150f}
+.vmsg.user .av{background:#1c3d34;color:var(--emerald-bright);border:1px solid var(--vline)}
+.vbub{padding:12px 15px;border-radius:14px;font-size:14px;line-height:1.9;word-break:break-word;overflow-x:auto}
+.vmsg.bot .vbub{background:#12291f;border:1px solid var(--vline);border-start-start-radius:4px}
+.vmsg.user .vbub{background:#1c3d34;border-start-end-radius:4px;white-space:pre-wrap}
+.vbub h2,.vbub h3{color:var(--emerald-bright);font-size:13px;margin:12px 0 7px;text-transform:uppercase;letter-spacing:.3px}
+.vbub h2:first-child,.vbub h3:first-child{margin-top:0}
+.vbub p{margin:7px 0}.vbub strong{color:var(--gold)}
+.vbub ul,.vbub ol{margin:7px 0;padding-inline-start:20px}.vbub li{margin:3px 0}
+.vbub hr{border:none;border-top:1px solid var(--vline);margin:12px 0}
+.vbub code{background:#0a1a15;padding:1px 5px;border-radius:4px;font-size:12px;color:var(--emerald-bright)}
+.vtable-wrap{overflow-x:auto;margin:11px 0;border-radius:9px;border:1px solid var(--vline)}
+.vbub table{border-collapse:collapse;width:100%;min-width:380px;font-size:12.5px}
+.vbub th{background:#0f261f;color:var(--gold);font-weight:600;text-align:start;padding:8px 11px;white-space:nowrap}
+.vbub td{padding:8px 11px;border-top:1px solid var(--vline)}
+.vbub tr:nth-child(even) td{background:rgba(255,255,255,.02)}
+.vtyping{display:flex;gap:5px;padding:5px 2px}
+.vtyping span{width:7px;height:7px;border-radius:50%;background:var(--emerald-bright);opacity:.5;animation:vb 1.3s infinite}
+.vtyping span:nth-child(2){animation-delay:.2s}.vtyping span:nth-child(3){animation-delay:.4s}
+@keyframes vb{0%,60%,100%{transform:translateY(0);opacity:.4}30%{transform:translateY(-5px);opacity:1}}
+.vera-welcome{text-align:center;color:var(--mut);font-size:.8rem;line-height:1.9;padding:8px 0}
+.vera-welcome .mk{color:var(--gold);font-size:.66rem;letter-spacing:2px;text-transform:uppercase;margin-bottom:8px}
+.vchips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:14px}
+.vchip{background:var(--vpanel);border:1px solid var(--vline);color:var(--mut);padding:8px 13px;border-radius:100px;font-size:.72rem;cursor:pointer;transition:.18s;font-family:inherit}
+.vchip:hover{border-color:var(--emerald);color:var(--tx)}
+.vera-composer{display:flex;gap:9px;align-items:flex-end;padding:12px 16px;border-top:1px solid var(--vline)}
+.vera-composer textarea{flex:1;background:#0f261f;border:1px solid var(--vline);border-radius:13px;outline:none;resize:none;color:var(--tx);font-family:inherit;font-size:14px;line-height:1.6;padding:10px 13px;max-height:120px}
+.vera-composer textarea:focus{border-color:var(--emerald)}
+.vsend{width:40px;height:40px;border-radius:12px;border:none;background:linear-gradient(135deg,var(--emerald-bright),var(--emerald));color:#04150f;cursor:pointer;display:grid;place-items:center;flex-shrink:0;transition:transform .15s,opacity .2s}
+.vsend:hover{transform:scale(1.06)}.vsend:disabled{opacity:.4;cursor:not-allowed;transform:none}
+.vsend svg{width:19px;height:19px}
+
+/* ===== DEMO SECTION (unchanged visuals) ===== */
+.demo-divider{max-width:760px;margin:34px auto 0;padding:0 14px;text-align:center}
+.demo-divider .ln{height:1px;background:var(--bd);margin:0 0 14px}
+.demo-divider h2{font-size:1rem;color:#fff;margin-bottom:6px}
+.demo-divider p{font-size:.74rem;color:var(--mut);line-height:1.7}
 .try-title{text-align:center;font-size:.78rem;color:var(--mut);margin:18px 0 10px}
 .chips{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:14px}
 .chip{background:#1a1a1a;border:1px solid #333;border-radius:18px;padding:8px 16px;font-size:.74rem;color:#ccc;cursor:pointer;transition:.2s}
 .chip:hover{border-color:var(--blu);color:var(--blu)}
 .chip.active{background:rgba(52,152,219,.12);border-color:var(--blu);color:var(--blu)}
-/* sections */
 .sec{background:var(--panel);border:1px solid var(--bd);border-radius:12px;padding:16px;margin-bottom:14px;animation:up .5s ease both}
 .sec h3{font-size:.82rem;color:var(--blu);border-bottom:1px solid var(--bd);padding-bottom:8px;margin-bottom:14px}
 @keyframes up{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
@@ -82,122 +134,195 @@ ul.mn li::before{content:"✗ ";color:var(--bad)}
 .meta b{color:#fff}
 .srcline{font-size:.6rem;color:#666;margin-top:10px;text-align:center;font-family:'Courier New',monospace;line-height:1.7}
 .demo-tag{display:inline-block;background:#2a2a2a;color:#aaa;font-size:.58rem;padding:2px 8px;border-radius:10px;margin-left:6px}
-.cta{background:linear-gradient(135deg,rgba(52,152,219,.1),rgba(155,89,182,.05));border:1px solid rgba(52,152,219,.3);border-radius:12px;padding:18px;text-align:center;margin-top:20px}
-.cta b{font-size:.95rem;color:#fff}
-.cta p{font-size:.74rem;color:var(--mut);margin-top:6px;line-height:1.7}
 footer{text-align:center;color:#555;font-size:.62rem;margin-top:20px;line-height:1.8}
-@media(max-width:560px){.radarwrap svg{max-width:280px}}
+@media(max-width:560px){.radarwrap svg{max-width:280px}.vmsg{max-width:97%}}
 </style>
 </head>
 <body>
 
 <header>
   <div style="display:flex;align-items:center;gap:10px">
-    <div class="logo">Asset<span>IQ</span></div>
-    <span class="tag-badge">SMART VALUE</span>
+    <div class="logo">Hard<span>Analyzer</span></div>
+    <span class="tag-badge">VERA ENGINE</span>
   </div>
   <button class="hbtn" id="langBtn" onclick="toggleLang()">EN</button>
 </header>
 
-<div class="disc">ℹ️ نسخه نمایشی — داده‌های نمونه | Demo version — sample data | صرفاً اطلاع‌رسانی، نه توصیه سرمایه‌گذاری</div>
+<div class="disc">ℹ️ تحلیل زنده با Vera + نمونه‌های نمایشی گرافیکی | Live Vera analysis + graphic demos | صرفاً اطلاع‌رسانی، نه توصیه سرمایه‌گذاری</div>
 
 <div class="hero">
-  <h1 data-k="heroH">با <b>AssetIQ</b>، باهوش‌تر بخرید</h1>
-  <p data-k="heroP">قبل از هر خرید، ارزش واقعی را بسنجید. AssetIQ کالاها را کنار هم می‌گذارد تا با پول خود، بهترین انتخاب را داشته باشید — نه کمتر، نه گران‌تر.</p>
+  <h1 data-k="heroH">با <b>Vera</b>، ارزش واقعی هر چیزی را بدان</h1>
+  <p data-k="heroP">قبل از هر خرید، ارزش واقعی را بسنج. Vera هر دارایی را شناسایی، تجزیه و ارزش‌گذاری می‌کند تا با پول خود، بهترین انتخاب را داشته باشی — نه کمتر، نه گران‌تر.</p>
   <div class="value-props">
-    <div class="vp"><div class="ic">🔼</div><b data-k="vp1t">پله بالاتر</b><span data-k="vp1d">گاهی با کمی پول بیشتر، ارزش خیلی بالاتری می‌گیرید</span></div>
-    <div class="vp"><div class="ic">🔄</div><b data-k="vp2t">گزینه بهتر</b><span data-k="vp2d">شاید گزینه‌ای بهتر هست که هنوز نمی‌شناسید</span></div>
+    <div class="vp"><div class="ic">🔼</div><b data-k="vp1t">پله بالاتر</b><span data-k="vp1d">گاهی با کمی پول بیشتر، ارزش خیلی بالاتری می‌گیری</span></div>
+    <div class="vp"><div class="ic">🔄</div><b data-k="vp2t">گزینه بهتر</b><span data-k="vp2d">شاید گزینه‌ای بهتر هست که هنوز نمی‌شناسی</span></div>
     <div class="vp"><div class="ic">🔽</div><b data-k="vp3t">بدون اسراف</b><span data-k="vp3d">گاهی ارزان‌تر، همان کار را عالی انجام می‌دهد</span></div>
   </div>
 </div>
 
+<!-- ===== LIVE VERA CHAT ===== -->
+<div class="vera-live">
+  <div class="vera-card">
+    <div class="vera-head">
+      <div class="vera-logo">V</div>
+      <div>
+        <h2 data-k="vTitle">تحلیل زنده با Vera</h2>
+        <p data-k="vSub">هر دارایی‌ای را بپرس — تجزیه، ارزش‌گذاری و مقایسه واقعی</p>
+      </div>
+      <div class="vera-live-badge"><span class="d"></span> <span data-k="vLive">زنده</span></div>
+    </div>
+    <div class="vera-chat" id="vchat">
+      <div class="vera-welcome" id="vwelcome">
+        <div class="mk">Universal Value Engine</div>
+        <div data-k="vWelcome">یک نمونه را بزن یا سؤالت را بنویس — Vera جدول کامل ارزش می‌سازد.</div>
+        <div class="vchips" id="vchips"></div>
+      </div>
+    </div>
+    <div class="vera-composer">
+      <textarea id="vinput" rows="1" data-k-ph="vPh" placeholder="مثلاً: آیفون ۱۴ را با گلکسی S23 اولترا مقایسه کن"></textarea>
+      <button class="vsend" id="vsend" title="ارسال">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== GRAPHIC DEMOS ===== -->
+<div class="demo-divider">
+  <div class="ln"></div>
+  <h2 data-k="demoT">🎨 نمونه‌های گرافیکی</h2>
+  <p data-k="demoP">این بخش با داده‌های نمونه، نمایش بصری تحلیل Vera را نشان می‌دهد: گیج امتیاز، رادار چندبعدی و مقایسه میله‌ای.</p>
+</div>
+
 <div class="wrap">
-  <div class="try-title" data-k="tryT">👇 یک نمونه را امتحان کنید</div>
+  <div class="try-title" data-k="tryT">👇 یک نمونه گرافیکی را امتحان کن</div>
   <div class="chips" id="chips"></div>
   <div id="out"></div>
 
-  <div class="cta">
-    <b data-k="ctaT">🚀 به‌زودی: تحلیل زنده با هوش مصنوعی</b>
-    <p data-k="ctaP">این نسخه نمایشی است. به‌زودی می‌توانید هر کالایی را تایپ کنید و AssetIQ آن را زنده تحلیل کند.</p>
-  </div>
-
   <footer>
-    <div data-k="footT">AssetIQ • مقایسه هوشمند ارزش دارایی</div>
-    <div style="margin-top:4px;opacity:.7">© 2026 AssetIQ — Demo • Salzburg, Austria 🇦🇹</div>
+    <div data-k="footT">HardAnalyzer • ارزش‌گذاری هوشمند با موتور Vera</div>
+    <div style="margin-top:4px;opacity:.7">© 2026 HardAnalyzer / TechNavi • Salzburg, Austria 🇦🇹</div>
   </footer>
 </div>
 
 <script>
+const WORKER_URL="https://vera-worker.amirnasiri2540hardanalyzer.workers.dev";
+// Safe markdown: use marked if available, else a self-contained fallback that
+// still renders tables, headers, bold and lists — so the page NEVER depends on the CDN.
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+function inline(s){return esc(s).replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/\*(.+?)\*/g,'<em>$1</em>').replace(/`(.+?)`/g,'<code>$1</code>')}
+function fallbackMD(txt){
+  const lines=txt.split('\n');let out=[],i=0;
+  while(i<lines.length){
+    let ln=lines[i];
+    // table: a line with | followed by a separator line of ---
+    if(/\|/.test(ln)&&i+1<lines.length&&/^\s*\|?[\s:*-]*-[\s:*|-]*\|?\s*$/.test(lines[i+1])){
+      const head=ln.split('|').map(c=>c.trim()).filter((c,idx,a)=>!(idx===0&&c==='')&&!(idx===a.length-1&&c===''));
+      i+=2;let rows=[];
+      while(i<lines.length&&/\|/.test(lines[i])){
+        const cells=lines[i].split('|').map(c=>c.trim()).filter((c,idx,a)=>!(idx===0&&c==='')&&!(idx===a.length-1&&c===''));
+        rows.push(cells);i++;
+      }
+      let th='<tr>'+head.map(h=>'<th>'+inline(h)+'</th>').join('')+'</tr>';
+      let tb=rows.map(r=>'<tr>'+r.map(c=>'<td>'+inline(c)+'</td>').join('')+'</tr>').join('');
+      out.push('<table>'+th+tb+'</table>');continue;
+    }
+    if(/^#{1,6}\s/.test(ln)){out.push('<h3>'+inline(ln.replace(/^#{1,6}\s/,''))+'</h3>');i++;continue}
+    if(/^\s*[-*]\s+/.test(ln)){
+      let items=[];while(i<lines.length&&/^\s*[-*]\s+/.test(lines[i])){items.push('<li>'+inline(lines[i].replace(/^\s*[-*]\s+/,''))+'</li>');i++}
+      out.push('<ul>'+items.join('')+'</ul>');continue;
+    }
+    if(/^\s*---\s*$/.test(ln)){out.push('<hr>');i++;continue}
+    if(ln.trim()===''){out.push('');i++;continue}
+    out.push('<p>'+inline(ln)+'</p>');i++;
+  }
+  return out.join('\n');
+}
+function renderMD(txt){
+  if(typeof marked!=="undefined"&&marked.parse){
+    try{return marked.parse(txt)}catch(e){}
+  }
+  return fallbackMD(txt);
+}
+if(typeof marked!=="undefined"&&marked.setOptions){marked.setOptions({gfm:true,breaks:true,headerIds:false,mangle:false})}
+
 /* ───── i18n ───── */
 const T={
- fa:{heroH:'با <b>AssetIQ</b>، باهوش‌تر بخرید',heroP:'قبل از هر خرید، ارزش واقعی را بسنجید. AssetIQ کالاها را کنار هم می‌گذارد تا با پول خود، بهترین انتخاب را داشته باشید — نه کمتر، نه گران‌تر.',vp1t:'پله بالاتر',vp1d:'گاهی با کمی پول بیشتر، ارزش خیلی بالاتری می‌گیرید',vp2t:'گزینه بهتر',vp2d:'شاید گزینه‌ای بهتر هست که هنوز نمی‌شناسید',vp3t:'بدون اسراف',vp3d:'گاهی ارزان‌تر، همان کار را عالی انجام می‌دهد',tryT:'👇 یک نمونه را امتحان کنید',ctaT:'🚀 به‌زودی: تحلیل زنده با هوش مصنوعی',ctaP:'این نسخه نمایشی است. به‌زودی می‌توانید هر کالایی را تایپ کنید و AssetIQ آن را زنده تحلیل کند.',footT:'AssetIQ • مقایسه هوشمند ارزش دارایی',score:'امتیاز AssetIQ',val:'ارزش تخمینی',price:'قیمت آگهی',profit:'سود خریدار',analysis:'نتیجه‌گیری AssetIQ',details:'جزئیات کامل',specs:'مشخصات',pros:'مزایا',cons:'معایب',verdict:'نتیجه',radar:'رادار چندبعدی',itembyitem:'مقایسه آیتم به آیتم',trend:'روند بازار',neutral:'داده خنثی — بدون توصیه خرید/فروش'},
- en:{heroH:'Buy smarter with <b>AssetIQ</b>',heroP:'Before any purchase, weigh the real value. AssetIQ places items side by side so your money makes the best choice — not less, not overpriced.',vp1t:'Step Up',vp1d:'Sometimes a little more money buys far more value',vp2t:'Better Option',vp2d:'Maybe a better choice exists you don\'t know yet',vp3t:'No Waste',vp3d:'Sometimes cheaper does the same job perfectly',tryT:'👇 Try a sample',ctaT:'🚀 Coming soon: live AI analysis',ctaP:'This is a demo. Soon you\'ll type any item and AssetIQ analyzes it live.',footT:'AssetIQ • Smart asset value comparison',score:'AssetIQ Score',val:'Est. Value',price:'Listing',profit:'Buyer Profit',analysis:'AssetIQ Verdict',details:'Full Details',specs:'Specs',pros:'Pros',cons:'Cons',verdict:'Verdict',radar:'Multi-dimensional Radar',itembyitem:'Item-by-item Comparison',trend:'Market Trend',neutral:'Neutral data — no buy/sell advice'}
+ fa:{heroH:'با <b>Vera</b>، ارزش واقعی هر چیزی را بدان',heroP:'قبل از هر خرید، ارزش واقعی را بسنج. Vera هر دارایی را شناسایی، تجزیه و ارزش‌گذاری می‌کند تا با پول خود، بهترین انتخاب را داشته باشی — نه کمتر، نه گران‌تر.',vp1t:'پله بالاتر',vp1d:'گاهی با کمی پول بیشتر، ارزش خیلی بالاتری می‌گیری',vp2t:'گزینه بهتر',vp2d:'شاید گزینه‌ای بهتر هست که هنوز نمی‌شناسی',vp3t:'بدون اسراف',vp3d:'گاهی ارزان‌تر، همان کار را عالی انجام می‌دهد',vTitle:'تحلیل زنده با Vera',vSub:'هر دارایی‌ای را بپرس — تجزیه، ارزش‌گذاری و مقایسه واقعی',vLive:'زنده',vWelcome:'یک نمونه را بزن یا سؤالت را بنویس — Vera جدول کامل ارزش می‌سازد.',vPh:'مثلاً: آیفون ۱۴ را با گلکسی S23 اولترا مقایسه کن',demoT:'🎨 نمونه‌های گرافیکی',demoP:'این بخش با داده‌های نمونه، نمایش بصری تحلیل Vera را نشان می‌دهد: گیج امتیاز، رادار چندبعدی و مقایسه میله‌ای.',tryT:'👇 یک نمونه گرافیکی را امتحان کن',footT:'HardAnalyzer • ارزش‌گذاری هوشمند با موتور Vera',score:'امتیاز Vera',val:'ارزش تخمینی',price:'قیمت آگهی',profit:'سود خریدار',analysis:'نتیجه‌گیری Vera',details:'جزئیات کامل',specs:'مشخصات',pros:'مزایا',cons:'معایب',verdict:'نتیجه',radar:'رادار چندبعدی',itembyitem:'مقایسه آیتم به آیتم',trend:'روند بازار',neutral:'داده خنثی — بدون توصیه خرید/فروش'},
+ en:{heroH:'Know the real value of anything with <b>Vera</b>',heroP:'Before any purchase, weigh the real value. Vera identifies, decomposes and values any asset so your money makes the best choice — not less, not overpriced.',vp1t:'Step Up',vp1d:'Sometimes a little more money buys far more value',vp2t:'Better Option',vp2d:'Maybe a better choice exists you don\'t know yet',vp3t:'No Waste',vp3d:'Sometimes cheaper does the same job perfectly',vTitle:'Live analysis with Vera',vSub:'Ask about any asset — real decomposition, valuation & comparison',vLive:'Live',vWelcome:'Tap a sample or type your question — Vera builds a full value table.',vPh:'e.g. compare iPhone 14 with Galaxy S23 Ultra',demoT:'🎨 Graphic samples',demoP:'This section uses sample data to show Vera\'s visual analysis: score gauges, multi-dimensional radar and bar comparison.',tryT:'👇 Try a graphic sample',footT:'HardAnalyzer • Smart valuation powered by Vera',score:'Vera Score',val:'Est. Value',price:'Listing',profit:'Buyer Profit',analysis:'Vera Verdict',details:'Full Details',specs:'Specs',pros:'Pros',cons:'Cons',verdict:'Verdict',radar:'Multi-dimensional Radar',itembyitem:'Item-by-item Comparison',trend:'Market Trend',neutral:'Neutral data — no buy/sell advice'}
 };
 let lang='fa';
 const t=k=>T[lang][k]||k;
 
-/* ───── demo datasets ───── */
+/* ═══════════ LIVE VERA CHAT ═══════════ */
+const vSamples={
+ fa:['آیفون ۱۴ را با گلکسی S23 اولترا مقایسه کن','ارزش RTX 4070 دست‌دوم در اتریش؟','لپ‌تاپ گیمینگ زیر ۱۰۰۰ یورو پیشنهاد بده'],
+ en:['Compare iPhone 14 with Galaxy S23 Ultra','Used RTX 4070 value in Austria?','Suggest a gaming laptop under €1000']
+};
+const vHistory=[];
+const vchat=document.getElementById('vchat');
+const vinput=document.getElementById('vinput');
+const vsend=document.getElementById('vsend');
+let vwelcome=document.getElementById('vwelcome');
+
+function buildVChips(){
+ const box=document.getElementById('vchips');if(!box)return;box.innerHTML='';
+ vSamples[lang].forEach(s=>{const b=document.createElement('button');b.className='vchip';b.textContent=s;b.onclick=()=>{vinput.value=s;vSend()};box.appendChild(b)});
+}
+vinput.addEventListener('input',()=>{vinput.style.height='auto';vinput.style.height=Math.min(vinput.scrollHeight,120)+'px'});
+vinput.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();vSend()}});
+vsend.addEventListener('click',vSend);
+
+function vAdd(role,text){
+ if(vwelcome){vwelcome.remove();vwelcome=null}
+ const m=document.createElement('div');m.className='vmsg '+(role==='user'?'user':'bot');
+ const av=document.createElement('div');av.className='av';av.textContent=role==='user'?(lang==='fa'?'شما':'You'):'V';
+ const b=document.createElement('div');b.className='vbub';
+ if(role==='user'){b.textContent=text}
+ else{const h=renderMD(text);b.innerHTML=h.replace(/<table>/g,'<div class="vtable-wrap"><table>').replace(/<\/table>/g,'</table></div>')}
+ m.appendChild(av);m.appendChild(b);vchat.appendChild(m);vchat.scrollTop=vchat.scrollHeight;
+}
+function vTyping(){
+ if(vwelcome){vwelcome.remove();vwelcome=null}
+ const m=document.createElement('div');m.className='vmsg bot';m.id='vtyping';
+ m.innerHTML='<div class="av">V</div><div class="vbub"><div class="vtyping"><span></span><span></span><span></span></div></div>';
+ vchat.appendChild(m);vchat.scrollTop=vchat.scrollHeight;
+}
+function vRmTyping(){const t=document.getElementById('vtyping');if(t)t.remove()}
+
+async function vSend(){
+ const text=vinput.value.trim();if(!text)return;
+ vAdd('user',text);vHistory.push({role:'user',content:text});
+ vinput.value='';vinput.style.height='auto';vsend.disabled=true;vTyping();
+ try{
+  const res=await fetch(WORKER_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:vHistory})});
+  const data=await res.json();vRmTyping();
+  if(data.reply){vAdd('bot',data.reply);vHistory.push({role:'assistant',content:data.reply})}
+  else{vAdd('bot','⚠️ '+(data.error||'پاسخی دریافت نشد')+(data.detail?'\n'+data.detail:''))}
+ }catch(err){vRmTyping();vAdd('bot','⚠️ '+(lang==='fa'?'ارتباط برقرار نشد. اتصال اینترنت را بررسی کن.':'Connection failed. Check your internet.')+'\n'+err.message)}
+ finally{vsend.disabled=false;vinput.focus()}
+}
+
+/* ═══════════ GRAPHIC DEMOS ═══════════ */
 const DEMO={
- laptop:{
-  title:{fa:'💻 سه لپ‌تاپ',en:'💻 Three Laptops'},
-  fin:false,winner:1,
-  criteria:{fa:['کارایی','ارزش خرید','کیفیت ساخت','ارتقاءپذیری'],en:['Performance','Value','Build','Upgradability']},
-  analysis:{fa:'لپ‌تاپ وسط <b>بهترین تعادل</b> را دارد: فقط €۲۵ بیشتر از گزینه ارزان، اما رم DDR4 و SSD سریع‌تر که ارزش را تقریباً دو برابر می‌کند. گزینه گران‌تر اگرچه قوی است، €۱۵۰ اضافه برای نیاز روزمره توجیه ندارد.',en:'The middle laptop offers the <b>best balance</b>: only €25 more than the cheap option, but DDR4 RAM and faster SSD nearly double the value. The premium one, though strong, isn\'t worth €150 extra for daily use.'},
-  trend:{fa:'قیمت لپ‌تاپ‌های دست‌دوم نسل قدیم به‌آرامی در حال کاهش است.',en:'Used older-gen laptop prices are gently declining.'},
-  assets:[
+ laptop:{title:{fa:'💻 سه لپ‌تاپ',en:'💻 Three Laptops'},fin:false,winner:1,criteria:{fa:['کارایی','ارزش خرید','کیفیت ساخت','ارتقاءپذیری'],en:['Performance','Value','Build','Upgradability']},analysis:{fa:'لپ‌تاپ وسط <b>بهترین تعادل</b> را دارد: فقط €۲۵ بیشتر از گزینه ارزان، اما رم DDR4 و SSD سریع‌تر که ارزش را تقریباً دو برابر می‌کند.',en:'The middle laptop offers the <b>best balance</b>: only €25 more but DDR4 RAM and faster SSD nearly double the value.'},trend:{fa:'قیمت لپ‌تاپ‌های دست‌دوم نسل قدیم به‌آرامی کاهش می‌یابد.',en:'Used older-gen laptop prices are gently declining.'},assets:[
    {n:{fa:'لپ‌تاپ DDR3 (ارزان)',en:'DDR3 Laptop (cheap)'},price:200,val:185,score:4100,crit:[40,55,60,30],specs:{fa:['Core i5 نسل ۶','۸GB DDR3','HDD 500GB'],en:['Core i5 6th gen','8GB DDR3','500GB HDD']},pros:{fa:['ارزان','سبک'],en:['Cheap','Light']},cons:{fa:['رم قدیمی','هارد کند'],en:['Old RAM','Slow disk']},vd:'FAIR'},
    {n:{fa:'لپ‌تاپ DDR4 ⭐',en:'DDR4 Laptop ⭐'},price:225,val:340,score:7900,crit:[75,92,78,80],specs:{fa:['Core i5 نسل ۸','۱۶GB DDR4','SSD 512GB'],en:['Core i5 8th gen','16GB DDR4','512GB SSD']},pros:{fa:['رم سریع','SSD','ارزش عالی'],en:['Fast RAM','SSD','Great value']},cons:{fa:['کمی گران‌تر'],en:['Slightly pricier']},vd:'STRONG_BUY'},
-   {n:{fa:'لپ‌تاپ گیمینگ',en:'Gaming Laptop'},price:375,val:410,score:8400,crit:[90,60,82,75],specs:{fa:['Core i7','۱۶GB','RTX گرافیک'],en:['Core i7','16GB','RTX GPU']},pros:{fa:['خیلی قوی'],en:['Very powerful']},cons:{fa:['€۱۵۰ گران‌تر','سنگین'],en:['€150 pricier','Heavy']},vd:'FAIR'}
-  ]
- },
- phone:{
-  title:{fa:'📱 آیفون vs سامسونگ',en:'📱 iPhone vs Samsung'},
-  fin:false,winner:0,
-  criteria:{fa:['دوربین','عملکرد','باتری','ارزش'],en:['Camera','Performance','Battery','Value']},
-  analysis:{fa:'<b>آیفون ۱۴</b> با €۳۰ اختلاف، دوربین و دوام نرم‌افزاری بهتری دارد و ارزش بازفروش بالاتری حفظ می‌کند. سامسونگ S23 انتخاب خوبی است اما برای حفظ ارزش بلندمدت، آیفون کمی جلوتر است.',en:'<b>iPhone 14</b>, just €30 apart, has a better camera and software longevity, holding higher resale value. The Galaxy S23 is solid, but for long-term value the iPhone edges ahead.'},
-  trend:{fa:'گوشی‌های پرچم‌دار دست‌دوم ارزش خود را خوب حفظ می‌کنند.',en:'Used flagship phones hold their value well.'},
-  assets:[
+   {n:{fa:'لپ‌تاپ گیمینگ',en:'Gaming Laptop'},price:375,val:410,score:8400,crit:[90,60,82,75],specs:{fa:['Core i7','۱۶GB','RTX گرافیک'],en:['Core i7','16GB','RTX GPU']},pros:{fa:['خیلی قوی'],en:['Very powerful']},cons:{fa:['€۱۵۰ گران‌تر','سنگین'],en:['€150 pricier','Heavy']},vd:'FAIR'}]},
+ phone:{title:{fa:'📱 آیفون vs سامسونگ',en:'📱 iPhone vs Samsung'},fin:false,winner:0,criteria:{fa:['دوربین','عملکرد','باتری','ارزش'],en:['Camera','Performance','Battery','Value']},analysis:{fa:'<b>آیفون ۱۴</b> با €۳۰ اختلاف، دوربین و دوام نرم‌افزاری بهتری دارد و ارزش بازفروش بالاتری حفظ می‌کند.',en:'<b>iPhone 14</b>, just €30 apart, has a better camera and software longevity, holding higher resale value.'},trend:{fa:'گوشی‌های پرچم‌دار دست‌دوم ارزش خود را خوب حفظ می‌کنند.',en:'Used flagship phones hold their value well.'},assets:[
    {n:{fa:'iPhone 14 ⭐',en:'iPhone 14 ⭐'},price:450,val:520,score:8200,crit:[88,85,78,82],specs:{fa:['128GB','A15 Bionic','iOS طولانی'],en:['128GB','A15 Bionic','Long iOS']},pros:{fa:['دوربین عالی','بازفروش بالا'],en:['Great camera','High resale']},cons:{fa:['باتری متوسط'],en:['Average battery']},vd:'STRONG_BUY'},
-   {n:{fa:'Galaxy S23',en:'Galaxy S23'},price:420,val:440,score:7600,crit:[82,88,80,75],specs:{fa:['128GB','Snapdragon 8','صفحه AMOLED'],en:['128GB','Snapdragon 8','AMOLED']},pros:{fa:['صفحه عالی','شارژ سریع'],en:['Great screen','Fast charge']},cons:{fa:['بازفروش کمتر'],en:['Lower resale']},vd:'BUY'}
-  ]
- },
- apartment:{
-  title:{fa:'🏠 دو آپارتمان',en:'🏠 Two Apartments'},
-  fin:false,winner:0,
-  criteria:{fa:['موقعیت','متراژ','وضعیت','نقدشوندگی'],en:['Location','Size','Condition','Liquidity']},
-  analysis:{fa:'<b>آپارتمان مرکز زالتسبورگ</b> با وجود متراژ کمتر، به‌خاطر موقعیت عالی و تقاضای بالا، ارزش بازفروش و اجاره بهتری دارد. آپارتمان حومه ارزان‌تر است اما رشد ارزش کندتری خواهد داشت.',en:'The <b>Salzburg city-center flat</b>, despite less space, has better resale and rental value thanks to prime location and high demand. The suburban flat is cheaper but will appreciate more slowly.'},
-  trend:{fa:'قیمت مسکن مرکز زالتسبورگ سالانه حدود ۳٪ رشد دارد.',en:'Salzburg central housing rises ~3% annually.'},
-  assets:[
+   {n:{fa:'Galaxy S23',en:'Galaxy S23'},price:420,val:440,score:7600,crit:[82,88,80,75],specs:{fa:['128GB','Snapdragon 8','صفحه AMOLED'],en:['128GB','Snapdragon 8','AMOLED']},pros:{fa:['صفحه عالی','شارژ سریع'],en:['Great screen','Fast charge']},cons:{fa:['بازفروش کمتر'],en:['Lower resale']},vd:'BUY'}]},
+ apartment:{title:{fa:'🏠 دو آپارتمان',en:'🏠 Two Apartments'},fin:false,winner:0,criteria:{fa:['موقعیت','متراژ','وضعیت','نقدشوندگی'],en:['Location','Size','Condition','Liquidity']},analysis:{fa:'<b>آپارتمان مرکز زالتسبورگ</b> با وجود متراژ کمتر، به‌خاطر موقعیت عالی و تقاضای بالا، ارزش بازفروش و اجاره بهتری دارد.',en:'The <b>Salzburg city-center flat</b>, despite less space, has better resale and rental value thanks to prime location.'},trend:{fa:'قیمت مسکن مرکز زالتسبورگ سالانه حدود ۳٪ رشد دارد.',en:'Salzburg central housing rises ~3% annually.'},assets:[
    {n:{fa:'مرکز زالتسبورگ ۷۵م ⭐',en:'Salzburg Center 75m² ⭐'},price:398000,val:420000,score:7600,crit:[92,65,80,85],specs:{fa:['۷۵ متر','ساخت ۲۰۱۲','مرکز شهر'],en:['75m²','Built 2012','City center']},pros:{fa:['موقعیت عالی','نقدشونده'],en:['Prime location','Liquid']},cons:{fa:['متراژ کمتر'],en:['Less space']},vd:'BUY'},
-   {n:{fa:'Hallein ۹۵م',en:'Hallein 95m²'},price:295000,val:305000,score:6400,crit:[62,85,82,60],specs:{fa:['۹۵ متر','ساخت ۲۰۰۵','۱۵ دقیقه قطار'],en:['95m²','Built 2005','15min train']},pros:{fa:['ارزان‌تر','بزرگ‌تر'],en:['Cheaper','Bigger']},cons:{fa:['دورتر از مرکز'],en:['Farther out']},vd:'FAIR'}
-  ]
- },
- car:{
-  title:{fa:'🚗 سه خودرو',en:'🚗 Three Cars'},
-  fin:false,winner:0,
-  criteria:{fa:['قیمت','کارکرد','اعتبار','مصرف'],en:['Price','Mileage','Reliability','Economy']},
-  analysis:{fa:'<b>تویوتا کرولا</b> با کارکرد کم، گارانتی فعال و اعتبار بالای هیبریدی، بهترین ارزش بلندمدت را دارد. گلف و اکتاویا گزینه‌های خوبی‌اند اما کرولا در حفظ ارزش و مصرف سوخت برتری دارد.',en:'The <b>Toyota Corolla</b>, with low mileage, active warranty and strong hybrid reliability, offers the best long-term value. The Golf and Octavia are good, but the Corolla leads in value retention and fuel economy.'},
-  trend:{fa:'خودروهای هیبریدی دست‌دوم ارزش خود را خوب حفظ می‌کنند.',en:'Used hybrid cars retain value well.'},
-  assets:[
+   {n:{fa:'Hallein ۹۵م',en:'Hallein 95m²'},price:295000,val:305000,score:6400,crit:[62,85,82,60],specs:{fa:['۹۵ متر','ساخت ۲۰۰۵','۱۵ دقیقه قطار'],en:['95m²','Built 2005','15min train']},pros:{fa:['ارزان‌تر','بزرگ‌تر'],en:['Cheaper','Bigger']},cons:{fa:['دورتر از مرکز'],en:['Farther out']},vd:'FAIR'}]},
+ car:{title:{fa:'🚗 سه خودرو',en:'🚗 Three Cars'},fin:false,winner:0,criteria:{fa:['قیمت','کارکرد','اعتبار','مصرف'],en:['Price','Mileage','Reliability','Economy']},analysis:{fa:'<b>تویوتا کرولا</b> با کارکرد کم، گارانتی فعال و اعتبار بالای هیبریدی، بهترین ارزش بلندمدت را دارد.',en:'The <b>Toyota Corolla</b>, with low mileage, active warranty and strong hybrid reliability, offers the best long-term value.'},trend:{fa:'خودروهای هیبریدی دست‌دوم ارزش خود را خوب حفظ می‌کنند.',en:'Used hybrid cars retain value well.'},assets:[
    {n:{fa:'Toyota Corolla 2021 ⭐',en:'Toyota Corolla 2021 ⭐'},price:19500,val:23400,score:7800,crit:[78,85,92,88],specs:{fa:['۴۰هزار کیلومتر','هیبرید','گارانتی'],en:['40k km','Hybrid','Warranty']},pros:{fa:['کم‌مصرف','اعتبار بالا'],en:['Economical','Reliable']},cons:{fa:['تجهیزات پایه'],en:['Base trim']},vd:'STRONG_BUY'},
    {n:{fa:'VW Golf 2020',en:'VW Golf 2020'},price:18900,val:19500,score:7100,crit:[75,70,80,75],specs:{fa:['۵۵هزار کیلومتر','بنزینی','شاسی محکم'],en:['55k km','Petrol','Solid build']},pros:{fa:['رانندگی عالی'],en:['Great drive']},cons:{fa:['کارکرد بیشتر'],en:['Higher km']},vd:'BUY'},
-   {n:{fa:'Škoda Octavia 2021',en:'Škoda Octavia 2021'},price:19200,val:20100,score:7300,crit:[76,78,82,80],specs:{fa:['۴۸هزار کیلومتر','جادار','اقتصادی'],en:['48k km','Spacious','Economical']},pros:{fa:['فضای زیاد'],en:['Spacious']},cons:{fa:['ارزش بازفروش متوسط'],en:['Average resale']},vd:'BUY'}
-  ]
- },
- stock:{
-  title:{fa:'📈 سهام (نمونه)',en:'📈 Stocks (sample)'},
-  fin:true,winner:-1,
-  criteria:{fa:['نقدشوندگی','رشد','ثبات','سود تقسیمی'],en:['Liquidity','Growth','Stability','Dividend']},
-  neutral:{fa:'این دو سهم صرفاً جهت <b>نمایش داده خنثی</b> هستند. اپل P/E بالاتر (۳۲) و رشد خدمات دارد؛ مایکروسافت P/E مشابه با تمرکز ابری. هیچ‌کدام توصیه خرید نیستند — صرفاً اطلاعات واقعی.',en:'These two stocks are shown only as <b>neutral data</b>. Apple has higher P/E (32) and services growth; Microsoft similar P/E with cloud focus. Neither is a buy recommendation — factual info only.'},
-  trend:{fa:'تحلیل الگوی تاریخی — پیش‌بینی آینده نیست.',en:'Historical pattern analysis — not a future prediction.'},
-  assets:[
+   {n:{fa:'Škoda Octavia 2021',en:'Škoda Octavia 2021'},price:19200,val:20100,score:7300,crit:[76,78,82,80],specs:{fa:['۴۸هزار کیلومتر','جادار','اقتصادی'],en:['48k km','Spacious','Economical']},pros:{fa:['فضای زیاد'],en:['Spacious']},cons:{fa:['ارزش بازفروش متوسط'],en:['Average resale']},vd:'BUY'}]},
+ stock:{title:{fa:'📈 سهام (نمونه)',en:'📈 Stocks (sample)'},fin:true,winner:-1,criteria:{fa:['نقدشوندگی','رشد','ثبات','سود تقسیمی'],en:['Liquidity','Growth','Stability','Dividend']},neutral:{fa:'این دو سهم صرفاً جهت <b>نمایش داده خنثی</b> هستند. هیچ‌کدام توصیه خرید نیستند — صرفاً اطلاعات واقعی.',en:'These two stocks are shown only as <b>neutral data</b>. Neither is a buy recommendation — factual info only.'},trend:{fa:'تحلیل الگوی تاریخی — پیش‌بینی آینده نیست.',en:'Historical pattern analysis — not a future prediction.'},assets:[
    {n:{fa:'Apple (AAPL)',en:'Apple (AAPL)'},price:212,val:null,score:8200,crit:[95,82,85,40],specs:{fa:['P/E: ۳۲','بازار: NASDAQ','۵۲ هفته: $168-230'],en:['P/E: 32','NASDAQ','52w: $168-230']},pros:{fa:['نقدشوندگی بالا','اکوسیستم'],en:['High liquidity','Ecosystem']},cons:{fa:['P/E بالا'],en:['High P/E']},vd:null},
-   {n:{fa:'Microsoft (MSFT)',en:'Microsoft (MSFT)'},price:425,val:null,score:8400,crit:[94,85,88,45],specs:{fa:['P/E: ۳۵','بازار: NASDAQ','رشد ابری'],en:['P/E: 35','NASDAQ','Cloud growth']},pros:{fa:['رشد ابری','ثبات'],en:['Cloud growth','Stable']},cons:{fa:['P/E بالاتر'],en:['Higher P/E']},vd:null}
-  ]
- }
+   {n:{fa:'Microsoft (MSFT)',en:'Microsoft (MSFT)'},price:425,val:null,score:8400,crit:[94,85,88,45],specs:{fa:['P/E: ۳۵','بازار: NASDAQ','رشد ابری'],en:['P/E: 35','NASDAQ','Cloud growth']},pros:{fa:['رشد ابری','ثبات'],en:['Cloud growth','Stable']},cons:{fa:['P/E بالاتر'],en:['Higher P/E']},vd:null}]}
 };
-
-/* ───── helpers ───── */
 const VD={STRONG_BUY:{fa:'خرید قوی',c:'#27ae60'},BUY:{fa:'خرید',c:'#2ecc71'},FAIR:{fa:'منصفانه',c:'#f39c12'},OVERPRICED:{fa:'گران',c:'#e74c3c'},AVOID:{fa:'پرهیز',c:'#c0392b'}};
 const VDEN={STRONG_BUY:'STRONG BUY',BUY:'BUY',FAIR:'FAIR',OVERPRICED:'OVERPRICED',AVOID:'AVOID'};
 const fmt=n=>n==null?'—':('€'+Number(n).toLocaleString('de-DE'));
@@ -205,106 +330,17 @@ const PALETTE=['#3498db','#f39c12','#9b59b6'];
 function colorsFor(A,W,fin){const o=[];let p=0;A.forEach((a,i)=>o.push((!fin&&i===W)?'#27ae60':PALETTE[p++%3]));return o}
 function nm(a){return a.n[lang]||a.n.fa}
 function short(s){s=String(s||'');return s.length>20?s.slice(0,19)+'…':s}
-
-function barBlock(title,A,vals,cols,fmtFn){
- let mx=1;vals.forEach(v=>{if(v!=null&&Math.abs(v)>mx)mx=Math.abs(v)});
- let rows='';
- A.forEach((a,i)=>{const v=vals[i];if(v==null)return;const w=Math.max(Math.abs(v)/mx*100,3);
-  rows+='<div class="brow"><div class="bname">'+short(nm(a))+'</div><div class="btrack"><div class="bfill" data-w="'+w.toFixed(1)+'%" style="background:'+cols[i]+'"></div></div><div class="bval">'+fmtFn(v)+'</div></div>';});
- return '<div class="mblock"><div class="mtitle">'+title+'</div>'+rows+'</div>';
-}
-
-function radarSVG(criteria,A,cols){
- const cx=160,cy=148,R=100,k=criteria.length;
- function pt(ci,v){const a=-Math.PI/2+ci*2*Math.PI/k,r=R*v/100;return[(cx+r*Math.cos(a)).toFixed(1),(cy+r*Math.sin(a)).toFixed(1)]}
- let rings='';[25,50,75,100].forEach(p=>{let ps=[];for(let i=0;i<k;i++)ps.push(pt(i,p).join(','));rings+='<polygon points="'+ps.join(' ')+'" fill="none" stroke="#252525" stroke-width="1"/>';});
- let axes='',labels='';criteria.forEach((c,i)=>{const e=pt(i,100);axes+='<line x1="'+cx+'" y1="'+cy+'" x2="'+e[0]+'" y2="'+e[1]+'" stroke="#252525" stroke-width="1"/>';const l=pt(i,122);labels+='<text x="'+l[0]+'" y="'+l[1]+'" text-anchor="middle" fill="#999" font-size="10.5">'+c+'</text>';});
- let polys='';A.forEach((a,ai)=>{let ps=[];for(let ci=0;ci<k;ci++){let v=Math.max(0,Math.min(100,a.crit[ci]||0));ps.push(pt(ci,v).join(','))}polys+='<polygon class="rpoly" points="'+ps.join(' ')+'" fill="'+cols[ai]+'" stroke="'+cols[ai]+'" style="animation-delay:'+(ai*0.25)+'s"/>';});
- return '<svg viewBox="0 0 320 300">'+rings+axes+polys+labels+'</svg>';
-}
-
-function gaugeBox(a,i,col,isWin,fin,rank){
- const medals=['🥇','🥈','🥉'];
- return '<div class="gbox '+(isWin?'winb':'')+'"><div class="gname">'+(isWin?'👑 ':'')+nm(a)+'</div>'
- +'<svg viewBox="0 0 200 112" width="100%"><path d="M20 100 A80 80 0 0 1 180 100" stroke="#252525" stroke-width="16" fill="none"/><path d="M20 100 A80 80 0 0 1 180 100" class="gfill" id="g'+i+'" stroke="'+col+'"/></svg>'
- +'<span class="gscore" style="color:'+col+'">'+Number(a.score||0).toLocaleString()+'</span>'
- +'<span class="glbl">'+t('score')+' '+(fin?'':'<span class="medal">'+(medals[rank]||'')+'</span>')+'</span>'
- +'<div class="pricetag">'+(a.val!=null?t('val')+': <b>'+fmt(a.val)+'</b><br>':'')+t('price')+': <b>'+fmt(a.price)+'</b></div></div>';
-}
-
-/* ───── render ───── */
+function barBlock(title,A,vals,cols,fmtFn){let mx=1;vals.forEach(v=>{if(v!=null&&Math.abs(v)>mx)mx=Math.abs(v)});let rows='';A.forEach((a,i)=>{const v=vals[i];if(v==null)return;const w=Math.max(Math.abs(v)/mx*100,3);rows+='<div class="brow"><div class="bname">'+short(nm(a))+'</div><div class="btrack"><div class="bfill" data-w="'+w.toFixed(1)+'%" style="background:'+cols[i]+'"></div></div><div class="bval">'+fmtFn(v)+'</div></div>'});return '<div class="mblock"><div class="mtitle">'+title+'</div>'+rows+'</div>'}
+function radarSVG(criteria,A,cols){const cx=160,cy=148,R=100,k=criteria.length;function pt(ci,v){const a=-Math.PI/2+ci*2*Math.PI/k,r=R*v/100;return[(cx+r*Math.cos(a)).toFixed(1),(cy+r*Math.sin(a)).toFixed(1)]}let rings='';[25,50,75,100].forEach(p=>{let ps=[];for(let i=0;i<k;i++)ps.push(pt(i,p).join(','));rings+='<polygon points="'+ps.join(' ')+'" fill="none" stroke="#252525" stroke-width="1"/>'});let axes='',labels='';criteria.forEach((c,i)=>{const e=pt(i,100);axes+='<line x1="'+cx+'" y1="'+cy+'" x2="'+e[0]+'" y2="'+e[1]+'" stroke="#252525" stroke-width="1"/>';const l=pt(i,122);labels+='<text x="'+l[0]+'" y="'+l[1]+'" text-anchor="middle" fill="#999" font-size="10.5">'+c+'</text>'});let polys='';A.forEach((a,ai)=>{let ps=[];for(let ci=0;ci<k;ci++){let v=Math.max(0,Math.min(100,a.crit[ci]||0));ps.push(pt(ci,v).join(','))}polys+='<polygon class="rpoly" points="'+ps.join(' ')+'" fill="'+cols[ai]+'" stroke="'+cols[ai]+'" style="animation-delay:'+(ai*0.25)+'s"/>'});return '<svg viewBox="0 0 320 300">'+rings+axes+polys+labels+'</svg>'}
+function gaugeBox(a,i,col,isWin,fin,rank){const medals=['🥇','🥈','🥉'];return '<div class="gbox '+(isWin?'winb':'')+'"><div class="gname">'+(isWin?'👑 ':'')+nm(a)+'</div><svg viewBox="0 0 200 112" width="100%"><path d="M20 100 A80 80 0 0 1 180 100" stroke="#252525" stroke-width="16" fill="none"/><path d="M20 100 A80 80 0 0 1 180 100" class="gfill" id="g'+i+'" stroke="'+col+'"/></svg><span class="gscore" style="color:'+col+'">'+Number(a.score||0).toLocaleString()+'</span><span class="glbl">'+t('score')+' '+(fin?'':'<span class="medal">'+(medals[rank]||'')+'</span>')+'</span><div class="pricetag">'+(a.val!=null?t('val')+': <b>'+fmt(a.val)+'</b><br>':'')+t('price')+': <b>'+fmt(a.price)+'</b></div></div>'}
 let currentKey='laptop';
-function show(key){
- currentKey=key;
- document.querySelectorAll('.chip').forEach(c=>c.classList.toggle('active',c.dataset.k===key));
- const d=DEMO[key],A=d.assets,W=d.winner,fin=d.fin,cols=colorsFor(A,W,fin);
- const crit=d.criteria[lang]||d.criteria.fa;
- const order=A.map((_,i)=>i).sort((x,y)=>(A[y].score||0)-(A[x].score||0));
- const rankOf=i=>order.indexOf(i);
+function show(key){currentKey=key;document.querySelectorAll('.chip').forEach(c=>c.classList.toggle('active',c.dataset.k===key));const d=DEMO[key],A=d.assets,W=d.winner,fin=d.fin,cols=colorsFor(A,W,fin);const crit=d.criteria[lang]||d.criteria.fa;const order=A.map((_,i)=>i).sort((x,y)=>(A[y].score||0)-(A[x].score||0));const rankOf=i=>order.indexOf(i);let ban='';if(!fin&&W>=0)ban='<div class="winban"><span class="crown">👑</span><b>'+nm(A[W])+'</b><p>'+(d.analysis[lang]||d.analysis.fa).replace(/<[^>]+>/g,'')+'</p></div>';if(fin)ban='<div class="neutral-box">📊 <b>'+t('neutral')+'</b><br>'+(d.neutral[lang]||d.neutral.fa)+'</div>';let legend='<div class="legend">';A.forEach((a,i)=>legend+='<div class="lg"><span class="dt" style="background:'+cols[i]+'"></span>'+short(nm(a))+'</div>');legend+='</div>';let gauges='<div class="sec"><h3>🎯 '+t('score')+'<span class="demo-tag">DEMO</span></h3>'+legend+'<div class="grow">';A.forEach((a,i)=>gauges+=gaugeBox(a,i,cols[i],(!fin&&i===W),fin,rankOf(i)));gauges+='</div></div>';let bars='<div class="sec"><h3>📊 '+t('itembyitem')+'</h3>';bars+=barBlock('💶 '+t('val'),A,A.map(a=>a.val),cols,fmt);bars+=barBlock('🏷️ '+t('price'),A,A.map(a=>a.price),cols,fmt);if(!fin)bars+=barBlock('💰 '+t('profit'),A,A.map(a=>a.val!=null?a.val-a.price:null),cols,v=>(v>0?'+':'')+fmt(v));crit.forEach((c,ci)=>bars+=barBlock('◈ '+c,A,A.map(a=>a.crit[ci]),cols,v=>v+'/100'));bars+='</div>';const radar='<div class="sec"><h3>🕸️ '+t('radar')+'</h3>'+legend+'<div class="radarwrap">'+radarSVG(crit,A,cols)+'</div></div>';const analysisText=fin?(d.neutral[lang]||d.neutral.fa):(d.analysis[lang]||d.analysis.fa);const analysis='<div class="sec"><h3>🧠 '+t('analysis')+'</h3><div class="analysis">'+analysisText+'</div></div>';let th='';A.forEach((a,i)=>th+='<th class="'+((!fin&&i===W)?'wincol':'')+'" style="border-top:3px solid '+cols[i]+'">'+((!fin&&i===W)?'👑 ':'')+nm(a)+'</th>');function row(lbl,fn){let tds='';A.forEach((a,i)=>tds+='<td class="'+((!fin&&i===W)?'wincol':'')+'">'+fn(a)+'</td>');return '<tr><td class="lbl">'+lbl+'</td>'+tds+'</tr>'}const tbl='<div class="sec"><h3>📋 '+t('details')+'</h3><div class="mwrap"><table class="cmp"><tr><td class="lbl"></td>'+th+'</tr>'+row(t('specs'),a=>(a.specs[lang]||a.specs.fa).join('<br>'))+row(t('pros'),a=>{let s='';(a.pros[lang]||a.pros.fa).forEach(x=>s+='<li>'+x+'</li>');return '<ul class="pl">'+s+'</ul>'})+row(t('cons'),a=>{let s='';(a.cons[lang]||a.cons.fa).forEach(x=>s+='<li>'+x+'</li>');return '<ul class="pl mn">'+s+'</ul>'})+(fin?'':row(t('verdict'),a=>{if(!a.vd)return '—';const v=VD[a.vd];return '<span class="vd" style="color:'+v.c+';border-color:'+v.c+'">'+(lang==='fa'?v.fa:VDEN[a.vd])+'</span>'}))+'</table></div></div>';const meta='<div class="sec"><h3>📈 '+t('trend')+'</h3><div class="metarow"><div class="meta">'+(d.trend[lang]||d.trend.fa)+'</div></div><div class="srcline">⚠️ '+(lang==='fa'?'نسخه نمایشی با داده‌های نمونه':'Demo version with sample data')+' | HardAnalyzer</div></div>';document.getElementById('out').innerHTML=ban+gauges+bars+radar+analysis+tbl+meta;setTimeout(()=>{A.forEach((a,i)=>{const g=document.getElementById('g'+i);if(g)g.style.strokeDashoffset=String(Math.round(251-Math.min((a.score||0)/10000,1)*251))});document.querySelectorAll('.bfill').forEach(el=>el.style.width=el.dataset.w)},120)}
 
- let ban='';
- if(!fin&&W>=0)ban='<div class="winban"><span class="crown">👑</span><b>'+nm(A[W])+'</b><p>'+(d.analysis[lang]||d.analysis.fa).replace(/<[^>]+>/g,'')+'</p></div>';
- if(fin)ban='<div class="neutral-box">📊 <b>'+t('neutral')+'</b><br>'+(d.neutral[lang]||d.neutral.fa)+'</div>';
+function toggleLang(){lang=lang==='fa'?'en':'fa';document.documentElement.dir=lang==='fa'?'rtl':'ltr';document.documentElement.lang=lang;document.getElementById('langBtn').textContent=lang==='fa'?'EN':'FA';document.querySelectorAll('[data-k]').forEach(el=>el.innerHTML=t(el.dataset.k));const ph=document.getElementById('vinput');if(ph)ph.placeholder=T[lang].vPh;buildChips();buildVChips();show(currentKey)}
+function buildChips(){const c=document.getElementById('chips');c.innerHTML='';Object.keys(DEMO).forEach(key=>{const ch=document.createElement('div');ch.className='chip';ch.dataset.k=key;ch.textContent=DEMO[key].title[lang]||DEMO[key].title.fa;ch.onclick=()=>show(key);c.appendChild(ch)})}
 
- let legend='<div class="legend">';A.forEach((a,i)=>legend+='<div class="lg"><span class="dt" style="background:'+cols[i]+'"></span>'+short(nm(a))+'</div>');legend+='</div>';
-
- let gauges='<div class="sec"><h3>🎯 '+t('score')+'<span class="demo-tag">DEMO</span></h3>'+legend+'<div class="grow">';
- A.forEach((a,i)=>gauges+=gaugeBox(a,i,cols[i],(!fin&&i===W),fin,rankOf(i)));gauges+='</div></div>';
-
- let bars='<div class="sec"><h3>📊 '+t('itembyitem')+'</h3>';
- bars+=barBlock('💶 '+t('val'),A,A.map(a=>a.val),cols,fmt);
- bars+=barBlock('🏷️ '+t('price'),A,A.map(a=>a.price),cols,fmt);
- if(!fin)bars+=barBlock('💰 '+t('profit'),A,A.map(a=>a.val!=null?a.val-a.price:null),cols,v=>(v>0?'+':'')+fmt(v));
- crit.forEach((c,ci)=>bars+=barBlock('◈ '+c,A,A.map(a=>a.crit[ci]),cols,v=>v+'/100'));
- bars+='</div>';
-
- const radar='<div class="sec"><h3>🕸️ '+t('radar')+'</h3>'+legend+'<div class="radarwrap">'+radarSVG(crit,A,cols)+'</div></div>';
-
- const analysisText=fin?(d.neutral[lang]||d.neutral.fa):(d.analysis[lang]||d.analysis.fa);
- const analysis='<div class="sec"><h3>🧠 '+t('analysis')+'</h3><div class="analysis">'+analysisText+'</div></div>';
-
- let th='';A.forEach((a,i)=>th+='<th class="'+((!fin&&i===W)?'wincol':'')+'" style="border-top:3px solid '+cols[i]+'">'+((!fin&&i===W)?'👑 ':'')+nm(a)+'</th>');
- function row(lbl,fn){let tds='';A.forEach((a,i)=>tds+='<td class="'+((!fin&&i===W)?'wincol':'')+'">'+fn(a)+'</td>');return '<tr><td class="lbl">'+lbl+'</td>'+tds+'</tr>';}
- const tbl='<div class="sec"><h3>📋 '+t('details')+'</h3><div class="mwrap"><table class="cmp"><tr><td class="lbl"></td>'+th+'</tr>'
- +row(t('specs'),a=>(a.specs[lang]||a.specs.fa).join('<br>'))
- +row(t('pros'),a=>{let s='';(a.pros[lang]||a.pros.fa).forEach(x=>s+='<li>'+x+'</li>');return '<ul class="pl">'+s+'</ul>'})
- +row(t('cons'),a=>{let s='';(a.cons[lang]||a.cons.fa).forEach(x=>s+='<li>'+x+'</li>');return '<ul class="pl mn">'+s+'</ul>'})
- +(fin?'':row(t('verdict'),a=>{if(!a.vd)return '—';const v=VD[a.vd];return '<span class="vd" style="color:'+v.c+';border-color:'+v.c+'">'+(lang==='fa'?v.fa:VDEN[a.vd])+'</span>'}))
- +'</table></div></div>';
-
- const meta='<div class="sec"><h3>📈 '+t('trend')+'</h3><div class="metarow"><div class="meta">'+(d.trend[lang]||d.trend.fa)+'</div></div><div class="srcline">⚠️ '+(lang==='fa'?'نسخه نمایشی با داده‌های نمونه':'Demo version with sample data')+' | Navora</div></div>';
-
- document.getElementById('out').innerHTML=ban+gauges+bars+radar+analysis+tbl+meta;
-
- setTimeout(()=>{
-  A.forEach((a,i)=>{const g=document.getElementById('g'+i);if(g)g.style.strokeDashoffset=String(Math.round(251-Math.min((a.score||0)/10000,1)*251));});
-  document.querySelectorAll('.bfill').forEach(el=>el.style.width=el.dataset.w);
- },120);
-}
-
-/* ───── lang ───── */
-function toggleLang(){
- lang=lang==='fa'?'en':'fa';
- document.documentElement.dir=lang==='fa'?'rtl':'ltr';
- document.documentElement.lang=lang;
- document.getElementById('langBtn').textContent=lang==='fa'?'EN':'FA';
- document.querySelectorAll('[data-k]').forEach(el=>el.innerHTML=t(el.dataset.k));
- buildChips();
- show(currentKey);
-}
-
-/* ───── chips ───── */
-function buildChips(){
- const c=document.getElementById('chips');c.innerHTML='';
- Object.keys(DEMO).forEach(key=>{
-  const ch=document.createElement('div');ch.className='chip';ch.dataset.k=key;
-  ch.textContent=DEMO[key].title[lang]||DEMO[key].title.fa;
-  ch.onclick=()=>show(key);
-  c.appendChild(ch);
- });
-}
-
-/* ───── init ───── */
+/* init */
+buildVChips();
 buildChips();
 show('laptop');
 </script>
