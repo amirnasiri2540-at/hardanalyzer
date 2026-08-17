@@ -396,7 +396,7 @@ const stripMD=s=>String(s||'').replace(/[*_`#>]/g,'').replace(/\[(.*?)\]\(.*?\)/
 
 /* ═══════════ CHART CONTRACT — asks Vera for machine-readable data ═══════════ */
 // Appended to the outgoing message only; never shown in the chat transcript.
-const CHART_CONTRACT='\n\n---\n[chart-data] After your normal answer, append ONE fenced block tagged `vera-chart` holding ONLY JSON, so the page can draw charts. Keep its text in the same language as your answer. Skip the block entirely when the question is not about valuing or comparing things.\n```vera-chart\n{"title":"...","currency":"€","financial":false,"criteria":["c1","c2","c3","c4"],"assets":[{"name":"...","price":0,"value":0,"score":0,"crit":[0,0,0,0],"specs":["..."],"pros":["..."],"cons":["..."],"verdict":"STRONG_BUY|BUY|FAIR|OVERPRICED|AVOID"}],"winner":0,"analysis":"...","trend":"..."}\n```\nRules: plain numbers (no separators or symbols); score 0-10000; crit 0-100 in the same order as criteria; 3-5 criteria; 2-4 assets; winner = index of the best value, or -1 for neutral/financial data.';
+const CHART_CONTRACT='\n\n(If your answer compares or values things, end it with a ```vera-chart block containing only JSON: {"criteria":["..."],"assets":[{"name":"","price":0,"value":0,"score":0,"crit":[0],"verdict":"BUY"}],"winner":0}. Plain numbers, crit 0-100, score 0-10000. Otherwise skip it.)';
 
 // Pull the JSON block out of a reply and return the reply without it.
 function splitChartBlock(reply){
@@ -649,28 +649,56 @@ function vTyping(){
 }
 function vRmTyping(){const t=document.getElementById('vtyping');if(t)t.remove()}
 
+// The chart contract is an extra instruction bolted onto the outgoing message,
+// and an extra instruction is something the engine can choke on. So it is only
+// ever an attempt: the moment it costs us an answer we drop it for the rest of
+// the session and fall back to the exact request shape that worked before.
+// The charts are a bonus. The answer is the product.
+let chartContractOn=true;
+// Judged on the one thing we actually need — a reply — not on a status code the
+// worker controls. A 500 carrying a good answer is still a good answer.
+async function postVera(messages){
+ const res=await fetch(WORKER_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages})});
+ let data=null;
+ try{data=await res.json()}catch(e){}
+ return data||{};
+}
+function veraErrText(d){
+ const fa=lang==='fa';
+ if(d&&d.error)return '⚠️ '+d.error+(d.detail?'\n'+d.detail:'');
+ return '⚠️ '+(fa?'موتور Vera الان پاسخی نداد. چند لحظه بعد دوباره بفرست.':'The Vera engine returned nothing. Try again in a moment.');
+}
 async function vSend(){
  const text=vinput.value.trim();if(!text)return;
  vAdd('user',text);vHistory.push({role:'user',content:text});
  vinput.value='';vinput.style.height='auto';vsend.disabled=true;vTyping();
- // The chart contract rides along with the outgoing message only — the stored
- // transcript stays clean so it never shows up in the UI or grows each turn.
- const wire=vHistory.map(m=>({role:m.role,content:m.content}));
- wire[wire.length-1]={role:'user',content:text+CHART_CONTRACT};
+ // The transcript stays clean, so the contract never shows in the UI nor piles up.
+ const plain=vHistory.map(m=>({role:m.role,content:m.content}));
  try{
-  const res=await fetch(WORKER_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:wire})});
-  const data=await res.json();vRmTyping();
-  if(data.reply){
-   const{clean}=splitChartBlock(data.reply);
-   const shown=clean||data.reply;
-   const bub=vAdd('bot',shown);
-   vHistory.push({role:'assistant',content:shown});
-   const ds=datasetFromReply(data.reply,shown);
-   if(ds){applyLive(ds);vChartCTA(bub)}
+  let reply=null;
+  if(chartContractOn){
+   const wire=plain.slice();
+   wire[wire.length-1]={role:'user',content:text+CHART_CONTRACT};
+   const d=await postVera(wire);
+   if(d.reply)reply=d.reply;
+   else chartContractOn=false;
   }
-  else{vAdd('bot','⚠️ '+(data.error||'پاسخی دریافت نشد')+(data.detail?'\n'+data.detail:''))}
- }catch(err){vRmTyping();vAdd('bot','⚠️ '+(lang==='fa'?'ارتباط برقرار نشد. اتصال اینترنت را بررسی کن.':'Connection failed. Check your internet.')+'\n'+err.message)}
- finally{vsend.disabled=false;vinput.focus()}
+  if(reply==null){
+   const d=await postVera(plain);
+   if(d.reply)reply=d.reply;
+   else{vRmTyping();vAdd('bot',veraErrText(d));return}
+  }
+  vRmTyping();
+  const{clean}=splitChartBlock(reply);
+  const shown=clean||reply;
+  const bub=vAdd('bot',shown);
+  vHistory.push({role:'assistant',content:shown});
+  try{const ds=datasetFromReply(reply,shown);if(ds){applyLive(ds);vChartCTA(bub)}}
+  catch(e){}                                     // a chart failure must never eat the answer
+ }catch(err){
+  vRmTyping();
+  vAdd('bot','⚠️ '+(lang==='fa'?'ارتباط با موتور Vera برقرار نشد. اینترنت را بررسی کن و دوباره بفرست.':'Could not reach the Vera engine. Check your connection and send again.'));
+ }finally{vsend.disabled=false;vinput.focus()}
 }
 
 /* ═══════════ GRAPHIC DEMOS ═══════════ */
