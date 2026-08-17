@@ -135,7 +135,70 @@ ul.mn li::before{content:"✗ ";color:var(--bad)}
 .srcline{font-size:.6rem;color:#666;margin-top:10px;text-align:center;font-family:'Courier New',monospace;line-height:1.7}
 .demo-tag{display:inline-block;background:#2a2a2a;color:#aaa;font-size:.58rem;padding:2px 8px;border-radius:10px;margin-left:6px}
 footer{text-align:center;color:#555;font-size:.62rem;margin-top:20px;line-height:1.8}
-@media(max-width:560px){.radarwrap svg{max-width:280px}.vmsg{max-width:97%}}
+
+/* ===== LIVE SYNC: chat → charts ===== */
+.ccta{margin-top:10px;background:rgba(52,211,166,.1);border:1px solid var(--vline);color:var(--emerald-bright);border-radius:12px;padding:8px 13px;font-size:.7rem;cursor:pointer;font-family:inherit;display:inline-flex;gap:7px;align-items:center;transition:.18s}
+.ccta:hover{border-color:var(--emerald-bright);background:rgba(52,211,166,.18)}
+.livebar{max-width:760px;margin:0 auto;padding:0 14px}
+.livebox{display:none;background:linear-gradient(135deg,rgba(52,211,166,.12),rgba(52,211,166,.03));border:1px solid rgba(52,211,166,.4);border-radius:12px;padding:11px 14px;font-size:.72rem;color:#9fe6cd;line-height:1.8;align-items:center;gap:10px;margin-bottom:12px}
+.livebox.on{display:flex}
+.livebox .ic{font-size:1.05rem;flex-shrink:0}
+.livebox button{margin-inline-start:auto;background:#0f261f;border:1px solid var(--vline);color:#bfe9da;border-radius:16px;padding:5px 12px;font-size:.64rem;cursor:pointer;font-family:inherit;white-space:nowrap}
+.livebox button:hover{border-color:var(--emerald-bright)}
+.chip.live{border-color:var(--emerald);color:var(--emerald-bright);background:rgba(52,211,166,.08)}
+.chip.live.active{background:rgba(52,211,166,.18)}
+
+/* ===== WEIGHT SLIDERS ===== */
+.wpanel{background:linear-gradient(180deg,rgba(155,89,182,.07),transparent)!important;border-color:rgba(155,89,182,.3)!important}
+.wpanel h3{color:var(--pur)!important;border-bottom-color:rgba(155,89,182,.25)!important}
+.wsub{font-size:.68rem;color:var(--mut);line-height:1.7;margin:-4px 0 13px}
+.wrow{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.wname{width:92px;font-size:.66rem;color:#ccc;text-align:right;line-height:1.3}
+.wslider{flex:1;-webkit-appearance:none;appearance:none;height:5px;border-radius:6px;background:#242424;outline:none;cursor:pointer}
+.wslider::-webkit-slider-thumb{-webkit-appearance:none;width:17px;height:17px;border-radius:50%;background:var(--pur);border:2px solid #14121a;cursor:grab;box-shadow:0 0 9px rgba(155,89,182,.55)}
+.wslider::-moz-range-thumb{width:15px;height:15px;border-radius:50%;background:var(--pur);border:2px solid #14121a;cursor:grab}
+.wpct{width:46px;font-size:.62rem;font-family:'Courier New',monospace;color:#c9b3d8;text-align:left}
+.wfoot{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:13px}
+.wbtn{background:#1a1a1a;border:1px solid #3a3a3a;color:#ccc;border-radius:16px;padding:6px 13px;font-size:.66rem;cursor:pointer;font-family:inherit;transition:.16s}
+.wbtn:hover{border-color:var(--pur);color:#d9c2e8}
+.wtag{margin-inline-start:auto;font-size:.6rem;color:var(--pur);border:1px solid rgba(155,89,182,.45);border-radius:12px;padding:3px 10px;opacity:0;transition:opacity .25s}
+.wtag.on{opacity:1}
+
+/* ===== DONUTS ===== */
+.pies{display:flex;gap:12px;flex-wrap:wrap}
+.piecard{flex:1;min-width:258px;background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:12px}
+.piecard h4{font-size:.7rem;color:#ddd;margin-bottom:10px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.seg{display:flex;gap:5px;flex-wrap:wrap;margin-inline-start:auto}
+.segb{background:#161616;border:1px solid #2e2e2e;color:#999;border-radius:12px;padding:3px 9px;font-size:.58rem;cursor:pointer;font-family:inherit;transition:.16s}
+.segb:hover{color:#ddd}
+.segb.on{border-color:var(--blu);color:var(--blu);background:rgba(52,152,219,.12)}
+.donutwrap{position:relative;display:flex;justify-content:center;min-height:186px}
+.donutwrap svg{width:184px;height:184px;overflow:visible}
+.dslice{cursor:pointer;transition:transform .2s ease,opacity .2s}
+.dcenter{position:absolute;inset:0;display:grid;place-items:center;pointer-events:none;text-align:center;line-height:1.45;padding:0 34px}
+.dcenter b{display:block;font-size:1.1rem;color:#fff}
+.dcenter em{display:block;font-size:.58rem;color:var(--mut);font-style:normal;margin-top:2px}
+.plegend{display:flex;flex-direction:column;gap:4px;margin-top:11px}
+.pitem{display:flex;align-items:center;gap:7px;font-size:.64rem;color:#bbb;padding:3px 5px;border-radius:6px;transition:.15s}
+.pitem.tg{cursor:pointer}
+.pitem.tg:hover{background:rgba(255,255,255,.045)}
+.pitem .dt{width:9px;height:9px;border-radius:3px;flex-shrink:0}
+.pitem .pv{margin-inline-start:auto;font-family:'Courier New',monospace;color:#ddd;font-size:.62rem;white-space:nowrap}
+.pitem.off{opacity:.34}.pitem.off .nmt{text-decoration:line-through}
+
+/* ===== TOGGLES + TOOLTIP ===== */
+.lg{cursor:pointer;user-select:none;transition:opacity .18s}
+.lg.off{opacity:.38}.lg.off .nmt{text-decoration:line-through}
+.brow.off{opacity:.26}
+.bname.tg{cursor:pointer}
+.ctip{position:fixed;z-index:200;background:#0d0d0d;border:1px solid #3a3a3a;border-radius:8px;padding:7px 11px;font-size:.66rem;color:#eee;pointer-events:none;opacity:0;transition:opacity .12s;line-height:1.7;box-shadow:0 6px 20px rgba(0,0,0,.6);max-width:230px}
+.ctip.on{opacity:1}
+.ctip b{color:#fff}
+.askrow{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:12px}
+.askb{background:var(--vpanel);border:1px solid var(--vline);color:#bfe9da;border-radius:100px;padding:8px 14px;font-size:.68rem;cursor:pointer;font-family:inherit;transition:.18s}
+.askb:hover{border-color:var(--emerald-bright);color:#fff}
+.emptyb{text-align:center;color:var(--mut);font-size:.74rem;padding:18px;line-height:1.9}
+@media(max-width:560px){.radarwrap svg{max-width:280px}.vmsg{max-width:97%}.wname{width:74px}.piecard{min-width:100%}}
 </style>
 </head>
 <body>
@@ -187,15 +250,23 @@ footer{text-align:center;color:#555;font-size:.62rem;margin-top:20px;line-height
   </div>
 </div>
 
-<!-- ===== GRAPHIC DEMOS ===== -->
-<div class="demo-divider">
+<!-- ===== GRAPHIC ENGINE (live + demo data) ===== -->
+<div class="demo-divider" id="demoSec">
   <div class="ln"></div>
-  <h2 data-k="demoT">🎨 نمونه‌های گرافیکی</h2>
-  <p data-k="demoP">این بخش با داده‌های نمونه، نمایش بصری تحلیل Vera را نشان می‌دهد: گیج امتیاز، رادار چندبعدی و مقایسه میله‌ای.</p>
+  <h2 data-k="demoT">🎨 نمودارهای زنده</h2>
+  <p data-k="demoP">هر تحلیلی که با Vera بگیری، همین‌جا به نمودار تبدیل می‌شود: گیج امتیاز، دایره‌ای سهم ارزش، رادار چندبعدی و مقایسه میله‌ای — و می‌توانی با وزن‌دادن به اولویت‌هایت نتیجه را زنده جابه‌جا کنی.</p>
+</div>
+
+<div class="livebar">
+  <div class="livebox" id="livebox">
+    <span class="ic">⚡</span>
+    <span data-k="liveNote">این نمودارها از آخرین تحلیل Vera ساخته شده‌اند.</span>
+    <button onclick="show('laptop')" data-k="backDemos">نمونه‌ها</button>
+  </div>
 </div>
 
 <div class="wrap">
-  <div class="try-title" data-k="tryT">👇 یک نمونه گرافیکی را امتحان کن</div>
+  <div class="try-title" data-k="tryT">👇 یک مجموعه را انتخاب کن یا از Vera بپرس</div>
   <div class="chips" id="chips"></div>
   <div id="out"></div>
 
@@ -204,6 +275,8 @@ footer{text-align:center;color:#555;font-size:.62rem;margin-top:20px;line-height
     <div style="margin-top:4px;opacity:.7">© 2026 HardAnalyzer / TechNavi • Salzburg, Austria 🇦🇹</div>
   </footer>
 </div>
+
+<div class="ctip" id="ctip"></div>
 
 <script>
 const WORKER_URL="https://vera-worker.amirnasiri2540hardanalyzer.workers.dev";
@@ -246,10 +319,282 @@ function renderMD(txt){
 }
 if(typeof marked!=="undefined"&&marked.setOptions){marked.setOptions({gfm:true,breaks:true,headerIds:false,mangle:false})}
 
+/* ═══════════ NUMBER + TEXT PARSING (fa/en tolerant) ═══════════ */
+// Vera answers in Persian or English, with Persian digits, European separators
+// and mixed currency marks. Everything downstream expects plain JS numbers.
+function toEn(s){return String(s).replace(/[۰-۹]/g,d=>d.charCodeAt(0)-0x06F0).replace(/[٠-٩]/g,d=>d.charCodeAt(0)-0x0660)}
+const NA_RE=/^(—|–|-|\?|n\/?a|none|null|نامشخص|ندارد|بدون|نداریم)$/i;
+function parseNum(raw){
+ if(raw==null)return null;
+ if(typeof raw==='number')return isFinite(raw)?raw:null;
+ let s=toEn(String(raw)).replace(/[\u200b-\u200f\u202a-\u202e]/g,'').trim();
+ if(!s||NA_RE.test(s))return null;
+ let mult=1;
+ const um=s.match(/(\d)\s*(k|bn|b|m|میلیارد|میلیون|هزار)\s*$/i);
+ if(um){const u=um[2].toLowerCase();mult=(u==='k'||u==='هزار')?1e3:(u==='m'||u==='میلیون')?1e6:1e9;s=s.slice(0,um.index+1)}
+ const neg=/^\s*[-−]/.test(s)||/^\(.*\)$/.test(s.trim());
+ s=s.replace(/[^\d.,]/g,'');
+ if(!s)return null;
+ const ci=s.lastIndexOf(','),di=s.lastIndexOf('.');
+ if(ci>=0&&di>=0){s=ci>di?s.replace(/\./g,'').replace(',','.'):s.replace(/,/g,'')}
+ else if(ci>=0){s=/^\d{1,3}(,\d{3})+$/.test(s)?s.replace(/,/g,''):s.replace(',','.')}
+ else if(di>=0&&/^\d{1,3}(\.\d{3})+$/.test(s)){s=s.replace(/\./g,'')}
+ const n=parseFloat(s);
+ return isFinite(n)?(neg?-n:n)*mult:null;
+}
+const clamp100=v=>Math.max(0,Math.min(100,v));
+// A criterion cell can arrive as "88", "8.8/10", "88%", "4/5" — all mean 0..100.
+function parse100(raw){
+ if(raw==null)return null;
+ const s=toEn(String(raw));
+ const fr=s.match(/(-?[\d.,]+)\s*\/\s*([\d.,]+)/);
+ if(fr){const v=parseNum(fr[1]),d=parseNum(fr[2]);return(v==null||!d)?null:clamp100(v/d*100)}
+ if(/%/.test(s)){const v=parseNum(s);return v==null?null:clamp100(v)}
+ const v=parseNum(s);
+ if(v==null)return null;
+ if(v>=0&&v<=10&&/[.,]/.test(s))return clamp100(v*10);
+ return(v>=0&&v<=100)?v:null;
+}
+// Gauges run on a 0..10000 scale; Vera may answer 8.2, 82 or 8200.
+function normScore(v){
+ if(v==null)return null;v=+v;
+ if(!isFinite(v)||v<0)return null;
+ if(v<=10)return Math.round(v*1000);
+ if(v<=100)return Math.round(v*100);
+ if(v<=1000)return Math.round(v*10);
+ return Math.round(Math.min(v,10000));
+}
+// "8.9", "89/100" and "89%" all mean the same gauge position.
+function parseScoreCell(raw){
+ if(raw!=null&&/[\/%]/.test(String(raw))){const p=parse100(raw);return p==null?null:Math.round(p*100)}
+ return normScore(parseNum(raw));
+}
+function vdKey(v){
+ if(!v)return null;
+ const s=toEn(String(v)).toUpperCase().replace(/[\s_\-]+/g,'');
+ if(/STRONGBUY|خریدقوی|حتماً?بخر/.test(s))return'STRONG_BUY';
+ if(/OVERPRIC|گران|بالاترازارزش/.test(s))return'OVERPRICED';
+ if(/AVOID|پرهیز|نخر|توصیه?نمی/.test(s))return'AVOID';
+ if(/FAIR|منصف|متعادل|معقول/.test(s))return'FAIR';
+ if(/BUY|خرید|بخر/.test(s))return'BUY';
+ return null;
+}
+// A pros/cons cell arrives as "a؛ b" or "a • b" or "a<br>b" — and, when Vera
+// used no separator at all, as short comma-joined fragments.
+function toArr(v){
+ if(Array.isArray(v))return v.map(x=>String(x).trim()).filter(Boolean);
+ if(!v)return[];
+ const s=String(v).trim();
+ let parts=s.split(/\s*[;؛•\n]\s*|\s*<br\s*\/?>\s*/i).map(x=>x.trim()).filter(Boolean);
+ if(parts.length===1){
+  const c=s.split(/\s*[,،]\s*/).map(x=>x.trim()).filter(Boolean);
+  if(c.length>1&&c.every(x=>x.length<=28))parts=c;
+ }
+ return parts;
+}
+const stripMD=s=>String(s||'').replace(/[*_`#>]/g,'').replace(/\[(.*?)\]\(.*?\)/g,'$1').trim();
+
+/* ═══════════ CHART CONTRACT — asks Vera for machine-readable data ═══════════ */
+// Appended to the outgoing message only; never shown in the chat transcript.
+const CHART_CONTRACT='\n\n---\n[chart-data] After your normal answer, append ONE fenced block tagged `vera-chart` holding ONLY JSON, so the page can draw charts. Keep its text in the same language as your answer. Skip the block entirely when the question is not about valuing or comparing things.\n```vera-chart\n{"title":"...","currency":"€","financial":false,"criteria":["c1","c2","c3","c4"],"assets":[{"name":"...","price":0,"value":0,"score":0,"crit":[0,0,0,0],"specs":["..."],"pros":["..."],"cons":["..."],"verdict":"STRONG_BUY|BUY|FAIR|OVERPRICED|AVOID"}],"winner":0,"analysis":"...","trend":"..."}\n```\nRules: plain numbers (no separators or symbols); score 0-10000; crit 0-100 in the same order as criteria; 3-5 criteria; 2-4 assets; winner = index of the best value, or -1 for neutral/financial data.';
+
+// Pull the JSON block out of a reply and return the reply without it.
+function splitChartBlock(reply){
+ const re=/```[ \t]*([\w-]*)[ \t]*\r?\n([\s\S]*?)```/g;let m;
+ while((m=re.exec(reply))){
+  const tag=(m[1]||'').toLowerCase(),body=m[2];
+  if(tag!=='vera-chart'&&!/"assets"\s*:/.test(body))continue;
+  try{const o=JSON.parse(body.trim());if(o&&Array.isArray(o.assets)&&o.assets.length)return{clean:reply.replace(m[0],'').replace(/\n{3,}/g,'\n\n').replace(/\n*---\s*$/,'').trim(),obj:o}}catch(e){}
+ }
+ if(/"assets"\s*:/.test(reply)){const b=findBareJSON(reply);if(b)return{clean:reply.replace(b.raw,'').trim(),obj:b.obj}}
+ return{clean:reply,obj:null};
+}
+// Same block, but unfenced — brace-matched so quoted braces don't fool us.
+function findBareJSON(txt){
+ for(let i=0;i<txt.length;i++){
+  if(txt[i]!=='{')continue;
+  let d=0,ins=false,esc=false;
+  for(let j=i;j<txt.length;j++){
+   const ch=txt[j];
+   if(esc){esc=false;continue}
+   if(ch==='\\'){esc=true;continue}
+   if(ch==='"'){ins=!ins;continue}
+   if(ins)continue;
+   if(ch==='{')d++;
+   else if(ch==='}'&&!--d){
+    const raw=txt.slice(i,j+1);
+    if(/"assets"\s*:/.test(raw)){try{const o=JSON.parse(raw);if(o&&Array.isArray(o.assets)&&o.assets.length)return{raw,obj:o}}catch(e){}}
+    break;
+   }
+  }
+ }
+ return null;
+}
+
+/* ═══════════ MARKDOWN TABLE FALLBACK ═══════════ */
+// When Vera answers with a plain comparison table we still want charts, so the
+// table gets classified into the same shape the JSON contract produces.
+const METRICS=[
+ ['price',/(قیمت|price|listing|آگهی|هزینه|cost|asking)/i],
+ ['val',/(ارزش\s*(تخمین|واقع|منصف)|ارزش$|value|worth|estimat|fair\s*value)/i],
+ ['score',/(امتیاز|score|نمره|rating)/i],
+ ['profit',/(سود|profit|margin|صرفه|saving)/i],
+ ['vd',/(نتیجه|verdict|توصیه|recommend|حکم)/i],
+ ['specs',/(مشخصات|spec|ویژگی|جزئیات|detail)/i],
+ ['pros',/(مزایا|pros|نقاط\s*قوت|مزیت|strength|advantage)/i],
+ ['cons',/(معایب|cons|نقاط\s*ضعف|ضعف|weakness|drawback|ایراد)/i]
+];
+// Header of the first column tells us how the table is laid out.
+const LABELCOL=/^\s*(|—|–|-|مورد|معیار|ویژگی|شاخص|پارامتر|مشخصه|item|metric|criteri\w*|attribute|feature|spec\w*)\s*$/i;
+const ASSETCOL=/^\s*(نام|مدل|گزینه|محصول|دارایی|کالا|name|model|option|asset|product|device|car|phone)\s*$/i;
+function classify(lbl){const s=stripMD(toEn(String(lbl||'')));for(const[k,re]of METRICS)if(re.test(s))return k;return null}
+function parseTables(md){
+ const lines=md.split('\n'),out=[];
+ const cells=r=>r.split('|').map(c=>stripMD(c)).filter((c,i,a)=>!((i===0||i===a.length-1)&&c===''));
+ for(let i=0;i<lines.length;i++){
+  if(!/\|/.test(lines[i])||i+1>=lines.length)continue;
+  if(!/^[\s|:\-]*-[\s|:\-]*$/.test(lines[i+1]))continue;
+  const head=cells(lines[i]),rows=[];let j=i+2;
+  while(j<lines.length&&/\|/.test(lines[j])&&lines[j].trim()){rows.push(cells(lines[j]));j++}
+  if(head.length>=2&&rows.length)out.push({head,rows});
+  i=j-1;
+ }
+ return out;
+}
+function dsFromTables(md){
+ const tables=parseTables(md);
+ if(!tables.length)return null;
+ const names=[],byName={},critLabels=[],critVals={};
+ const put=(name,key,raw,label)=>{
+  if(!name)return;
+  if(!byName[name]){byName[name]={n:name,price:null,val:null,score:null,specs:[],pros:[],cons:[],vd:null};names.push(name)}
+  const a=byName[name];
+  // A scored cell ("ارزش | 85/100") or a second "value"-ish row next to an
+  // existing one is a criterion, not money.
+  if(key==='price'||key==='val'){
+   if(/[\/%]/.test(String(raw)))return putCrit(name,label||key,raw);
+   const v=parseNum(raw);if(v==null)return;
+   a[key]==null?a[key]=v:putCrit(name,label||key,raw);
+  }
+  else if(key==='score'){const v=parseScoreCell(raw);if(v!=null&&a.score==null)a.score=v}
+  else if(key==='vd'){a.vd=a.vd||vdKey(raw)}
+  else if(key==='specs'||key==='pros'||key==='cons'){toArr(raw).forEach(x=>a[key].push(x))}
+ };
+ const putCrit=(name,label,raw)=>{
+  if(!byName[name])put(name,'specs','');
+  if(!byName[name])return;
+  const v=parse100(raw);
+  if(v==null){if(raw&&String(raw).trim()&&!NA_RE.test(String(raw).trim()))byName[name].specs.push(label+': '+raw);return}
+  let ci=critLabels.indexOf(label);
+  if(ci<0){if(critLabels.length>=6)return;critLabels.push(label);ci=critLabels.length-1}
+  (critVals[name]||(critVals[name]={}))[ci]=v;
+ };
+ for(const tb of tables){
+  const rowHits=tb.rows.filter(r=>classify(r[0])).length;
+  const headHits=tb.head.slice(1).filter(h=>classify(h)).length;
+  const h0=tb.head[0]||'';
+  const rowWise=rowHits!==headHits?rowHits>headHits:(LABELCOL.test(h0)?true:ASSETCOL.test(h0)?false:false);
+  if(rowWise){                                   // metrics as rows, assets as columns
+   const cols=tb.head.slice(1).filter(Boolean);
+   if(!cols.length)continue;
+   cols.forEach(c=>put(c,'specs',''));
+   tb.rows.forEach(r=>{
+    const key=classify(r[0]);
+    cols.forEach((c,i)=>{const raw=r[i+1];if(raw==null)return;key?put(c,key,raw,r[0]):putCrit(c,r[0],raw)});
+   });
+  }else{                                          // assets as rows, metrics as columns
+   tb.rows.forEach(r=>{
+    const name=r[0];if(!name)return;
+    put(name,'specs','');
+    tb.head.slice(1).forEach((h,hi)=>{const raw=r[hi+1];if(raw==null)return;const key=classify(h);key?put(name,key,raw,h):putCrit(name,h,raw)});
+   });
+  }
+ }
+ if(names.length<1)return null;
+ const assets=names.map(n=>{const a=byName[n];a.crit=critLabels.map((_,i)=>(critVals[n]||{})[i]!=null?critVals[n][i]:null);return a});
+ const prose=md.split('\n').filter(l=>!/\|/.test(l)&&!/^\s*[-*=_]{3,}\s*$/.test(l)&&!/^```/.test(l)).map(stripMD).filter(Boolean);
+ const heading=(md.match(/^#{1,6}\s+(.+)$/m)||[])[1];
+ return finalizeDS({
+  title:stripMD(heading||names.slice(0,3).join(' vs ')),
+  criteria:critLabels,assets,winner:-1,
+  analysis:prose.slice(0,2).join(' ').slice(0,320),
+  trend:prose.length>2?prose.slice(2,3).join(' ').slice(0,200):''
+ },'chat-table');
+}
+function dsFromJSON(o){
+ const criteria=(Array.isArray(o.criteria)?o.criteria:[]).map(c=>stripMD(c)).filter(Boolean).slice(0,6);
+ const assets=(Array.isArray(o.assets)?o.assets:[]).slice(0,6).map(a=>{
+  const raw=Array.isArray(a.crit)?a.crit:(Array.isArray(a.criteria)?a.criteria:[]);
+  return{n:stripMD(a.name||a.n||''),price:parseNum(a.price),val:parseNum(a.value!=null?a.value:a.val),
+   score:parseScoreCell(a.score),crit:criteria.map((_,i)=>parse100(raw[i])),
+   specs:toArr(a.specs),pros:toArr(a.pros),cons:toArr(a.cons),vd:vdKey(a.verdict||a.vd)};
+ }).filter(a=>a.n);
+ if(!assets.length)return null;
+ return finalizeDS({title:stripMD(o.title||''),cur:(o.currency||'').trim()||null,fin:!!o.financial,
+  criteria,assets,winner:Number.isInteger(o.winner)?o.winner:-1,
+  analysis:stripMD(o.analysis||''),trend:stripMD(o.trend||''),neutral:stripMD(o.neutral||'')},'chat-json');
+}
+// Chart text goes into innerHTML, and for a live dataset that text came from a
+// model, so it is neutralised here at the single point where it enters the app.
+// Demo data never passes through and keeps its intentional <b> markup.
+const escHTML=s=>String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+function sanitizeDS(ds){
+ ['title','analysis','trend','neutral','cur'].forEach(k=>{if(ds[k])ds[k]=escHTML(ds[k])});
+ ds.criteria=ds.criteria.map(escHTML);
+ ds.assets.forEach(a=>{
+  a.n=escHTML(a.n);
+  ['specs','pros','cons'].forEach(k=>{a[k]=(a[k]||[]).map(escHTML)});
+ });
+ return ds;
+}
+// Drops empty criteria columns, rescales 0..10 columns, fills missing scores.
+function finalizeDS(ds,source){
+ const A=ds.assets,names=ds.criteria.slice();
+ const keep=names.map((_,i)=>A.some(a=>a.crit[i]!=null));
+ ds.criteria=names.filter((_,i)=>keep[i]);
+ A.forEach(a=>{a.crit=a.crit.filter((_,i)=>keep[i])});
+ ds.criteria.forEach((_,i)=>{
+  const vals=A.map(a=>a.crit[i]).filter(v=>v!=null);
+  if(vals.length&&Math.max.apply(null,vals)<=10)A.forEach(a=>{if(a.crit[i]!=null)a.crit[i]=a.crit[i]*10});
+ });
+ A.forEach(a=>{
+  a.crit=a.crit.map(v=>v==null?null:Math.round(v));
+  if(a.score==null){const v=a.crit.filter(x=>x!=null);if(v.length)a.score=Math.round(v.reduce((s,x)=>s+x,0)/v.length*100)}
+ });
+ const usable=A.some(a=>a.score!=null||a.val!=null||a.price!=null)||ds.criteria.length>0;
+ if(!usable)return null;
+ if(!(ds.winner>=0&&ds.winner<A.length)&&!ds.fin){
+  let best=-1,bs=-1;
+  A.forEach((a,i)=>{const s=a.vd==='STRONG_BUY'?3:a.vd==='BUY'?2:0;const k=s*1e6+(a.score||0)+((a.val!=null&&a.price)?(a.val/a.price)*100:0);if(k>bs){bs=k;best=i}});
+  ds.winner=best;
+ }
+ ds.source=source;ds.cur=ds.cur||'€';ds.fin=!!ds.fin;
+ if(!ds.title)ds.title=A.map(a=>a.n).slice(0,3).join(' vs ');
+ return sanitizeDS(ds);
+}
+// One entry point: JSON contract first, markdown tables as the safety net.
+function datasetFromReply(reply,cleanText){
+ try{
+  const o=splitChartBlock(reply).obj;
+  if(o){const d=dsFromJSON(o);if(d)return d}
+ }catch(e){}
+ try{return dsFromTables(cleanText||reply)}catch(e){return null}
+}
+
 /* ───── i18n ───── */
 const T={
- fa:{heroH:'با <b>Vera</b>، ارزش واقعی هر چیزی را بدان',heroP:'قبل از هر خرید، ارزش واقعی را بسنج. Vera هر دارایی را شناسایی، تجزیه و ارزش‌گذاری می‌کند تا با پول خود، بهترین انتخاب را داشته باشی — نه کمتر، نه گران‌تر.',vp1t:'پله بالاتر',vp1d:'گاهی با کمی پول بیشتر، ارزش خیلی بالاتری می‌گیری',vp2t:'گزینه بهتر',vp2d:'شاید گزینه‌ای بهتر هست که هنوز نمی‌شناسی',vp3t:'بدون اسراف',vp3d:'گاهی ارزان‌تر، همان کار را عالی انجام می‌دهد',vTitle:'تحلیل زنده با Vera',vSub:'هر دارایی‌ای را بپرس — تجزیه، ارزش‌گذاری و مقایسه واقعی',vLive:'زنده',vWelcome:'یک نمونه را بزن یا سؤالت را بنویس — Vera جدول کامل ارزش می‌سازد.',vPh:'مثلاً: آیفون ۱۴ را با گلکسی S23 اولترا مقایسه کن',demoT:'🎨 نمونه‌های گرافیکی',demoP:'این بخش با داده‌های نمونه، نمایش بصری تحلیل Vera را نشان می‌دهد: گیج امتیاز، رادار چندبعدی و مقایسه میله‌ای.',tryT:'👇 یک نمونه گرافیکی را امتحان کن',footT:'HardAnalyzer • ارزش‌گذاری هوشمند با موتور Vera',score:'امتیاز Vera',val:'ارزش تخمینی',price:'قیمت آگهی',profit:'سود خریدار',analysis:'نتیجه‌گیری Vera',details:'جزئیات کامل',specs:'مشخصات',pros:'مزایا',cons:'معایب',verdict:'نتیجه',radar:'رادار چندبعدی',itembyitem:'مقایسه آیتم به آیتم',trend:'روند بازار',neutral:'داده خنثی — بدون توصیه خرید/فروش'},
- en:{heroH:'Know the real value of anything with <b>Vera</b>',heroP:'Before any purchase, weigh the real value. Vera identifies, decomposes and values any asset so your money makes the best choice — not less, not overpriced.',vp1t:'Step Up',vp1d:'Sometimes a little more money buys far more value',vp2t:'Better Option',vp2d:'Maybe a better choice exists you don\'t know yet',vp3t:'No Waste',vp3d:'Sometimes cheaper does the same job perfectly',vTitle:'Live analysis with Vera',vSub:'Ask about any asset — real decomposition, valuation & comparison',vLive:'Live',vWelcome:'Tap a sample or type your question — Vera builds a full value table.',vPh:'e.g. compare iPhone 14 with Galaxy S23 Ultra',demoT:'🎨 Graphic samples',demoP:'This section uses sample data to show Vera\'s visual analysis: score gauges, multi-dimensional radar and bar comparison.',tryT:'👇 Try a graphic sample',footT:'HardAnalyzer • Smart valuation powered by Vera',score:'Vera Score',val:'Est. Value',price:'Listing',profit:'Buyer Profit',analysis:'Vera Verdict',details:'Full Details',specs:'Specs',pros:'Pros',cons:'Cons',verdict:'Verdict',radar:'Multi-dimensional Radar',itembyitem:'Item-by-item Comparison',trend:'Market Trend',neutral:'Neutral data — no buy/sell advice'}
+ fa:{heroH:'با <b>Vera</b>، ارزش واقعی هر چیزی را بدان',heroP:'قبل از هر خرید، ارزش واقعی را بسنج. Vera هر دارایی را شناسایی، تجزیه و ارزش‌گذاری می‌کند تا با پول خود، بهترین انتخاب را داشته باشی — نه کمتر، نه گران‌تر.',vp1t:'پله بالاتر',vp1d:'گاهی با کمی پول بیشتر، ارزش خیلی بالاتری می‌گیری',vp2t:'گزینه بهتر',vp2d:'شاید گزینه‌ای بهتر هست که هنوز نمی‌شناسی',vp3t:'بدون اسراف',vp3d:'گاهی ارزان‌تر، همان کار را عالی انجام می‌دهد',vTitle:'تحلیل زنده با Vera',vSub:'هر دارایی‌ای را بپرس — تجزیه، ارزش‌گذاری و مقایسه واقعی',vLive:'زنده',vWelcome:'یک نمونه را بزن یا سؤالت را بنویس — Vera جدول کامل ارزش می‌سازد.',vPh:'مثلاً: آیفون ۱۴ را با گلکسی S23 اولترا مقایسه کن',demoT:'🎨 نمودارهای زنده',demoP:'هر تحلیلی که با Vera بگیری، همین‌جا به نمودار تبدیل می‌شود: گیج امتیاز، دایره‌ای سهم ارزش، رادار چندبعدی و مقایسه میله‌ای — و می‌توانی با وزن‌دادن به اولویت‌هایت نتیجه را زنده جابه‌جا کنی.',tryT:'👇 یک مجموعه را انتخاب کن یا از Vera بپرس',footT:'HardAnalyzer • ارزش‌گذاری هوشمند با موتور Vera',score:'امتیاز Vera',val:'ارزش تخمینی',price:'قیمت آگهی',profit:'سود خریدار',analysis:'نتیجه‌گیری Vera',details:'جزئیات کامل',specs:'مشخصات',pros:'مزایا',cons:'معایب',verdict:'نتیجه',radar:'رادار چندبعدی',itembyitem:'مقایسه آیتم به آیتم',trend:'روند بازار',neutral:'داده خنثی — بدون توصیه خرید/فروش',
+   wTitle:'اولویت‌های تو',wSub:'وزن هر معیار را جابه‌جا کن — امتیاز، برنده و همه نمودارها زنده تغییر می‌کنند.',wReset:'بازنشانی وزن‌ها',wTag:'شخصی‌سازی‌شده',wWin:'با اولویت‌های تو، <b>{n}</b> جلو می‌افتد.',wFocus:'تمرکز روی {n}',
+   pieShare:'سهم از کل',pieMix:'ترکیب معیارها',shareOf:'سهم',mixOf:'ترکیب',total:'مجموع',
+   liveT:'⚡ نتیجه چت',liveNote:'این نمودارها از آخرین تحلیل Vera ساخته شده‌اند.',backDemos:'نمونه‌ها',chartReady:'📊 نمودارهای این تحلیل آماده شد — ببین',
+   askWhy:'چرا این برنده شد؟',askAlt:'گزینه بهتری هم هست؟',askW:'با اولویت‌های من دوباره تحلیل کن',askTitle:'ادامه بده با Vera',
+   noVis:'همه گزینه‌ها خاموش‌اند — یکی را از راهنما روشن کن.',demoTag:'DEMO',liveTag:'LIVE'},
+ en:{heroH:'Know the real value of anything with <b>Vera</b>',heroP:'Before any purchase, weigh the real value. Vera identifies, decomposes and values any asset so your money makes the best choice — not less, not overpriced.',vp1t:'Step Up',vp1d:'Sometimes a little more money buys far more value',vp2t:'Better Option',vp2d:'Maybe a better choice exists you don\'t know yet',vp3t:'No Waste',vp3d:'Sometimes cheaper does the same job perfectly',vTitle:'Live analysis with Vera',vSub:'Ask about any asset — real decomposition, valuation & comparison',vLive:'Live',vWelcome:'Tap a sample or type your question — Vera builds a full value table.',vPh:'e.g. compare iPhone 14 with Galaxy S23 Ultra',demoT:'🎨 Live charts',demoP:'Every analysis you run with Vera turns into charts right here: score gauges, value-share donuts, a multi-dimensional radar and bar comparisons — and you can re-weight your priorities to move the result live.',tryT:'👇 Pick a set, or just ask Vera',footT:'HardAnalyzer • Smart valuation powered by Vera',score:'Vera Score',val:'Est. Value',price:'Listing',profit:'Buyer Profit',analysis:'Vera Verdict',details:'Full Details',specs:'Specs',pros:'Pros',cons:'Cons',verdict:'Verdict',radar:'Multi-dimensional Radar',itembyitem:'Item-by-item Comparison',trend:'Market Trend',neutral:'Neutral data — no buy/sell advice',
+   wTitle:'Your priorities',wSub:'Drag each criterion\'s weight — scores, the winner and every chart update live.',wReset:'Reset weights',wTag:'Personalized',wWin:'With your priorities, <b>{n}</b> takes the lead.',wFocus:'Focus on {n}',
+   pieShare:'Share of total',pieMix:'Criteria mix',shareOf:'share',mixOf:'mix',total:'Total',
+   liveT:'⚡ Chat result',liveNote:'These charts are built from Vera\'s latest analysis.',backDemos:'Samples',chartReady:'📊 Charts for this analysis are ready — take a look',
+   askWhy:'Why did this win?',askAlt:'Is there a better option?',askW:'Re-analyze with my priorities',askTitle:'Keep going with Vera',
+   noVis:'All options are off — switch one back on from the legend.',demoTag:'DEMO',liveTag:'LIVE'}
 };
 let lang='fa';
 const t=k=>T[lang][k]||k;
@@ -281,6 +626,20 @@ function vAdd(role,text){
  if(role==='user'){b.textContent=text}
  else{const h=renderMD(text);b.innerHTML=h.replace(/<table>/g,'<div class="vtable-wrap"><table>').replace(/<\/table>/g,'</table></div>')}
  m.appendChild(av);m.appendChild(b);vchat.appendChild(m);vchat.scrollTop=vchat.scrollHeight;
+ return b;
+}
+// Invitation to jump down to the charts — never scrolls the reader away mid-sentence.
+function vChartCTA(bub){
+ if(!bub)return;
+ const btn=document.createElement('button');btn.className='ccta';btn.textContent=t('chartReady');
+ btn.onclick=()=>{const s=document.getElementById('demoSec');if(s)s.scrollIntoView({behavior:'smooth',block:'start'})};
+ bub.appendChild(btn);vchat.scrollTop=vchat.scrollHeight;
+}
+// Charts talk back: the follow-up buttons under the charts feed the chat.
+function askVera(text){
+ vinput.value=text;
+ document.querySelector('.vera-live').scrollIntoView({behavior:'smooth',block:'center'});
+ vSend();
 }
 function vTyping(){
  if(vwelcome){vwelcome.remove();vwelcome=null}
@@ -294,10 +653,21 @@ async function vSend(){
  const text=vinput.value.trim();if(!text)return;
  vAdd('user',text);vHistory.push({role:'user',content:text});
  vinput.value='';vinput.style.height='auto';vsend.disabled=true;vTyping();
+ // The chart contract rides along with the outgoing message only — the stored
+ // transcript stays clean so it never shows up in the UI or grows each turn.
+ const wire=vHistory.map(m=>({role:m.role,content:m.content}));
+ wire[wire.length-1]={role:'user',content:text+CHART_CONTRACT};
  try{
-  const res=await fetch(WORKER_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:vHistory})});
+  const res=await fetch(WORKER_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:wire})});
   const data=await res.json();vRmTyping();
-  if(data.reply){vAdd('bot',data.reply);vHistory.push({role:'assistant',content:data.reply})}
+  if(data.reply){
+   const{clean}=splitChartBlock(data.reply);
+   const shown=clean||data.reply;
+   const bub=vAdd('bot',shown);
+   vHistory.push({role:'assistant',content:shown});
+   const ds=datasetFromReply(data.reply,shown);
+   if(ds){applyLive(ds);vChartCTA(bub)}
+  }
   else{vAdd('bot','⚠️ '+(data.error||'پاسخی دریافت نشد')+(data.detail?'\n'+data.detail:''))}
  }catch(err){vRmTyping();vAdd('bot','⚠️ '+(lang==='fa'?'ارتباط برقرار نشد. اتصال اینترنت را بررسی کن.':'Connection failed. Check your internet.')+'\n'+err.message)}
  finally{vsend.disabled=false;vinput.focus()}
@@ -319,25 +689,414 @@ const DEMO={
    {n:{fa:'Toyota Corolla 2021 ⭐',en:'Toyota Corolla 2021 ⭐'},price:19500,val:23400,score:7800,crit:[78,85,92,88],specs:{fa:['۴۰هزار کیلومتر','هیبرید','گارانتی'],en:['40k km','Hybrid','Warranty']},pros:{fa:['کم‌مصرف','اعتبار بالا'],en:['Economical','Reliable']},cons:{fa:['تجهیزات پایه'],en:['Base trim']},vd:'STRONG_BUY'},
    {n:{fa:'VW Golf 2020',en:'VW Golf 2020'},price:18900,val:19500,score:7100,crit:[75,70,80,75],specs:{fa:['۵۵هزار کیلومتر','بنزینی','شاسی محکم'],en:['55k km','Petrol','Solid build']},pros:{fa:['رانندگی عالی'],en:['Great drive']},cons:{fa:['کارکرد بیشتر'],en:['Higher km']},vd:'BUY'},
    {n:{fa:'Škoda Octavia 2021',en:'Škoda Octavia 2021'},price:19200,val:20100,score:7300,crit:[76,78,82,80],specs:{fa:['۴۸هزار کیلومتر','جادار','اقتصادی'],en:['48k km','Spacious','Economical']},pros:{fa:['فضای زیاد'],en:['Spacious']},cons:{fa:['ارزش بازفروش متوسط'],en:['Average resale']},vd:'BUY'}]},
- stock:{title:{fa:'📈 سهام (نمونه)',en:'📈 Stocks (sample)'},fin:true,winner:-1,criteria:{fa:['نقدشوندگی','رشد','ثبات','سود تقسیمی'],en:['Liquidity','Growth','Stability','Dividend']},neutral:{fa:'این دو سهم صرفاً جهت <b>نمایش داده خنثی</b> هستند. هیچ‌کدام توصیه خرید نیستند — صرفاً اطلاعات واقعی.',en:'These two stocks are shown only as <b>neutral data</b>. Neither is a buy recommendation — factual info only.'},trend:{fa:'تحلیل الگوی تاریخی — پیش‌بینی آینده نیست.',en:'Historical pattern analysis — not a future prediction.'},assets:[
+ stock:{title:{fa:'📈 سهام (نمونه)',en:'📈 Stocks (sample)'},fin:true,winner:-1,cur:'$',criteria:{fa:['نقدشوندگی','رشد','ثبات','سود تقسیمی'],en:['Liquidity','Growth','Stability','Dividend']},neutral:{fa:'این دو سهم صرفاً جهت <b>نمایش داده خنثی</b> هستند. هیچ‌کدام توصیه خرید نیستند — صرفاً اطلاعات واقعی.',en:'These two stocks are shown only as <b>neutral data</b>. Neither is a buy recommendation — factual info only.'},trend:{fa:'تحلیل الگوی تاریخی — پیش‌بینی آینده نیست.',en:'Historical pattern analysis — not a future prediction.'},assets:[
    {n:{fa:'Apple (AAPL)',en:'Apple (AAPL)'},price:212,val:null,score:8200,crit:[95,82,85,40],specs:{fa:['P/E: ۳۲','بازار: NASDAQ','۵۲ هفته: $168-230'],en:['P/E: 32','NASDAQ','52w: $168-230']},pros:{fa:['نقدشوندگی بالا','اکوسیستم'],en:['High liquidity','Ecosystem']},cons:{fa:['P/E بالا'],en:['High P/E']},vd:null},
    {n:{fa:'Microsoft (MSFT)',en:'Microsoft (MSFT)'},price:425,val:null,score:8400,crit:[94,85,88,45],specs:{fa:['P/E: ۳۵','بازار: NASDAQ','رشد ابری'],en:['P/E: 35','NASDAQ','Cloud growth']},pros:{fa:['رشد ابری','ثبات'],en:['Cloud growth','Stable']},cons:{fa:['P/E بالاتر'],en:['Higher P/E']},vd:null}]}
 };
 const VD={STRONG_BUY:{fa:'خرید قوی',c:'#27ae60'},BUY:{fa:'خرید',c:'#2ecc71'},FAIR:{fa:'منصفانه',c:'#f39c12'},OVERPRICED:{fa:'گران',c:'#e74c3c'},AVOID:{fa:'پرهیز',c:'#c0392b'}};
 const VDEN={STRONG_BUY:'STRONG BUY',BUY:'BUY',FAIR:'FAIR',OVERPRICED:'OVERPRICED',AVOID:'AVOID'};
-const fmt=n=>n==null?'—':('€'+Number(n).toLocaleString('de-DE'));
-const PALETTE=['#3498db','#f39c12','#9b59b6'];
-function colorsFor(A,W,fin){const o=[];let p=0;A.forEach((a,i)=>o.push((!fin&&i===W)?'#27ae60':PALETTE[p++%3]));return o}
-function nm(a){return a.n[lang]||a.n.fa}
-function short(s){s=String(s||'');return s.length>20?s.slice(0,19)+'…':s}
-function barBlock(title,A,vals,cols,fmtFn){let mx=1;vals.forEach(v=>{if(v!=null&&Math.abs(v)>mx)mx=Math.abs(v)});let rows='';A.forEach((a,i)=>{const v=vals[i];if(v==null)return;const w=Math.max(Math.abs(v)/mx*100,3);rows+='<div class="brow"><div class="bname">'+short(nm(a))+'</div><div class="btrack"><div class="bfill" data-w="'+w.toFixed(1)+'%" style="background:'+cols[i]+'"></div></div><div class="bval">'+fmtFn(v)+'</div></div>'});return '<div class="mblock"><div class="mtitle">'+title+'</div>'+rows+'</div>'}
-function radarSVG(criteria,A,cols){const cx=160,cy=148,R=100,k=criteria.length;function pt(ci,v){const a=-Math.PI/2+ci*2*Math.PI/k,r=R*v/100;return[(cx+r*Math.cos(a)).toFixed(1),(cy+r*Math.sin(a)).toFixed(1)]}let rings='';[25,50,75,100].forEach(p=>{let ps=[];for(let i=0;i<k;i++)ps.push(pt(i,p).join(','));rings+='<polygon points="'+ps.join(' ')+'" fill="none" stroke="#252525" stroke-width="1"/>'});let axes='',labels='';criteria.forEach((c,i)=>{const e=pt(i,100);axes+='<line x1="'+cx+'" y1="'+cy+'" x2="'+e[0]+'" y2="'+e[1]+'" stroke="#252525" stroke-width="1"/>';const l=pt(i,122);labels+='<text x="'+l[0]+'" y="'+l[1]+'" text-anchor="middle" fill="#999" font-size="10.5">'+c+'</text>'});let polys='';A.forEach((a,ai)=>{let ps=[];for(let ci=0;ci<k;ci++){let v=Math.max(0,Math.min(100,a.crit[ci]||0));ps.push(pt(ci,v).join(','))}polys+='<polygon class="rpoly" points="'+ps.join(' ')+'" fill="'+cols[ai]+'" stroke="'+cols[ai]+'" style="animation-delay:'+(ai*0.25)+'s"/>'});return '<svg viewBox="0 0 320 300">'+rings+axes+polys+labels+'</svg>'}
-function gaugeBox(a,i,col,isWin,fin,rank){const medals=['🥇','🥈','🥉'];return '<div class="gbox '+(isWin?'winb':'')+'"><div class="gname">'+(isWin?'👑 ':'')+nm(a)+'</div><svg viewBox="0 0 200 112" width="100%"><path d="M20 100 A80 80 0 0 1 180 100" stroke="#252525" stroke-width="16" fill="none"/><path d="M20 100 A80 80 0 0 1 180 100" class="gfill" id="g'+i+'" stroke="'+col+'"/></svg><span class="gscore" style="color:'+col+'">'+Number(a.score||0).toLocaleString()+'</span><span class="glbl">'+t('score')+' '+(fin?'':'<span class="medal">'+(medals[rank]||'')+'</span>')+'</span><div class="pricetag">'+(a.val!=null?t('val')+': <b>'+fmt(a.val)+'</b><br>':'')+t('price')+': <b>'+fmt(a.price)+'</b></div></div>'}
-let currentKey='laptop';
-function show(key){currentKey=key;document.querySelectorAll('.chip').forEach(c=>c.classList.toggle('active',c.dataset.k===key));const d=DEMO[key],A=d.assets,W=d.winner,fin=d.fin,cols=colorsFor(A,W,fin);const crit=d.criteria[lang]||d.criteria.fa;const order=A.map((_,i)=>i).sort((x,y)=>(A[y].score||0)-(A[x].score||0));const rankOf=i=>order.indexOf(i);let ban='';if(!fin&&W>=0)ban='<div class="winban"><span class="crown">👑</span><b>'+nm(A[W])+'</b><p>'+(d.analysis[lang]||d.analysis.fa).replace(/<[^>]+>/g,'')+'</p></div>';if(fin)ban='<div class="neutral-box">📊 <b>'+t('neutral')+'</b><br>'+(d.neutral[lang]||d.neutral.fa)+'</div>';let legend='<div class="legend">';A.forEach((a,i)=>legend+='<div class="lg"><span class="dt" style="background:'+cols[i]+'"></span>'+short(nm(a))+'</div>');legend+='</div>';let gauges='<div class="sec"><h3>🎯 '+t('score')+'<span class="demo-tag">DEMO</span></h3>'+legend+'<div class="grow">';A.forEach((a,i)=>gauges+=gaugeBox(a,i,cols[i],(!fin&&i===W),fin,rankOf(i)));gauges+='</div></div>';let bars='<div class="sec"><h3>📊 '+t('itembyitem')+'</h3>';bars+=barBlock('💶 '+t('val'),A,A.map(a=>a.val),cols,fmt);bars+=barBlock('🏷️ '+t('price'),A,A.map(a=>a.price),cols,fmt);if(!fin)bars+=barBlock('💰 '+t('profit'),A,A.map(a=>a.val!=null?a.val-a.price:null),cols,v=>(v>0?'+':'')+fmt(v));crit.forEach((c,ci)=>bars+=barBlock('◈ '+c,A,A.map(a=>a.crit[ci]),cols,v=>v+'/100'));bars+='</div>';const radar='<div class="sec"><h3>🕸️ '+t('radar')+'</h3>'+legend+'<div class="radarwrap">'+radarSVG(crit,A,cols)+'</div></div>';const analysisText=fin?(d.neutral[lang]||d.neutral.fa):(d.analysis[lang]||d.analysis.fa);const analysis='<div class="sec"><h3>🧠 '+t('analysis')+'</h3><div class="analysis">'+analysisText+'</div></div>';let th='';A.forEach((a,i)=>th+='<th class="'+((!fin&&i===W)?'wincol':'')+'" style="border-top:3px solid '+cols[i]+'">'+((!fin&&i===W)?'👑 ':'')+nm(a)+'</th>');function row(lbl,fn){let tds='';A.forEach((a,i)=>tds+='<td class="'+((!fin&&i===W)?'wincol':'')+'">'+fn(a)+'</td>');return '<tr><td class="lbl">'+lbl+'</td>'+tds+'</tr>'}const tbl='<div class="sec"><h3>📋 '+t('details')+'</h3><div class="mwrap"><table class="cmp"><tr><td class="lbl"></td>'+th+'</tr>'+row(t('specs'),a=>(a.specs[lang]||a.specs.fa).join('<br>'))+row(t('pros'),a=>{let s='';(a.pros[lang]||a.pros.fa).forEach(x=>s+='<li>'+x+'</li>');return '<ul class="pl">'+s+'</ul>'})+row(t('cons'),a=>{let s='';(a.cons[lang]||a.cons.fa).forEach(x=>s+='<li>'+x+'</li>');return '<ul class="pl mn">'+s+'</ul>'})+(fin?'':row(t('verdict'),a=>{if(!a.vd)return '—';const v=VD[a.vd];return '<span class="vd" style="color:'+v.c+';border-color:'+v.c+'">'+(lang==='fa'?v.fa:VDEN[a.vd])+'</span>'}))+'</table></div></div>';const meta='<div class="sec"><h3>📈 '+t('trend')+'</h3><div class="metarow"><div class="meta">'+(d.trend[lang]||d.trend.fa)+'</div></div><div class="srcline">⚠️ '+(lang==='fa'?'نسخه نمایشی با داده‌های نمونه':'Demo version with sample data')+' | HardAnalyzer</div></div>';document.getElementById('out').innerHTML=ban+gauges+bars+radar+analysis+tbl+meta;setTimeout(()=>{A.forEach((a,i)=>{const g=document.getElementById('g'+i);if(g)g.style.strokeDashoffset=String(Math.round(251-Math.min((a.score||0)/10000,1)*251))});document.querySelectorAll('.bfill').forEach(el=>el.style.width=el.dataset.w)},120)}
+const PALETTE=['#3498db','#f39c12','#9b59b6','#1abc9c','#e67e22','#e84393'];
+const CPAL=['#3498db','#9b59b6','#e67e22','#1abc9c','#f1c40f','#e74c3c'];
+const WINC='#27ae60';
 
-function toggleLang(){lang=lang==='fa'?'en':'fa';document.documentElement.dir=lang==='fa'?'rtl':'ltr';document.documentElement.lang=lang;document.getElementById('langBtn').textContent=lang==='fa'?'EN':'FA';document.querySelectorAll('[data-k]').forEach(el=>el.innerHTML=t(el.dataset.k));const ph=document.getElementById('vinput');if(ph)ph.placeholder=T[lang].vPh;buildChips();buildVChips();show(currentKey)}
-function buildChips(){const c=document.getElementById('chips');c.innerHTML='';Object.keys(DEMO).forEach(key=>{const ch=document.createElement('div');ch.className='chip';ch.dataset.k=key;ch.textContent=DEMO[key].title[lang]||DEMO[key].title.fa;ch.onclick=()=>show(key);c.appendChild(ch)})}
+/* One store drives every chart: which dataset, which assets are on, how the
+   user weighted the criteria, which slice each donut is showing. */
+const S={key:'laptop',ds:null,cols:[],w:[],touched:false,off:new Set(),pm:'val',pa:0,live:null};
+
+// Demo data carries {fa,en} bilingual fields; chat data arrives as plain strings.
+function L(v){if(v==null)return v;if(Array.isArray(v))return v;if(typeof v==='object')return v[lang]!=null?v[lang]:(v.fa!=null?v.fa:v.en);return v}
+function nm(a){return L(a.n)||'?'}
+function short(s,n){s=String(s||'');n=n||20;return s.length>n?s.slice(0,n-1)+'…':s}
+// Sign stays outside the symbol so a loss reads "−€15", not "€-15" (which an
+// RTL line flips into a nonsense "15-€").
+function fmt(n){if(n==null)return '—';const c=(S.ds&&S.ds.cur)||'€';
+ return (n<0?'−':'')+c+Number(Math.abs(n)).toLocaleString('de-DE',{maximumFractionDigits:2})}
+function critNames(){const c=S.ds?L(S.ds.criteria):null;return Array.isArray(c)?c.slice():[]}
+function AS(){return S.ds?S.ds.assets:[]}
+const wOf=i=>S.w[i]==null?50:S.w[i];
+
+/* ═══════════ SCORING — re-rank by the user's weights ═══════════
+   At equal weights the result is exactly Vera's own score, so nothing shifts
+   until the user actually drags something. From there the score scales by how
+   the asset does on the criteria they care about. No invented numbers. */
+function effScore(a){
+ const k=critNames().length,c=a.crit||[];
+ if(!S.touched||!k||!c.length)return a.score||0;
+ let acc=0,sw=0,sum=0,n=0;
+ for(let i=0;i<k;i++){const v=c[i];if(v==null)continue;acc+=wOf(i)*v;sw+=wOf(i);sum+=v;n++}
+ if(!n||!sw||!sum)return a.score||0;
+ return Math.max(0,Math.min(10000,Math.round((a.score||0)*((acc/sw)/(sum/n)))));
+}
+function visIdx(){return AS().map((_,i)=>i).filter(i=>!S.off.has(i))}
+function ranked(){return visIdx().sort((x,y)=>effScore(AS()[y])-effScore(AS()[x]))}
+function winIdx(){
+ const ds=S.ds;if(!ds||ds.fin)return -1;
+ const o=ranked();if(!o.length)return -1;
+ if(!S.touched&&ds.winner>=0&&!S.off.has(ds.winner))return ds.winner;
+ return o[0];
+}
+function colorsFor(W){return AS().map((_,i)=>i===W?WINC:PALETTE[i%PALETTE.length])}
+
+/* ═══════════ TOOLTIP ═══════════ */
+function tipMove(e){const el=document.getElementById('ctip');if(!el)return;const p=e.touches&&e.touches[0]?e.touches[0]:e;
+ el.style.left=Math.max(6,Math.min(window.innerWidth-el.offsetWidth-8,p.clientX+14))+'px';
+ el.style.top=Math.max(6,p.clientY-el.offsetHeight-12)+'px'}
+function tipShow(e,html){const el=document.getElementById('ctip');if(!el)return;el.innerHTML=html;el.classList.add('on');tipMove(e)}
+function tipHide(){const el=document.getElementById('ctip');if(el)el.classList.remove('on')}
+/* ═══════════ DONUTS ═══════════ */
+function arcPath(cx,cy,R,r,a0,a1){
+ const p=(rad,a)=>[(cx+rad*Math.cos(a)).toFixed(2),(cy+rad*Math.sin(a)).toFixed(2)];
+ const big=(a1-a0)>Math.PI?1:0,A=p(R,a0),B=p(R,a1),C=p(r,a1),D=p(r,a0);
+ return 'M'+A[0]+' '+A[1]+'A'+R+' '+R+' 0 '+big+' 1 '+B[0]+' '+B[1]+'L'+C[0]+' '+C[1]+'A'+r+' '+r+' 0 '+big+' 0 '+D[0]+' '+D[1]+'Z';
+}
+const DST={};
+function tween(dur,fn){const t0=performance.now();requestAnimationFrame(function step(now){const p=Math.min(1,(now-t0)/dur);fn(1-Math.pow(1-p,3));if(p<1)requestAnimationFrame(step)})}
+// Slices animate from where they currently sit, so a slider drag morphs the
+// donut instead of snapping it. The svg is only rebuilt when the slice set changes.
+function renderDonut(id,slices,centerFn){
+ const box=document.getElementById(id);if(!box)return;
+ const key=slices.map(s=>s.k).join('|');
+ const tot=slices.reduce((s,x)=>s+Math.max(0,x.v||0),0);
+ const target=slices.map(s=>tot>0?Math.max(0,s.v||0)/tot:0);
+ const st=DST[id];let from;
+ if(st&&st.key===key&&box.querySelector('svg')){from=st.vals.slice()}
+ else{
+  box.innerHTML='<svg viewBox="0 0 200 200">'+slices.map((s,i)=>'<path class="dslice" data-i="'+i+'" fill="'+s.c+'"></path>').join('')+'</svg>';
+  from=target.map(()=>0);
+  if(!box.dataset.bound){box.dataset.bound='1';bindDonut(id,box)}
+ }
+ const tok=((st&&st.tok)||0)+1;
+ DST[id]={key,vals:from.slice(),slices,tok,center:centerFn};
+ const paths=box.querySelectorAll('.dslice');
+ slices.forEach((s,i)=>{if(paths[i])paths[i].setAttribute('fill',s.c)});   // winner colour can move between refreshes
+ tween(430,p=>{
+  const cur=DST[id];if(!cur||cur.tok!==tok)return;
+  const vals=target.map((tv,i)=>from[i]+(tv-from[i])*p);
+  cur.vals=vals;
+  let a=-Math.PI/2;
+  vals.forEach((sh,i)=>{const el=paths[i];if(!el)return;
+   if(sh<0.0006){el.setAttribute('d','');return}
+   const a1=a+sh*Math.PI*2*0.9999;el.setAttribute('d',arcPath(100,100,86,52,a,a1));a=a1});
+ });
+ setCenter(id,-1);
+}
+function setCenter(id,i){const c=document.getElementById(id+'c'),st=DST[id];if(!c||!st)return;c.innerHTML=st.center?st.center(i,st):''}
+function hoverSlice(id,i,on){
+ const st=DST[id];if(!st)return;
+ const box=document.getElementById(id),el=box&&box.querySelector('.dslice[data-i="'+i+'"]');
+ if(el){
+  if(on){let a=-Math.PI/2;for(let j=0;j<i;j++)a+=(st.vals[j]||0)*Math.PI*2;const mid=a+(st.vals[i]||0)*Math.PI;
+   el.style.transform='translate('+(Math.cos(mid)*6).toFixed(1)+'px,'+(Math.sin(mid)*6).toFixed(1)+'px)'}
+  else el.style.transform='';
+ }
+ setCenter(id,on?i:-1);
+}
+function bindDonut(id,box){
+ const slice=e=>e.target&&e.target.closest?e.target.closest('.dslice'):null;
+ box.addEventListener('mouseover',e=>{const p=slice(e);if(!p)return;const i=+p.dataset.i,s=(DST[id]||{}).slices;
+  hoverSlice(id,i,true);if(s&&s[i])tipShow(e,'<b>'+s[i].n+'</b><br>'+s[i].lbl)});
+ box.addEventListener('mousemove',e=>{if(slice(e))tipMove(e)});
+ box.addEventListener('mouseout',e=>{const p=slice(e);if(!p)return;hoverSlice(id,+p.dataset.i,false);tipHide()});
+ box.addEventListener('click',e=>{const p=slice(e);if(!p)return;const s=(DST[id]||{}).slices,i=+p.dataset.i;
+  if(s&&s[i]&&s[i].act)s[i].act();else{hoverSlice(id,i,true);setTimeout(()=>hoverSlice(id,i,false),1800)}});
+}
+
+/* ═══════════ SECTION BUILDERS ═══════════ */
+function legendHTML(){return '<div class="legend">'+AS().map((a,i)=>'<div class="lg" data-i="'+i+'"><span class="dt" style="background:'+S.cols[i]+'"></span><span class="nmt">'+short(nm(a),18)+'</span></div>').join('')+'</div>'}
+function gaugeHTML(a,i){
+ return '<div class="gbox" id="gbox'+i+'"><div class="gname" id="gn'+i+'"></div>'+
+ '<svg viewBox="0 0 200 112" width="100%"><path d="M20 100 A80 80 0 0 1 180 100" stroke="#252525" stroke-width="16" fill="none"/><path d="M20 100 A80 80 0 0 1 180 100" class="gfill" id="g'+i+'"/></svg>'+
+ '<span class="gscore" id="gs'+i+'"></span><span class="glbl">'+t('score')+' <span class="medal" id="gm'+i+'"></span></span>'+
+ '<div class="pricetag" id="gp'+i+'"></div></div>';
+}
+function radarSVG(criteria,A,cols){
+ const cx=160,cy=148,R=100,k=criteria.length;
+ function pt(ci,v){const a=-Math.PI/2+ci*2*Math.PI/k,r=R*v/100;return[(cx+r*Math.cos(a)).toFixed(1),(cy+r*Math.sin(a)).toFixed(1)]}
+ let rings='';[25,50,75,100].forEach(p=>{let ps=[];for(let i=0;i<k;i++)ps.push(pt(i,p).join(','));rings+='<polygon points="'+ps.join(' ')+'" fill="none" stroke="#252525" stroke-width="1"/>'});
+ let axes='',labels='';
+ criteria.forEach((c,i)=>{const e=pt(i,100);axes+='<line x1="'+cx+'" y1="'+cy+'" x2="'+e[0]+'" y2="'+e[1]+'" stroke="#252525" stroke-width="1"/>';
+  const l=pt(i,122);labels+='<text x="'+l[0]+'" y="'+l[1]+'" text-anchor="middle" fill="#999" font-size="10.5">'+short(c,14)+'</text>'});
+ let polys='';
+ A.forEach((a,ai)=>{let ps=[];for(let ci=0;ci<k;ci++)ps.push(pt(ci,Math.max(0,Math.min(100,(a.crit||[])[ci]||0))).join(','));
+  polys+='<polygon id="rp'+ai+'" class="rpoly" points="'+ps.join(' ')+'" fill="'+cols[ai]+'" stroke="'+cols[ai]+'" style="animation-delay:'+(ai*0.25)+'s"/>'});
+ return '<svg viewBox="0 0 320 300">'+rings+axes+polys+labels+'</svg>';
+}
+// Which quantities are worth a bar / a donut slice for this dataset.
+function metricList(bar){
+ const A=AS(),M=[],fin=S.ds.fin;
+ if(A.some(a=>a.val!=null))M.push({k:'val',t:(bar?'💶 ':'')+t('val'),get:a=>a.val,f:fmt});
+ if(A.some(a=>a.price!=null))M.push({k:'price',t:(bar?'🏷️ ':'')+t('price'),get:a=>a.price,f:fmt});
+ if(!fin&&A.some(a=>a.val!=null&&a.price!=null))M.push({k:'profit',t:(bar?'💰 ':'')+t('profit'),get:a=>(a.val!=null&&a.price!=null)?a.val-a.price:null,f:v=>(v>0?'+':'')+fmt(v),signed:true});
+ if(A.some(a=>a.score!=null))M.push({k:'score',t:(bar?'🎯 ':'')+t('score'),get:a=>effScore(a),f:v=>Number(v).toLocaleString()});
+ if(bar){
+  const si=M.findIndex(m=>m.k==='score');if(si>=0)M.splice(si,1);   // gauges already own the score
+  critNames().forEach((c,ci)=>{if(A.some(a=>(a.crit||[])[ci]!=null))M.push({k:'c'+ci,t:'◈ '+c,get:a=>(a.crit||[])[ci],f:v=>Math.round(v)+'/100'})});
+ }
+ return M;
+}
+function barsHTML(){
+ const M=metricList(true);if(!M.length)return '';
+ const A=AS();
+ return '<div class="sec"><h3>📊 '+t('itembyitem')+'</h3>'+M.map(m=>
+  '<div class="mblock" data-mb="'+m.k+'"><div class="mtitle">'+m.t+'</div>'+
+  A.map((a,i)=>'<div class="brow" data-i="'+i+'" data-m="'+m.k+'"><div class="bname tg" data-i="'+i+'">'+short(nm(a),16)+'</div><div class="btrack"><div class="bfill"></div></div><div class="bval"></div></div>').join('')+
+  '</div>').join('')+'</div>';
+}
+function piesHTML(){
+ const ms=metricList(false),crit=critNames();
+ if(!ms.length&&!crit.length)return '';
+ let h='<div class="sec"><h3>🍩 '+t('pieShare')+'</h3><div class="pies">';
+ if(ms.length)h+='<div class="piecard"><h4><span>'+t('shareOf')+'</span><div class="seg">'+ms.map(m=>'<button class="segb" data-m="'+m.k+'">'+m.t+'</button>').join('')+'</div></h4>'+
+  '<div class="donutwrap"><div id="dpie1"></div><div class="dcenter" id="dpie1c"></div></div><div class="plegend" id="dpie1l"></div></div>';
+ if(crit.length)h+='<div class="piecard"><h4><span>'+t('pieMix')+'</span><div class="seg" id="paseg"></div></h4>'+
+  '<div class="donutwrap"><div id="dpie2"></div><div class="dcenter" id="dpie2c"></div></div><div class="plegend" id="dpie2l"></div></div>';
+ return h+'</div></div>';
+}
+function weightsHTML(crit){
+ return '<div class="sec wpanel"><h3>🎛️ '+t('wTitle')+'</h3><div class="wsub">'+t('wSub')+'</div>'+
+ crit.map((c,i)=>'<div class="wrow"><div class="wname">'+short(c,14)+'</div><input class="wslider" type="range" min="0" max="100" step="1" value="'+wOf(i)+'" data-i="'+i+'" aria-label="'+c+'"><div class="wpct" id="wp'+i+'">'+wOf(i)+'%</div></div>').join('')+
+ '<div class="wfoot"><button class="wbtn" data-wreset="1">↺ '+t('wReset')+'</button>'+
+ crit.map((c,i)=>'<button class="wbtn" data-focus="'+i+'">'+t('wFocus').replace('{n}',short(c,12))+'</button>').join('')+
+ '<span class="wtag" id="wtag">'+t('wTag')+'</span></div></div>';
+}
+function ulHTML(arr,cls){arr=arr||[];return arr.length?'<ul class="'+cls+'">'+arr.map(x=>'<li>'+x+'</li>').join('')+'</ul>':'—'}
+function tableHTML(){
+ const A=AS(),ds=S.ds,has=f=>A.some(a=>(L(a[f])||[]).length);
+ let th='';A.forEach((a,i)=>th+='<th data-i="'+i+'" style="border-top:3px solid '+S.cols[i]+'"></th>');
+ const row=(lbl,fn)=>{let tds='';A.forEach((a,i)=>tds+='<td data-i="'+i+'">'+fn(a)+'</td>');return '<tr><td class="lbl">'+lbl+'</td>'+tds+'</tr>'};
+ let rows='';
+ if(has('specs'))rows+=row(t('specs'),a=>(L(a.specs)||[]).join('<br>')||'—');
+ if(has('pros'))rows+=row(t('pros'),a=>ulHTML(L(a.pros),'pl'));
+ if(has('cons'))rows+=row(t('cons'),a=>ulHTML(L(a.cons),'pl mn'));
+ if(!ds.fin&&A.some(a=>a.vd))rows+=row(t('verdict'),a=>{if(!a.vd||!VD[a.vd])return '—';const v=VD[a.vd];return '<span class="vd" style="color:'+v.c+';border-color:'+v.c+'">'+(lang==='fa'?v.fa:VDEN[a.vd])+'</span>'});
+ if(!rows)return '';
+ return '<div class="sec"><h3>📋 '+t('details')+'</h3><div class="mwrap"><table class="cmp" id="dtbl"><tr><td class="lbl"></td>'+th+'</tr>'+rows+'</table></div></div>';
+}
+function metaHTML(){
+ const ds=S.ds,trend=L(ds.trend),live=ds.source&&ds.source!=='demo';
+ let h='<div class="sec"><h3>📈 '+t('trend')+'</h3>';
+ if(trend)h+='<div class="metarow" style="margin-bottom:14px"><div class="meta">'+trend+'</div></div>';
+ h+='<div class="mtitle" style="margin-bottom:9px">💬 '+t('askTitle')+'</div><div class="askrow">'+
+  '<button class="askb" data-ask="why">🔍 '+t('askWhy')+'</button>'+
+  '<button class="askb" data-ask="alt">🔄 '+t('askAlt')+'</button>'+
+  (critNames().length?'<button class="askb" data-ask="w">🎛️ '+t('askW')+'</button>':'')+'</div>';
+ h+='<div class="srcline">'+(live?'⚡ '+(lang==='fa'?'ساخته‌شده از تحلیل زنده Vera':'Built from a live Vera analysis')
+  :'⚠️ '+(lang==='fa'?'نسخه نمایشی با داده‌های نمونه':'Demo version with sample data'))+' | HardAnalyzer</div>';
+ return h+'</div>';
+}
+function bannerHTML(W){
+ const ds=S.ds,A=ds.assets;
+ if(ds.fin)return '<div class="neutral-box">📊 <b>'+t('neutral')+'</b><br>'+(L(ds.neutral)||L(ds.analysis)||'')+'</div>';
+ if(W<0)return '<div class="neutral-box">'+t('noVis')+'</div>';
+ const moved=S.touched&&ds.winner>=0&&W!==ds.winner;
+ const txt=moved?t('wWin').replace('{n}',nm(A[W])):String(L(ds.analysis)||'').replace(/<[^>]+>/g,'');
+ return '<div class="winban"><span class="crown">👑</span><b>'+nm(A[W])+'</b><p>'+txt+'</p></div>';
+}
+
+/* ═══════════ RENDER + LIVE REFRESH ═══════════ */
+function renderDemo(){
+ const ds=S.ds,out=document.getElementById('out');
+ if(!out)return;
+ if(!ds||!ds.assets.length){out.innerHTML='<div class="emptyb">—</div>';return}
+ const A=ds.assets,crit=critNames();
+ S.cols=colorsFor(winIdx());
+ const tag='<span class="demo-tag">'+(ds.source&&ds.source!=='demo'?t('liveTag'):t('demoTag'))+'</span>';
+ let h='<div id="dban"></div>';
+ if(A.some(a=>a.score!=null))h+='<div class="sec"><h3>🎯 '+t('score')+tag+'</h3>'+legendHTML()+'<div class="grow">'+A.map((a,i)=>gaugeHTML(a,i)).join('')+'</div></div>';
+ if(crit.length)h+=weightsHTML(crit);
+ h+=piesHTML()+barsHTML();
+ if(crit.length>=3)h+='<div class="sec"><h3>🕸️ '+t('radar')+'</h3>'+legendHTML()+'<div class="radarwrap" id="dradar"></div></div>';
+ const an=L(ds.analysis);
+ if(an)h+='<div class="sec"><h3>🧠 '+t('analysis')+'</h3><div class="analysis">'+an+'</div></div>';
+ h+=tableHTML()+metaHTML();
+ out.innerHTML=h;
+ if(crit.length>=3)document.getElementById('dradar').innerHTML=radarSVG(crit,A,S.cols);
+ refresh();
+}
+let banCache='',rafPending=false;
+function scheduleRefresh(){if(rafPending)return;rafPending=true;requestAnimationFrame(()=>{rafPending=false;refresh()})}
+function refresh(){
+ const ds=S.ds;if(!ds)return;
+ const A=ds.assets,W=winIdx(),vis=visIdx(),ord=ranked();
+ S.cols=colorsFor(W);
+ const ban=document.getElementById('dban');
+ if(ban){const html=bannerHTML(W);if(html!==banCache){banCache=html;ban.innerHTML=html}}
+ const wt=document.getElementById('wtag');if(wt)wt.classList.toggle('on',S.touched);
+ A.forEach((a,i)=>{
+  const off=S.off.has(i),col=S.cols[i],sc=effScore(a);
+  const box=document.getElementById('gbox'+i);
+  if(box){
+   box.style.opacity=off?'.3':'';box.classList.toggle('winb',!off&&i===W);
+   const gn=document.getElementById('gn'+i);if(gn)gn.innerHTML=(i===W?'👑 ':'')+nm(a);
+   const gs=document.getElementById('gs'+i);if(gs){gs.textContent=Number(sc).toLocaleString();gs.style.color=col}
+   const gm=document.getElementById('gm'+i);if(gm)gm.textContent=(ds.fin||off)?'':(['🥇','🥈','🥉'][ord.indexOf(i)]||'');
+   const g=document.getElementById('g'+i);if(g){g.style.stroke=col;g.style.strokeDashoffset=String(Math.round(251-Math.min(sc/10000,1)*251))}
+   const gp=document.getElementById('gp'+i);if(gp)gp.innerHTML=(a.val!=null?t('val')+': <b>'+fmt(a.val)+'</b><br>':'')+(a.price!=null?t('price')+': <b>'+fmt(a.price)+'</b>':'');
+  }
+  const rp=document.getElementById('rp'+i);if(rp)rp.style.display=off?'none':'';
+  document.querySelectorAll('.lg[data-i="'+i+'"]').forEach(el=>{el.classList.toggle('off',off);const d=el.querySelector('.dt');if(d)d.style.background=col});
+  document.querySelectorAll('#dtbl [data-i="'+i+'"]').forEach(el=>el.classList.toggle('wincol',!ds.fin&&i===W));
+  const th=document.querySelector('#dtbl th[data-i="'+i+'"]');
+  if(th){th.innerHTML=(!ds.fin&&i===W?'👑 ':'')+nm(a);th.style.borderTop='3px solid '+col;th.style.opacity=off?'.4':''}
+ });
+ metricList(true).forEach(m=>{
+  let mx=1;vis.forEach(i=>{const v=m.get(A[i]);if(v!=null&&Math.abs(v)>mx)mx=Math.abs(v)});
+  let any=false;
+  A.forEach((a,i)=>{
+   const row=document.querySelector('.brow[data-m="'+m.k+'"][data-i="'+i+'"]');if(!row)return;
+   const v=m.get(a);
+   row.style.display=v==null?'none':'';
+   row.classList.toggle('off',S.off.has(i));
+   if(v!=null&&!S.off.has(i))any=true;
+   const f=row.querySelector('.bfill'),lb=row.querySelector('.bval');
+   if(v!=null){f.style.width=Math.min(100,Math.max(Math.abs(v)/mx*100,3)).toFixed(1)+'%';
+    f.style.background=(m.signed&&v<0)?'#e74c3c':S.cols[i];lb.textContent=m.f(v)}
+   else{f.style.width='0%';lb.textContent='—'}
+  });
+  const mb=document.querySelector('.mblock[data-mb="'+m.k+'"]');if(mb)mb.style.display=any?'':'none';
+ });
+ refreshPies(vis);
+}
+function refreshPies(vis){
+ const A=AS(),ms=metricList(false),crit=critNames();
+ if(ms.length&&document.getElementById('dpie1')){
+  if(!ms.some(m=>m.k===S.pm))S.pm=ms[0].k;
+  document.querySelectorAll('.segb[data-m]').forEach(b=>b.classList.toggle('on',b.dataset.m===S.pm));
+  const m=ms.find(x=>x.k===S.pm);
+  const raw=vis.map(i=>({i,v:m.get(A[i])})).filter(x=>x.v!=null&&x.v>0);
+  const tot=raw.reduce((s,x)=>s+x.v,0);
+  const slices=raw.map(x=>({k:'a'+x.i,n:nm(A[x.i]),c:S.cols[x.i],v:x.v,
+   lbl:m.f(x.v)+' · '+(tot?Math.round(x.v/tot*100):0)+'%',act:()=>toggleAsset(x.i)}));
+  if(slices.length)renderDonut('dpie1',slices,(i,st)=>{
+   if(i>=0&&st.slices[i])return '<div><b>'+Math.round((st.vals[i]||0)*100)+'%</b><em>'+short(st.slices[i].n,16)+'</em></div>';
+   return '<div><b>'+m.f(tot)+'</b><em>'+t('total')+' · '+m.t+'</em></div>';
+  });
+  else{document.getElementById('dpie1').innerHTML='<div class="emptyb">—</div>';delete DST.dpie1;setCenter('dpie1',-1)}
+  legendPie('dpie1l',A.map((a,i)=>{const v=m.get(a);return{c:S.cols[i],n:nm(a),i,tg:true,off:S.off.has(i),
+   v:(v==null?'—':m.f(v))+(tot&&v>0&&!S.off.has(i)?' · '+Math.round(v/tot*100)+'%':'')}}));
+ }
+ if(crit.length&&document.getElementById('dpie2')){
+  if(S.off.has(S.pa)||S.pa>=A.length)S.pa=vis.length?vis[0]:0;
+  const seg=document.getElementById('paseg');
+  if(seg)seg.innerHTML=vis.map(i=>'<button class="segb'+(i===S.pa?' on':'')+'" data-a="'+i+'">'+short(nm(A[i]),10)+'</button>').join('');
+  const a=A[S.pa]||A[0];
+  const raw=crit.map((c,i)=>{const base=(a.crit||[])[i];return{i,c,base,v:base==null?0:base*(S.touched?wOf(i)/50:1)}}).filter(x=>x.v>0);
+  const tot=raw.reduce((s,x)=>s+x.v,0);
+  const slices=raw.map(x=>({k:'c'+x.i,n:x.c,c:CPAL[x.i%CPAL.length],v:x.v,
+   lbl:Math.round(x.base)+'/100'+(S.touched?' × '+(wOf(x.i)/50).toFixed(2):'')+' · '+(tot?Math.round(x.v/tot*100):0)+'%'}));
+  if(slices.length)renderDonut('dpie2',slices,(i,st)=>{
+   if(i>=0&&st.slices[i])return '<div><b>'+Math.round((st.vals[i]||0)*100)+'%</b><em>'+short(st.slices[i].n,16)+'</em></div>';
+   return '<div><b>'+Number(effScore(a)).toLocaleString()+'</b><em>'+short(nm(a),16)+'</em></div>';
+  });
+  else{document.getElementById('dpie2').innerHTML='<div class="emptyb">—</div>';delete DST.dpie2;setCenter('dpie2',-1)}
+  legendPie('dpie2l',raw.map(x=>({c:CPAL[x.i%CPAL.length],n:x.c,v:Math.round(x.base)+'/100'+(tot?' · '+Math.round(x.v/tot*100)+'%':'')})));
+ }
+}
+function legendPie(id,items){
+ const el=document.getElementById(id);if(!el)return;
+ el.innerHTML=items.map(x=>'<div class="pitem'+(x.tg?' tg':'')+(x.off?' off':'')+'"'+(x.i!=null?' data-i="'+x.i+'"':'')+
+  '><span class="dt" style="background:'+x.c+'"></span><span class="nmt">'+short(x.n,18)+'</span><span class="pv">'+x.v+'</span></div>').join('');
+}
+
+/* ═══════════ INTERACTIONS ═══════════ */
+function toggleAsset(i){
+ if(!S.off.has(i)&&visIdx().length<=1)return;      // never leave every chart empty
+ S.off.has(i)?S.off.delete(i):S.off.add(i);
+ refresh();
+}
+function resetWeights(){
+ S.w=critNames().map(()=>50);S.touched=false;
+ document.querySelectorAll('.wslider').forEach(s=>{s.value=50;const p=document.getElementById('wp'+s.dataset.i);if(p)p.textContent='50%'});
+ refresh();
+}
+function focusCrit(i){
+ S.w=critNames().map((_,j)=>j===i?100:20);S.touched=true;
+ document.querySelectorAll('.wslider').forEach(s=>{const j=+s.dataset.i;s.value=S.w[j];const p=document.getElementById('wp'+j);if(p)p.textContent=S.w[j]+'%'});
+ refresh();
+}
+// Names/criteria are HTML-escaped for the charts; the composer takes plain text.
+const unescHTML=s=>String(s==null?'':s).replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&quot;/g,'"').replace(/&amp;/g,'&');
+function doAsk(kind){
+ const A=AS(),W=winIdx(),vis=visIdx(),fa=lang==='fa';
+ const crit=critNames().map(unescHTML);
+ const nmOf=i=>unescHTML(nm(A[i]));
+ const names=vis.map(nmOf).join(fa?' و ':' vs ');
+ let q;
+ if(kind==='why')q=fa?'چرا '+(W>=0?nmOf(W):names)+' بهترین انتخاب است؟ نقطه‌ضعف‌هایش را هم بگو.'
+  :'Why is '+(W>=0?nmOf(W):names)+' the best pick? Name its weak spots too.';
+ else if(kind==='alt')q=fa?'به جز '+names+'، گزینه بهتری در همین بودجه هست؟ دو پیشنهاد با جدول مقایسه بده.'
+  :'Beyond '+names+', is there a better option at the same budget? Give two suggestions with a comparison table.';
+ else{
+  const w=crit.map((c,i)=>c+': '+wOf(i)+'%').join('، ');
+  q=fa?'اولویت‌های من این‌هاست — '+w+'. با همین وزن‌ها '+names+' را دوباره تحلیل و رتبه‌بندی کن.'
+   :'My priorities are — '+w+'. Re-analyze and rank '+names+' with those weights.';
+ }
+ askVera(q);
+}
+function bindDemo(){
+ const out=document.getElementById('out');if(!out||out.dataset.bound)return;
+ out.dataset.bound='1';
+ out.addEventListener('click',e=>{
+  const q=s=>e.target.closest&&e.target.closest(s);
+  const lg=q('.lg[data-i]');if(lg)return toggleAsset(+lg.dataset.i);
+  const bn=q('.bname.tg');if(bn)return toggleAsset(+bn.dataset.i);
+  const pi=q('.pitem.tg[data-i]');if(pi)return toggleAsset(+pi.dataset.i);
+  const sm=q('.segb[data-m]');if(sm){S.pm=sm.dataset.m;return refresh()}
+  const sa=q('.segb[data-a]');if(sa){S.pa=+sa.dataset.a;return refresh()}
+  const fb=q('[data-focus]');if(fb)return focusCrit(+fb.dataset.focus);
+  if(q('[data-wreset]'))return resetWeights();
+  const ak=q('[data-ask]');if(ak)return doAsk(ak.dataset.ask);
+ });
+ out.addEventListener('input',e=>{
+  const s=e.target.closest&&e.target.closest('.wslider');if(!s)return;
+  S.w[+s.dataset.i]=+s.value;S.touched=true;
+  const p=document.getElementById('wp'+s.dataset.i);if(p)p.textContent=s.value+'%';
+  scheduleRefresh();
+ });
+ out.addEventListener('mouseover',e=>{
+  const r=e.target.closest&&e.target.closest('.brow');if(!r)return;
+  const m=metricList(true).find(x=>x.k===r.dataset.m),a=AS()[+r.dataset.i];
+  if(m&&a)tipShow(e,'<b>'+nm(a)+'</b><br>'+m.t+': '+(m.get(a)==null?'—':m.f(m.get(a))));
+ });
+ out.addEventListener('mousemove',e=>{if(e.target.closest&&e.target.closest('.brow'))tipMove(e)});
+ out.addEventListener('mouseout',e=>{if(e.target.closest&&e.target.closest('.brow'))tipHide()});
+}
+
+/* ═══════════ DATASET SWITCHING ═══════════ */
+function show(key){
+ if(key==='live'&&!S.live)key='laptop';
+ const ds=key==='live'?S.live:DEMO[key];
+ if(!ds)return;
+ if(!ds.source)ds.source='demo';
+ S.key=key;S.ds=ds;
+ S.w=critNames().map(()=>50);S.touched=false;S.off=new Set();
+ S.pa=(ds.winner>=0&&ds.winner<ds.assets.length)?ds.winner:0;   // open the mix on Vera's pick
+ const ms=metricList(false);S.pm=ms.length?ms[0].k:'val';
+ banCache='';DST.dpie1=null;DST.dpie2=null;
+ document.querySelectorAll('.chip').forEach(c=>c.classList.toggle('active',c.dataset.k===key));
+ const lb=document.getElementById('livebox');if(lb)lb.classList.toggle('on',key==='live');
+ renderDemo();
+ bindDemo();
+}
+// Called when a Vera reply carried enough structure to draw.
+function applyLive(ds){S.live=ds;buildChips();show('live')}
+function buildChips(){
+ const c=document.getElementById('chips');if(!c)return;
+ c.innerHTML='';
+ const mk=(key,label,cls)=>{const ch=document.createElement('div');ch.className='chip'+(cls||'');ch.dataset.k=key;ch.textContent=label;ch.onclick=()=>show(key);c.appendChild(ch)};
+ if(S.live)mk('live',t('liveT')+(S.live.title?' · '+short(S.live.title,26):''),' live');
+ Object.keys(DEMO).forEach(k=>mk(k,L(DEMO[k].title)));
+ c.querySelectorAll('.chip').forEach(x=>x.classList.toggle('active',x.dataset.k===S.key));
+}
+
+function toggleLang(){
+ lang=lang==='fa'?'en':'fa';
+ document.documentElement.dir=lang==='fa'?'rtl':'ltr';document.documentElement.lang=lang;
+ document.getElementById('langBtn').textContent=lang==='fa'?'EN':'FA';
+ document.querySelectorAll('[data-k]').forEach(el=>el.innerHTML=t(el.dataset.k));
+ const ph=document.getElementById('vinput');if(ph)ph.placeholder=T[lang].vPh;
+ buildChips();buildVChips();show(S.key);
+}
 
 /* init */
 buildVChips();
