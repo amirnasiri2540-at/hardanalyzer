@@ -328,9 +328,24 @@ if(typeof marked!=="undefined"&&marked.setOptions){marked.setOptions({gfm:true,b
 // and mixed currency marks. Everything downstream expects plain JS numbers.
 function toEn(s){return String(s).replace(/[۰-۹]/g,d=>d.charCodeAt(0)-0x06F0).replace(/[٠-٩]/g,d=>d.charCodeAt(0)-0x0660)}
 const NA_RE=/^(—|–|-|\?|n\/?a|none|null|نامشخص|ندارد|بدون|نداریم)$/i;
-function parseNum(raw){
+// Vera quotes prices as ranges \u2014 "\u20ac850\u20131000", "550 \u062a\u0627 650". Glued together they
+// become \u20ac8,501,000, so a range is split and kept as a pair; the charts plot its
+// midpoint and the cards show the range it came from.
+function parseRange(raw){
+ if(raw==null||typeof raw==='number')return null;
+ const s=toEn(String(raw)).replace(/[\u200b-\u200f\u202a-\u202e]/g,'').trim();
+ if(!s||NA_RE.test(s))return null;
+ let m=s.match(/^(.*?\d[\d.,]*)\s*(?:[\u2013\u2014\u2012~]|\bto\b|\u062a\u0627|\u0627\u0644\u06cc)\s*([^\d]{0,3}\d[\d.,]*.*)$/i);
+ if(!m)m=s.match(/^(.*?\d[\d.,]*)\s*-\s*([^\d]{0,3}\d[\d.,]*.*)$/);
+ if(!m)return null;
+ const lo=parseNum(m[1],true),hi=parseNum(m[2],true);
+ if(lo==null||hi==null||hi<lo)return null;
+ return[lo,hi];
+}
+function parseNum(raw,noRange){
  if(raw==null)return null;
  if(typeof raw==='number')return isFinite(raw)?raw:null;
+ if(!noRange){const r=parseRange(raw);if(r)return(r[0]+r[1])/2}
  let s=toEn(String(raw)).replace(/[\u200b-\u200f\u202a-\u202e]/g,'').trim();
  if(!s||NA_RE.test(s))return null;
  let mult=1;
@@ -483,7 +498,8 @@ function dsFromTables(md){
   if(key==='price'||key==='val'){
    if(/[\/%]/.test(String(raw)))return putCrit(name,label||key,raw);
    const v=parseNum(raw);if(v==null)return;
-   a[key]==null?a[key]=v:putCrit(name,label||key,raw);
+   if(a[key]==null){a[key]=v;const r=parseRange(raw);if(r)a[key+'R']=r}
+   else putCrit(name,label||key,raw);
   }
   else if(key==='score'){const v=parseScoreCell(raw);if(v!=null&&a.score==null)a.score=v}
   else if(key==='vd'){a.vd=a.vd||vdKey(raw)}
@@ -534,7 +550,9 @@ function dsFromJSON(o){
  const criteria=(Array.isArray(o.criteria)?o.criteria:[]).map(c=>stripMD(c)).filter(Boolean).slice(0,6);
  const assets=(Array.isArray(o.assets)?o.assets:[]).slice(0,6).map(a=>{
   const raw=Array.isArray(a.crit)?a.crit:(Array.isArray(a.criteria)?a.criteria:[]);
-  return{n:stripMD(a.name||a.n||''),price:parseNum(a.price),val:parseNum(a.value!=null?a.value:a.val),
+  const rawVal=a.value!=null?a.value:a.val;
+  return{n:stripMD(a.name||a.n||''),price:parseNum(a.price),priceR:parseRange(a.price),
+   val:parseNum(rawVal),valR:parseRange(rawVal),
    score:parseScoreCell(a.score),crit:criteria.map((_,i)=>parse100(raw[i])),
    specs:toArr(a.specs),pros:toArr(a.pros),cons:toArr(a.cons),vd:vdKey(a.verdict||a.vd)};
  }).filter(a=>a.n);
@@ -794,6 +812,13 @@ function short(s,n){s=String(s||'');n=n||20;return s.length>n?s.slice(0,n-1)+'�
 // RTL line flips into a nonsense "15-€").
 function fmt(n){if(n==null)return '—';const c=(S.ds&&S.ds.cur)||'€';
  return (n<0?'−':'')+c+Number(Math.abs(n)).toLocaleString('de-DE',{maximumFractionDigits:2})}
+// Showing "€850–1.000" beats showing its midpoint as if it were a quote.
+function money(a,k){
+ const r=a&&a[k+'R'];
+ if(!r)return fmt(a?a[k]:null);
+ const c=(S.ds&&S.ds.cur)||'€';
+ return c+Number(r[0]).toLocaleString('de-DE')+'–'+Number(r[1]).toLocaleString('de-DE');
+}
 function critNames(){const c=S.ds?L(S.ds.criteria):null;return Array.isArray(c)?c.slice():[]}
 function AS(){return S.ds?S.ds.assets:[]}
 const wOf=i=>S.w[i]==null?50:S.w[i];
@@ -907,8 +932,8 @@ function radarSVG(criteria,A,cols){
 // Which quantities are worth a bar / a donut slice for this dataset.
 function metricList(bar){
  const A=AS(),M=[],fin=S.ds.fin;
- if(A.some(a=>a.val!=null))M.push({k:'val',t:(bar?'💶 ':'')+t('val'),get:a=>a.val,f:fmt});
- if(A.some(a=>a.price!=null))M.push({k:'price',t:(bar?'🏷️ ':'')+t('price'),get:a=>a.price,f:fmt});
+ if(A.some(a=>a.val!=null))M.push({k:'val',t:(bar?'💶 ':'')+t('val'),get:a=>a.val,f:(v,a)=>a?money(a,'val'):fmt(v)});
+ if(A.some(a=>a.price!=null))M.push({k:'price',t:(bar?'🏷️ ':'')+t('price'),get:a=>a.price,f:(v,a)=>a?money(a,'price'):fmt(v)});
  if(!fin&&A.some(a=>a.val!=null&&a.price!=null))M.push({k:'profit',t:(bar?'💰 ':'')+t('profit'),get:a=>(a.val!=null&&a.price!=null)?a.val-a.price:null,f:v=>(v>0?'+':'')+fmt(v),signed:true});
  if(A.some(a=>a.score!=null))M.push({k:'score',t:(bar?'🎯 ':'')+t('score'),get:a=>effScore(a),f:v=>Number(v).toLocaleString()});
  if(bar){
@@ -1014,7 +1039,7 @@ function refresh(){
    const gs=document.getElementById('gs'+i);if(gs){gs.textContent=Number(sc).toLocaleString();gs.style.color=col}
    const gm=document.getElementById('gm'+i);if(gm)gm.textContent=(ds.fin||off)?'':(['🥇','🥈','🥉'][ord.indexOf(i)]||'');
    const g=document.getElementById('g'+i);if(g){g.style.stroke=col;g.style.strokeDashoffset=String(Math.round(251-Math.min(sc/10000,1)*251))}
-   const gp=document.getElementById('gp'+i);if(gp)gp.innerHTML=(a.val!=null?t('val')+': <b>'+fmt(a.val)+'</b><br>':'')+(a.price!=null?t('price')+': <b>'+fmt(a.price)+'</b>':'');
+   const gp=document.getElementById('gp'+i);if(gp)gp.innerHTML=(a.val!=null?t('val')+': <b>'+money(a,'val')+'</b><br>':'')+(a.price!=null?t('price')+': <b>'+money(a,'price')+'</b>':'');
   }
   const rp=document.getElementById('rp'+i);if(rp)rp.style.display=off?'none':'';
   document.querySelectorAll('.lg[data-i="'+i+'"]').forEach(el=>{el.classList.toggle('off',off);const d=el.querySelector('.dt');if(d)d.style.background=col});
@@ -1033,7 +1058,7 @@ function refresh(){
    if(v!=null&&!S.off.has(i))any=true;
    const f=row.querySelector('.bfill'),lb=row.querySelector('.bval');
    if(v!=null){f.style.width=Math.min(100,Math.max(Math.abs(v)/mx*100,3)).toFixed(1)+'%';
-    f.style.background=(m.signed&&v<0)?'#e74c3c':S.cols[i];lb.textContent=m.f(v)}
+    f.style.background=(m.signed&&v<0)?'#e74c3c':S.cols[i];lb.textContent=m.f(v,a)}
    else{f.style.width='0%';lb.textContent='—'}
   });
   const mb=document.querySelector('.mblock[data-mb="'+m.k+'"]');if(mb)mb.style.display=any?'':'none';
@@ -1049,14 +1074,14 @@ function refreshPies(vis){
   const raw=vis.map(i=>({i,v:m.get(A[i])})).filter(x=>x.v!=null&&x.v>0);
   const tot=raw.reduce((s,x)=>s+x.v,0);
   const slices=raw.map(x=>({k:'a'+x.i,n:nm(A[x.i]),c:S.cols[x.i],v:x.v,
-   lbl:m.f(x.v)+' · '+(tot?Math.round(x.v/tot*100):0)+'%',act:()=>toggleAsset(x.i)}));
+   lbl:m.f(x.v,A[x.i])+' · '+(tot?Math.round(x.v/tot*100):0)+'%',act:()=>toggleAsset(x.i)}));
   if(slices.length)renderDonut('dpie1',slices,(i,st)=>{
    if(i>=0&&st.slices[i])return '<div><b>'+Math.round((st.vals[i]||0)*100)+'%</b><em>'+short(st.slices[i].n,16)+'</em></div>';
    return '<div><b>'+m.f(tot)+'</b><em>'+t('total')+' · '+m.t+'</em></div>';
   });
   else{document.getElementById('dpie1').innerHTML='<div class="emptyb">—</div>';delete DST.dpie1;setCenter('dpie1',-1)}
   legendPie('dpie1l',A.map((a,i)=>{const v=m.get(a);return{c:S.cols[i],n:nm(a),i,tg:true,off:S.off.has(i),
-   v:(v==null?'—':m.f(v))+(tot&&v>0&&!S.off.has(i)?' · '+Math.round(v/tot*100)+'%':'')}}));
+   v:(v==null?'—':m.f(v,a))+(tot&&v>0&&!S.off.has(i)?' · '+Math.round(v/tot*100)+'%':'')}}));
  }
  if(crit.length&&document.getElementById('dpie2')){
   if(S.off.has(S.pa)||S.pa>=A.length)S.pa=vis.length?vis[0]:0;
@@ -1139,7 +1164,7 @@ function bindDemo(){
  out.addEventListener('mouseover',e=>{
   const r=e.target.closest&&e.target.closest('.brow');if(!r)return;
   const m=metricList(true).find(x=>x.k===r.dataset.m),a=AS()[+r.dataset.i];
-  if(m&&a)tipShow(e,'<b>'+nm(a)+'</b><br>'+m.t+': '+(m.get(a)==null?'—':m.f(m.get(a))));
+  if(m&&a)tipShow(e,'<b>'+nm(a)+'</b><br>'+m.t+': '+(m.get(a)==null?'—':m.f(m.get(a),a)));
  });
  out.addEventListener('mousemove',e=>{if(e.target.closest&&e.target.closest('.brow'))tipMove(e)});
  out.addEventListener('mouseout',e=>{if(e.target.closest&&e.target.closest('.brow'))tipHide()});
