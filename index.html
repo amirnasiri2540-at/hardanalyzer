@@ -463,7 +463,15 @@ const stripMD=s=>String(s||'').replace(/[*_`#>]/g,'').replace(/\[(.*?)\]\(.*?\)/
 
 /* ═══════════ CHART CONTRACT — asks Vera for machine-readable data ═══════════ */
 // Appended to the outgoing message only; never shown in the chat transcript.
-const CHART_CONTRACT='\n\n(If your answer compares or values things, end it with a ```vera-chart block containing only JSON: {"criteria":["..."],"assets":[{"name":"","price":0,"value":0,"score":0,"crit":[0],"verdict":"BUY"}],"winner":0}. Plain numbers, crit 0-100, score 0-10000. Otherwise skip it.)';
+// Measured, not guessed: the JSON block was being ignored outright while the
+// markdown table path parsed cleanly, and the engine was answering an Iranian
+// site in German. So the ask is now short, in the reader's own language, and
+// asks for the one thing that actually arrives — a table with figures in it.
+function chartAsk(){
+ return lang==='fa'
+  ? '\n\n[راهنما: پاسخ را به فارسی بنویس. اگر این سؤال مقایسه یا ارزش‌گذاری است، حتماً یک جدول مارک‌داون بیاور با سطرهای «قیمت»، «ارزش تخمینی»، «امتیاز» و سه تا چهار معیار دیگر؛ در خانه‌های همین سطرها فقط عدد بگذار، مثل ۹۲/۱۰۰ یا €۱۲۰۰.]'
+  : '\n\n[Note: answer in English. If this is a comparison or a valuation, include a markdown table with rows for Price, Estimated value, Score and three or four other criteria; put figures only in those cells, like 92/100 or EUR 1200.]';
+}
 
 // Pull the JSON block out of a reply and return the reply without it.
 function splitChartBlock(reply){
@@ -502,18 +510,18 @@ function findBareJSON(txt){
 // When Vera answers with a plain comparison table we still want charts, so the
 // table gets classified into the same shape the JSON contract produces.
 const METRICS=[
- ['price',/(قیمت|price|listing|آگهی|هزینه|cost|asking)/i],
- ['val',/(ارزش\s*(تخمین|واقع|منصف)|ارزش$|value|worth|estimat|fair\s*value)/i],
- ['score',/(امتیاز|score|نمره|rating)/i],
- ['profit',/(سود|profit|margin|صرفه|saving)/i],
- ['vd',/(نتیجه|verdict|توصیه|recommend|حکم)/i],
- ['specs',/(مشخصات|spec|ویژگی|جزئیات|detail)/i],
- ['pros',/(مزایا|pros|نقاط\s*قوت|مزیت|strength|advantage)/i],
- ['cons',/(معایب|cons|نقاط\s*ضعف|ضعف|weakness|drawback|ایراد)/i]
+ ['price',/(قیمت|price|listing|آگهی|هزینه|cost|asking|preis|kosten)/i],
+ ['val',/(ارزش\s*(تخمین|واقع|منصف)|ارزش$|value|worth|estimat|fair\s*value|gesch(ä|ae)tzter\s*wert|marktwert)/i],
+ ['score',/(امتیاز|score|نمره|rating|punktzahl|bewertung)/i],
+ ['profit',/(سود|profit|margin|صرفه|saving|gewinn|ersparnis)/i],
+ ['vd',/(نتیجه|verdict|توصیه|recommend|حکم|fazit|urteil|empfehlung)/i],
+ ['specs',/(مشخصات|spec|ویژگی|جزئیات|detail|merkmale|technische\s*daten)/i],
+ ['pros',/(مزایا|pros|نقاط\s*قوت|مزیت|strength|advantage|vorteile|st(ä|ae)rken)/i],
+ ['cons',/(معایب|cons|نقاط\s*ضعف|ضعف|weakness|drawback|ایراد|nachteile|schw(ä|ae)chen)/i]
 ];
 // Header of the first column tells us how the table is laid out.
-const LABELCOL=/^\s*(|—|–|-|مورد|موارد|عنصر|آیتم|مؤلفه|مولفه|معیار|معیارها|ویژگی|ویژگی‌?ها|شاخص|شاخصه|سنجه|پارامتر|مشخصه|مشخصات|بخش|دسته|item|metric|criteri\w*|attribute|feature|aspect|categor\w*|parameter|comparison|spec\w*)\s*$/i;
-const ASSETCOL=/^\s*(نام|مدل|گزینه|محصول|دارایی|کالا|دستگاه|name|model|option|asset|product|device|car|phone|laptop)\s*$/i;
+const LABELCOL=/^\s*(|—|–|-|مورد|موارد|عنصر|آیتم|مؤلفه|مولفه|معیار|معیارها|ویژگی|ویژگی‌?ها|شاخص|شاخصه|سنجه|پارامتر|مشخصه|مشخصات|بخش|دسته|item|metric|criteri\w*|attribute|feature|aspect|categor\w*|parameter|comparison|spec\w*|merkmal|kriterium|eigenschaft|kategorie)\s*$/i;
+const ASSETCOL=/^\s*(نام|مدل|گزینه|محصول|دارایی|کالا|دستگاه|name|model|option|asset|product|device|car|phone|laptop|modell|ger(ä|ae)t|produkt)\s*$/i;
 function classify(lbl){const s=stripMD(toEn(String(lbl||'')));for(const[k,re]of METRICS)if(re.test(s))return k;return null}
 function parseTables(md){
  const lines=md.split('\n'),out=[];
@@ -817,7 +825,7 @@ async function vSend(){
   let reply=null,usedContract=false;
   if(chartContractOn){
    const wire=plain.slice();
-   wire[wire.length-1]={role:'user',content:text+CHART_CONTRACT};
+   wire[wire.length-1]={role:'user',content:text+chartAsk()};
    const d=await postVera(wire);
    if(d.reply){reply=d.reply;usedContract=true}
    else chartContractOn=false;
