@@ -198,6 +198,10 @@ footer{text-align:center;color:#555;font-size:.62rem;margin-top:20px;line-height
 .askb{background:var(--vpanel);border:1px solid var(--vline);color:#bfe9da;border-radius:100px;padding:8px 14px;font-size:.68rem;cursor:pointer;font-family:inherit;transition:.18s}
 .askb:hover{border-color:var(--emerald-bright);color:#fff}
 .emptyb{text-align:center;color:var(--mut);font-size:.74rem;padding:18px;line-height:1.9}
+/* only rendered under ?debug=1 */
+.dbgline{margin-top:10px;padding:8px 10px;border:1px dashed #3d5a50;border-radius:8px;background:#0a1a15;color:#7fb3a1;font-family:'Courier New',monospace;font-size:.62rem;line-height:1.9;direction:ltr;text-align:left;word-break:break-word}
+.dbgline button{margin-top:6px;background:#12291f;border:1px solid var(--vline);color:#bfe9da;border-radius:10px;padding:4px 10px;font-size:.62rem;cursor:pointer;font-family:inherit}
+.dbgta{width:100%;height:110px;margin-top:6px;background:#08120f;color:#9fd8c4;border:1px solid var(--vline);border-radius:8px;font-family:'Courier New',monospace;font-size:.6rem;direction:ltr}
 @media(max-width:560px){.radarwrap svg{max-width:280px}.vmsg{max-width:97%}.wname{width:74px}.piecard{min-width:100%}}
 </style>
 </head>
@@ -344,12 +348,17 @@ function parseNum(raw){
 }
 const clamp100=v=>Math.max(0,Math.min(100,v));
 // A criterion cell can arrive as "88", "8.8/10", "88%", "4/5" — all mean 0..100.
+// The whole cell has to be one of those shapes. A number wearing a unit ("50
+// TOPS", "16GB", "3.2 GHz") is a specification, not a score, and reading it as
+// one would put a fabricated bar on the chart.
+const P_PURE=/^-?[\d.,]+$/,P_PCT=/^-?[\d.,]+\s*%$/,P_FRAC=/^-?[\d.,]+\s*\/\s*[\d.,]+$/;
 function parse100(raw){
  if(raw==null)return null;
- const s=toEn(String(raw));
- const fr=s.match(/(-?[\d.,]+)\s*\/\s*([\d.,]+)/);
- if(fr){const v=parseNum(fr[1]),d=parseNum(fr[2]);return(v==null||!d)?null:clamp100(v/d*100)}
- if(/%/.test(s)){const v=parseNum(s);return v==null?null:clamp100(v)}
+ const s=toEn(String(raw)).replace(/[\u200b-\u200f\u202a-\u202e]/g,'').trim();
+ if(!s||NA_RE.test(s))return null;
+ if(P_FRAC.test(s)){const p=s.split('/'),v=parseNum(p[0]),d=parseNum(p[1]);return(v==null||!d)?null:clamp100(v/d*100)}
+ if(P_PCT.test(s)){const v=parseNum(s);return v==null?null:clamp100(v)}
+ if(!P_PURE.test(s))return null;
  const v=parseNum(s);
  if(v==null)return null;
  if(v>=0&&v<=10&&/[.,]/.test(s))return clamp100(v*10);
@@ -445,8 +454,8 @@ const METRICS=[
  ['cons',/(معایب|cons|نقاط\s*ضعف|ضعف|weakness|drawback|ایراد)/i]
 ];
 // Header of the first column tells us how the table is laid out.
-const LABELCOL=/^\s*(|—|–|-|مورد|معیار|ویژگی|شاخص|پارامتر|مشخصه|item|metric|criteri\w*|attribute|feature|spec\w*)\s*$/i;
-const ASSETCOL=/^\s*(نام|مدل|گزینه|محصول|دارایی|کالا|name|model|option|asset|product|device|car|phone)\s*$/i;
+const LABELCOL=/^\s*(|—|–|-|مورد|موارد|عنصر|آیتم|مؤلفه|مولفه|معیار|معیارها|ویژگی|ویژگی‌?ها|شاخص|شاخصه|سنجه|پارامتر|مشخصه|مشخصات|بخش|دسته|item|metric|criteri\w*|attribute|feature|aspect|categor\w*|parameter|comparison|spec\w*)\s*$/i;
+const ASSETCOL=/^\s*(نام|مدل|گزینه|محصول|دارایی|کالا|دستگاه|name|model|option|asset|product|device|car|phone|laptop)\s*$/i;
 function classify(lbl){const s=stripMD(toEn(String(lbl||'')));for(const[k,re]of METRICS)if(re.test(s))return k;return null}
 function parseTables(md){
  const lines=md.split('\n'),out=[];
@@ -573,12 +582,55 @@ function finalizeDS(ds,source){
  return sanitizeDS(ds);
 }
 // One entry point: JSON contract first, markdown tables as the safety net.
-function datasetFromReply(reply,cleanText){
+// Every attempt records why it did or did not produce charts, so ?debug=1 can
+// answer "nothing happened" with a reason instead of a shrug.
+let lastDiag=null;
+function datasetFromReply(reply,cleanText,usedContract){
+ const g={contract:usedContract?'sent':'dropped',json:false,tables:0,shape:'–',result:'none',assets:0,crit:0,money:0};
+ lastDiag=g;
  try{
   const o=splitChartBlock(reply).obj;
-  if(o){const d=dsFromJSON(o);if(d)return d}
- }catch(e){}
- try{return dsFromTables(cleanText||reply)}catch(e){return null}
+  if(o){
+   g.json=true;
+   const ds=dsFromJSON(o);
+   if(ds){g.result='json';noteDS(g,ds);return ds}
+   g.result='json-unusable';
+  }
+ }catch(e){g.result='json-broken'}
+ try{
+  const src=cleanText||reply,tabs=parseTables(src);
+  g.tables=tabs.length;
+  if(tabs.length)g.shape=tabs[0].head.length+'col × '+tabs[0].rows.length+'row';
+  const ds=dsFromTables(src);
+  if(ds){g.result='table';noteDS(g,ds);return ds}
+  g.result=tabs.length?'table-has-no-numbers':'no-table';
+ }catch(e){g.result='table-broken'}
+ return null;
+}
+function noteDS(g,ds){
+ g.assets=ds.assets.length;g.crit=ds.criteria.length;
+ g.money=ds.assets.filter(a=>a.price!=null||a.val!=null||a.score!=null).length;
+}
+// ?debug=1 prints the reason under each answer, with the raw reply one tap away.
+const DBG=/[?&#]debug=1\b/.test(location.search+location.hash);
+function vDiagLine(bub,reply){
+ if(!DBG||!bub||!lastDiag)return;
+ const g=lastDiag;
+ const box=document.createElement('div');box.className='dbgline';
+ box.textContent='⚙ قرارداد: '+g.contract+' · JSON: '+(g.json?'✓':'✗')+' · جدول: '+g.tables+' ('+g.shape+') · نتیجه: '+g.result+' · دارایی: '+g.assets+' · معیار: '+g.crit+' · عددی: '+g.money;
+ const btn=document.createElement('button');btn.textContent='📋 کپی پاسخ خام برای عیب‌یابی';
+ btn.onclick=()=>{
+  const payload='--- diag ---\n'+JSON.stringify(g,null,1)+'\n--- raw reply ---\n'+reply;
+  const done=()=>{btn.textContent='✅ کپی شد'};
+  if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(payload).then(done,()=>dbgFallback(box,payload));
+  else dbgFallback(box,payload);
+ };
+ box.appendChild(document.createElement('br'));box.appendChild(btn);
+ bub.appendChild(box);
+}
+function dbgFallback(box,text){
+ const ta=document.createElement('textarea');ta.className='dbgta';ta.value=text;
+ box.appendChild(ta);ta.focus();ta.select();
 }
 
 /* ───── i18n ───── */
@@ -675,12 +727,12 @@ async function vSend(){
  // The transcript stays clean, so the contract never shows in the UI nor piles up.
  const plain=vHistory.map(m=>({role:m.role,content:m.content}));
  try{
-  let reply=null;
+  let reply=null,usedContract=false;
   if(chartContractOn){
    const wire=plain.slice();
    wire[wire.length-1]={role:'user',content:text+CHART_CONTRACT};
    const d=await postVera(wire);
-   if(d.reply)reply=d.reply;
+   if(d.reply){reply=d.reply;usedContract=true}
    else chartContractOn=false;
   }
   if(reply==null){
@@ -693,8 +745,11 @@ async function vSend(){
   const shown=clean||reply;
   const bub=vAdd('bot',shown);
   vHistory.push({role:'assistant',content:shown});
-  try{const ds=datasetFromReply(reply,shown);if(ds){applyLive(ds);vChartCTA(bub)}}
-  catch(e){}                                     // a chart failure must never eat the answer
+  try{
+   const ds=datasetFromReply(reply,shown,usedContract);
+   if(ds){applyLive(ds);vChartCTA(bub)}
+   vDiagLine(bub,reply);
+  }catch(e){}                                    // a chart failure must never eat the answer
  }catch(err){
   vRmTyping();
   vAdd('bot','⚠️ '+(lang==='fa'?'ارتباط با موتور Vera برقرار نشد. اینترنت را بررسی کن و دوباره بفرست.':'Could not reach the Vera engine. Check your connection and send again.'));
