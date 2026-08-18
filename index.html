@@ -208,6 +208,34 @@ footer{text-align:center;color:#555;font-size:.62rem;margin-top:20px;line-height
 .emptyhero b{display:block;color:#fff;font-size:.95rem;margin:11px 0 8px}
 .emptyhero p{color:var(--mut);font-size:.76rem;line-height:1.95;max-width:460px;margin:0 auto 15px}
 .emptyhero .eh-hint{margin-top:14px;font-size:.68rem;color:#666;line-height:1.8}
+/* the purchase justification sheet — the one thing a buyer hands over */
+.sheetbtns{margin-inline-start:auto;display:flex;gap:6px}
+.sheetbtns .wbtn{font-size:.62rem!important;padding:4px 11px!important}
+.sheet{background:#101010;border:1px solid var(--bd);border-radius:11px;padding:16px 18px;font-size:.76rem;line-height:2}
+.sheet p{margin:5px 0}
+.sheet i{font-style:normal;color:var(--mut);font-size:.7rem}
+.sheet .sheetrec b{color:var(--win);font-size:.92rem}
+.sheetsub{margin:15px 0 8px;font-size:.7rem;color:#ccc;font-weight:bold;border-bottom:1px solid var(--bd);padding-bottom:6px}
+.sheettbl{border-collapse:collapse;width:100%;font-size:.72rem}
+.sheettbl th{color:var(--mut);font-weight:normal;font-size:.64rem;text-align:start;padding:5px 8px;white-space:nowrap}
+.sheettbl td{padding:6px 8px;border-top:1px solid #232323}
+.sheettbl tr.picked td{background:rgba(39,174,96,.08)}
+.sheettbl tr.picked b{color:var(--win);font-size:.66rem}
+.sheetck{list-style:none;padding:0;font-size:.72rem;line-height:2.1}
+.sheetck li::before{content:"☐ ";color:var(--los)}
+.sheetsrc{margin-top:14px;font-size:.62rem;color:#666;line-height:1.8;border-top:1px solid var(--bd);padding-top:9px}
+.esttag{font-size:.55rem;color:var(--los);border:1px solid rgba(243,156,18,.45);border-radius:9px;padding:1px 6px;white-space:nowrap;vertical-align:middle}
+.estnote{font-size:.66rem;color:#c8a56a;background:rgba(243,156,18,.06);border:1px solid rgba(243,156,18,.25);border-radius:9px;padding:9px 12px;line-height:1.9;margin-bottom:10px}
+@media print{
+ body{background:#fff}
+ header,.disc,.hero,.vera-live,.demo-divider,.livebar,footer,.ctip{display:none!important}
+ #out>.sec:not(#dsheetSec){display:none!important}
+ #dsheetSec,#dsheetSec .sheet{background:#fff;border:none;padding:0}
+ #dsheetSec *{color:#111!important;border-color:#bbb!important}
+ #dsheetSec .sheetbtns,#dsheetSec .wsub{display:none!important}
+ .sheettbl tr.picked td{background:#f2f2f2!important}
+}
+
 /* step-up ladder */
 .step{background:var(--card);border:1px solid var(--bd);border-left:4px solid var(--bd);border-radius:11px;padding:12px 14px;margin-bottom:10px}
 .step.st-great{border-left-color:var(--win);background:linear-gradient(90deg,rgba(39,174,96,.09),transparent 55%)}
@@ -706,7 +734,17 @@ function dbgFallback(box,text){
 const T={
  fa:{heroH:'با <b>Vera</b>، ارزش واقعی هر چیزی را بدان',heroP:'قبل از هر خرید، ارزش واقعی را بسنج. Vera هر دارایی را شناسایی، تجزیه و ارزش‌گذاری می‌کند تا با پول خود، بهترین انتخاب را داشته باشی — نه کمتر، نه گران‌تر.',vp1t:'پله بالاتر',vp1d:'گاهی با کمی پول بیشتر، ارزش خیلی بالاتری می‌گیری',vp2t:'گزینه بهتر',vp2d:'شاید گزینه‌ای بهتر هست که هنوز نمی‌شناسی',vp3t:'بدون اسراف',vp3d:'گاهی ارزان‌تر، همان کار را عالی انجام می‌دهد',vTitle:'تحلیل زنده با Vera',vSub:'هر دارایی‌ای را بپرس — تجزیه، ارزش‌گذاری و مقایسه واقعی',vLive:'زنده',vWelcome:'یک نمونه را بزن یا سؤالت را بنویس — Vera جدول کامل ارزش می‌سازد.',vPh:'مثلاً: آیفون ۱۴ را با گلکسی S23 اولترا مقایسه کن',demoT:'🎨 نمودارهای زنده',demoP:'هرچه بالا از Vera بپرسی، همین‌جا به نمودار تبدیل می‌شود — و اگر جوابی عدد نداشته باشد، همین‌جا صریح می‌گوید نتوانست.',tryT:'',
    emptyT:'هنوز نموداری ساخته نشده',emptyP:'از Vera یک مقایسه بپرس. هر جوابی که عدد داشته باشد — قیمت، ارزش تخمینی، امتیاز — خودکار همین‌جا به نمودار تبدیل می‌شود. اینجا هیچ داده‌ی نمایشی نمی‌بینی؛ فقط چیزی که واقعاً پرسیده‌ای.',
-   emptyEg:'مثال: «Ubiquiti airFiber AF-24 را با Mimosa B24 مقایسه کن»',footT:'HardAnalyzer • ارزش‌گذاری هوشمند با موتور Vera',score:'امتیاز Vera',val:'ارزش تخمینی',price:'قیمت آگهی',profit:'سود خریدار',analysis:'نتیجه‌گیری Vera',details:'جزئیات کامل',specs:'مشخصات',pros:'مزایا',cons:'معایب',verdict:'نتیجه',radar:'رادار چندبعدی',itembyitem:'مقایسه آیتم به آیتم',trend:'روند بازار',neutral:'داده خنثی — بدون توصیه خرید/فروش',
+   emptyEg:'مثال: «Ubiquiti airFiber AF-24 را با Mimosa B24 مقایسه کن»',
+   estTag:'تخمینی',estNote:'قیمت‌ها و ارزش‌ها تخمین Vera هستند، نه استعلام. پیش از سفارش از فروشنده تأیید بگیر.',
+   sheetT:'برگه‌ی توجیه خرید',sheetSub:'برای فوروارد به مدیر یا پیوست به درخواست خرید.',
+   sheetDate:'تاریخ',sheetReq:'درخواست',sheetRec:'پیشنهاد',sheetWhy:'دلیل',sheetOpts:'گزینه‌های بررسی‌شده',
+   sheetDiff:'تفاوت هزینه',sheetConfirm:'پیش از سفارش باید تأیید شود',
+   sheetC1:'قیمت نهایی و موجودی از توزیع‌کننده (ارقام بالا تخمینی‌اند)',sheetC2:'زمان تحویل',
+   sheetC3:'وضعیت محصول — منسوخ (EOL) نشده باشد و شمارهٔ فنی درست باشد',sheetC4:'گارانتی و شرایط تعویض',
+   sheetCopy:'📋 کپی متن',sheetPrint:'🖨 چاپ / PDF',sheetPicked:'← پیشنهاد',
+   sheetSrc:'ساخته‌شده از تحلیل Vera در HardAnalyzer. ارقام تخمینی‌اند و جایگزین استعلام رسمی نیستند.',
+   whyCheapBetter:'هم ارزان‌تر است، هم امتیاز بالاتری دارد.',whyCheapClose:'{p}٪ ارزان‌تر، با تنها {s}٪ امتیاز کمتر.',
+   whyDearBetter:'{p}٪ گران‌تر، ولی {s}٪ بهتر.',whyOnly:'تنها گزینه‌ای که بررسی شد.',whyPlain:'بالاترین امتیاز در این مقایسه.',footT:'HardAnalyzer • ارزش‌گذاری هوشمند با موتور Vera',score:'امتیاز Vera',val:'ارزش تخمینی',price:'قیمت آگهی',profit:'سود خریدار',analysis:'نتیجه‌گیری Vera',details:'جزئیات کامل',specs:'مشخصات',pros:'مزایا',cons:'معایب',verdict:'نتیجه',radar:'رادار چندبعدی',itembyitem:'مقایسه آیتم به آیتم',trend:'روند بازار',neutral:'داده خنثی — بدون توصیه خرید/فروش',
    wTitle:'اولویت‌های تو',wSub:'وزن هر معیار را جابه‌جا کن — امتیاز، برنده و همه نمودارها زنده تغییر می‌کنند.',wReset:'بازنشانی وزن‌ها',wTag:'شخصی‌سازی‌شده',wWin:'با اولویت‌های تو، <b>{n}</b> جلو می‌افتد.',wFocus:'تمرکز روی {n}',
    pieShare:'سهم از کل',pieMix:'ترکیب معیارها',shareOf:'سهم',mixOf:'ترکیب',total:'مجموع',
    liveT:'⚡ نتیجه چت',liveNote:'این نمودارها از آخرین تحلیل Vera ساخته شده‌اند.',backDemos:'نمونه‌ها',chartReady:'📊 نمودارهای این تحلیل آماده شد — ببین',
@@ -725,7 +763,17 @@ const T={
    posFair:'قیمت منصفانه',posBargain:'ارزش بیشتر از قیمت',posOver:'گران‌تر از ارزش',posNone:'برای این نمودار هم قیمت لازم است هم ارزش تخمینی.'},
  en:{heroH:'Know the real value of anything with <b>Vera</b>',heroP:'Before any purchase, weigh the real value. Vera identifies, decomposes and values any asset so your money makes the best choice — not less, not overpriced.',vp1t:'Step Up',vp1d:'Sometimes a little more money buys far more value',vp2t:'Better Option',vp2d:'Maybe a better choice exists you don\'t know yet',vp3t:'No Waste',vp3d:'Sometimes cheaper does the same job perfectly',vTitle:'Live analysis with Vera',vSub:'Ask about any asset — real decomposition, valuation & comparison',vLive:'Live',vWelcome:'Tap a sample or type your question — Vera builds a full value table.',vPh:'e.g. compare iPhone 14 with Galaxy S23 Ultra',demoT:'🎨 Live charts',demoP:'Whatever you ask Vera above turns into charts here — and when an answer carries no figures, it says so plainly instead of showing something else.',tryT:'',
    emptyT:'No charts yet',emptyP:'Ask Vera to compare something. Any answer carrying figures — price, estimated value, a score — becomes charts here automatically. Nothing on this page is sample data; you only ever see what you actually asked for.',
-   emptyEg:'Try: "Compare Ubiquiti airFiber AF-24 with Mimosa B24"',footT:'HardAnalyzer • Smart valuation powered by Vera',score:'Vera Score',val:'Est. Value',price:'Listing',profit:'Buyer Profit',analysis:'Vera Verdict',details:'Full Details',specs:'Specs',pros:'Pros',cons:'Cons',verdict:'Verdict',radar:'Multi-dimensional Radar',itembyitem:'Item-by-item Comparison',trend:'Market Trend',neutral:'Neutral data — no buy/sell advice',
+   emptyEg:'Try: "Compare Ubiquiti airFiber AF-24 with Mimosa B24"',
+   estTag:'estimate',estNote:'Prices and values are Vera\'s estimates, not quotes. Confirm with a distributor before ordering.',
+   sheetT:'Purchase justification',sheetSub:'To forward to your manager or attach to the requisition.',
+   sheetDate:'Date',sheetReq:'Request',sheetRec:'Recommendation',sheetWhy:'Reason',sheetOpts:'Options considered',
+   sheetDiff:'Cost difference',sheetConfirm:'Confirm before ordering',
+   sheetC1:'Final price and stock from the distributor (figures above are estimates)',sheetC2:'Lead time',
+   sheetC3:'Product status — not end-of-life, and the part number is right',sheetC4:'Warranty and RMA terms',
+   sheetCopy:'📋 Copy text',sheetPrint:'🖨 Print / PDF',sheetPicked:'← recommended',
+   sheetSrc:'Built from a Vera analysis in HardAnalyzer. Figures are estimates and do not replace a formal quote.',
+   whyCheapBetter:'Cheaper and scores higher.',whyCheapClose:'{p}% cheaper, for only {s}% less score.',
+   whyDearBetter:'{p}% dearer, but {s}% better.',whyOnly:'The only option considered.',whyPlain:'Highest score in this comparison.',footT:'HardAnalyzer • Smart valuation powered by Vera',score:'Vera Score',val:'Est. Value',price:'Listing',profit:'Buyer Profit',analysis:'Vera Verdict',details:'Full Details',specs:'Specs',pros:'Pros',cons:'Cons',verdict:'Verdict',radar:'Multi-dimensional Radar',itembyitem:'Item-by-item Comparison',trend:'Market Trend',neutral:'Neutral data — no buy/sell advice',
    wTitle:'Your priorities',wSub:'Drag each criterion\'s weight — scores, the winner and every chart update live.',wReset:'Reset weights',wTag:'Personalized',wWin:'With your priorities, <b>{n}</b> takes the lead.',wFocus:'Focus on {n}',
    pieShare:'Share of total',pieMix:'Criteria mix',shareOf:'share',mixOf:'mix',total:'Total',
    liveT:'⚡ Chat result',liveNote:'These charts are built from Vera\'s latest analysis.',backDemos:'Samples',chartReady:'📊 Charts for this analysis are ready — take a look',
@@ -1180,9 +1228,70 @@ function metaHTML(){
   '<button class="askb" data-ask="why">🔍 '+t('askWhy')+'</button>'+
   '<button class="askb" data-ask="alt">🔄 '+t('askAlt')+'</button>'+
   (critNames().length?'<button class="askb" data-ask="w">🎛️ '+t('askW')+'</button>':'')+'</div>';
+ h+='<div class="estnote">💶 '+t('estNote')+'</div>';
  h+='<div class="srcline">'+(live?'⚡ '+(lang==='fa'?'ساخته‌شده از تحلیل زنده Vera':'Built from a live Vera analysis')
   :'⚠️ '+(lang==='fa'?'نسخه نمایشی با داده‌های نمونه':'Demo version with sample data'))+' | HardAnalyzer</div>';
  return h+'</div>';
+}
+/* ═══════════ THE BUYER'S DELIVERABLE ═══════════
+   A purchasing manager does not run a link budget. They place an order and
+   defend it on one page. Everything needed for that page is already on screen,
+   scattered across six charts — this collects it into the thing they actually
+   hand over, and is honest that the figures are estimates, not quotes. */
+function sheetReason(W){
+ const A=AS(),vis=visIdx().filter(i=>i!==W);
+ if(!vis.length)return t('whyOnly');
+ const w=A[W],rival=vis.sort((x,y)=>effScore(A[y])-effScore(A[x]))[0],r=A[rival];
+ if(w.price==null||r.price==null||!r.price||!effScore(r))return t('whyPlain');
+ const pPct=Math.round((w.price-r.price)/r.price*100),sPct=Math.round((effScore(w)-effScore(r))/effScore(r)*100);
+ if(pPct<0&&sPct>=0)return t('whyCheapBetter');
+ if(pPct<0)return t('whyCheapClose').replace('{p}',Math.abs(pPct)).replace('{s}',Math.abs(sPct));
+ if(pPct>0&&sPct>0)return t('whyDearBetter').replace('{p}',pPct).replace('{s}',sPct);
+ return t('whyPlain');
+}
+function sheetData(){
+ const ds=S.ds;if(!ds)return null;
+ const A=ds.assets,W=winIdx(),vis=visIdx();
+ if(W<0||!vis.length)return null;
+ const opts=vis.slice().sort((x,y)=>effScore(A[y])-effScore(A[x])).map(i=>({
+  i,name:nm(A[i]),price:A[i].price!=null?money(A[i],'price'):'—',
+  score:A[i].score!=null?Number(effScore(A[i])).toLocaleString('en-US'):'—',pick:i===W}));
+ const others=vis.filter(i=>i!==W).map(i=>A[i].price).filter(v=>v!=null);
+ const diff=(A[W].price!=null&&others.length)?A[W].price-Math.min.apply(null,others):null;
+ return{req:ds.q||L(ds.title)||'',rec:nm(A[W]),why:sheetReason(W),opts,diff,
+  date:new Date().toISOString().slice(0,10)};
+}
+function sheetHTML(){
+ const d=sheetData();if(!d)return '';
+ const rows=d.opts.map(o=>'<tr'+(o.pick?' class="picked"':'')+'><td>'+o.name+(o.pick?' <b>'+t('sheetPicked')+'</b>':'')+'</td><td>'+o.price+'</td><td>'+o.score+'</td></tr>').join('');
+ const diff=d.diff==null?'':'<p><i>'+t('sheetDiff')+':</i> '+(d.diff>0?'+':'')+fmt(d.diff)+'</p>';
+ const cl=[1,2,3,4].map(n=>'<li>'+t('sheetC'+n)+'</li>').join('');
+ return '<div class="sec" id="dsheetSec"><h3>📄 '+t('sheetT')+
+  '<span class="sheetbtns"><button class="wbtn" data-sheetcopy="1">'+t('sheetCopy')+'</button>'+
+  '<button class="wbtn" data-sheetprint="1">'+t('sheetPrint')+'</button></span></h3>'+
+  '<div class="wsub">'+t('sheetSub')+'</div>'+
+  '<div class="sheet" id="dsheet">'+
+   '<p><i>'+t('sheetDate')+':</i> '+d.date+'</p>'+
+   '<p><i>'+t('sheetReq')+':</i> «'+d.req+'»</p>'+
+   '<p class="sheetrec"><i>'+t('sheetRec')+':</i> <b>'+d.rec+'</b></p>'+
+   '<p><i>'+t('sheetWhy')+':</i> '+d.why+'</p>'+
+   '<div class="sheetsub">'+t('sheetOpts')+'</div>'+
+   '<table class="sheettbl"><tr><th></th><th>'+t('price')+' <span class="esttag">'+t('estTag')+'</span></th><th>'+t('score')+'</th></tr>'+rows+'</table>'+
+   diff+
+   '<div class="sheetsub">'+t('sheetConfirm')+'</div><ul class="sheetck">'+cl+'</ul>'+
+   '<div class="sheetsrc">'+t('sheetSrc')+'</div>'+
+  '</div></div>';
+}
+function sheetText(){
+ const d=sheetData();if(!d)return '';
+ const L2=[t('sheetT'),'',t('sheetDate')+': '+d.date,t('sheetReq')+': '+d.req,'',
+  t('sheetRec')+': '+d.rec,t('sheetWhy')+': '+d.why,'',t('sheetOpts')+':'];
+ d.opts.forEach(o=>L2.push('  - '+o.name+' — '+o.price+' ('+t('estTag')+') — '+t('score')+' '+o.score+(o.pick?'  '+t('sheetPicked'):'')));
+ if(d.diff!=null)L2.push('',t('sheetDiff')+': '+(d.diff>0?'+':'')+fmt(d.diff));
+ L2.push('',t('sheetConfirm')+':');
+ [1,2,3,4].forEach(n=>L2.push('  [ ] '+t('sheetC'+n)));
+ L2.push('',t('sheetSrc'));
+ return L2.join('\n').replace(/&quot;/g,'"').replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>');
 }
 function bannerHTML(W){
  const ds=S.ds,A=ds.assets;
@@ -1201,7 +1310,7 @@ function renderDemo(){
  const A=ds.assets,crit=critNames();
  S.cols=colorsFor(winIdx());
  const tag='<span class="demo-tag">'+(ds.source&&ds.source!=='demo'?t('liveTag'):t('demoTag'))+'</span>';
- let h='<div id="dban"></div>';
+ let h='<div id="dban"></div>'+sheetHTML();
  if(A.some(a=>a.score!=null))h+='<div class="sec"><h3>🎯 '+t('score')+tag+'</h3>'+legendHTML()+'<div class="grow">'+A.map((a,i)=>gaugeHTML(a,i)).join('')+'</div></div>';
  if(crit.length)h+=weightsHTML(crit);
  h+=stepHTML()+posHTML();
@@ -1232,7 +1341,7 @@ function refresh(){
    const gs=document.getElementById('gs'+i);if(gs){gs.textContent=Number(sc).toLocaleString('en-US');gs.style.color=col}
    const gm=document.getElementById('gm'+i);if(gm)gm.textContent=(ds.fin||off)?'':(['🥇','🥈','🥉'][ord.indexOf(i)]||'');
    const g=document.getElementById('g'+i);if(g){g.style.stroke=col;g.style.strokeDashoffset=String(Math.round(251-Math.min(sc/10000,1)*251))}
-   const gp=document.getElementById('gp'+i);if(gp)gp.innerHTML=(a.val!=null?t('val')+': <b>'+money(a,'val')+'</b><br>':'')+(a.price!=null?t('price')+': <b>'+money(a,'price')+'</b>':'');
+   const gp=document.getElementById('gp'+i);if(gp)gp.innerHTML=(a.val!=null?t('val')+': <b>'+money(a,'val')+'</b><br>':'')+(a.price!=null?t('price')+': <b>'+money(a,'price')+'</b> <span class="esttag">'+t('estTag')+'</span>':'');
   }
   const rp=document.getElementById('rp'+i);if(rp)rp.style.display=off?'none':'';
   document.querySelectorAll('.lg[data-i="'+i+'"]').forEach(el=>{el.classList.toggle('off',off);const d=el.querySelector('.dt');if(d)d.style.background=col});
@@ -1377,6 +1486,13 @@ function bindDemo(){
   const sm=q('.segb[data-m]');if(sm){S.pm=sm.dataset.m;return refresh()}
   const sa=q('.segb[data-a]');if(sa){S.pa=+sa.dataset.a;return refresh()}
   const fb=q('[data-focus]');if(fb)return focusCrit(+fb.dataset.focus);
+  if(q('[data-sheetprint]'))return window.print();
+  if(q('[data-sheetcopy]')){
+   const btn=q('[data-sheetcopy]'),txt=sheetText(),done=()=>{btn.textContent='✅'};
+   if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(txt).then(done,()=>dbgFallback(btn.parentNode,txt));
+   else dbgFallback(btn.parentNode,txt);
+   return;
+  }
   if(q('[data-wreset]'))return resetWeights();
   if(q('[data-diff]')){S.diffOnly=!S.diffOnly;return refresh()}
   const ak=q('[data-ask]');if(ak)return doAsk(ak.dataset.ask);
