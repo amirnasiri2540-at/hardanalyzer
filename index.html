@@ -110,7 +110,7 @@ header{background:#000;border-bottom:2px solid #222;padding:14px 18px;display:fl
 .bname{width:88px;font-size:.62rem;color:#aaa;text-align:right;line-height:1.3}
 .btrack{flex:1;background:#191919;height:15px;border-radius:8px;overflow:hidden}
 .bfill{height:100%;border-radius:8px;width:0;transition:width 1.1s cubic-bezier(.25,.46,.45,.94) .15s}
-.bval{width:84px;font-size:.64rem;font-family:'Courier New',monospace;color:#ddd;text-align:left;white-space:nowrap}
+.bval{width:84px;font-size:.64rem;font-family:'Courier New',monospace;color:#ddd;text-align:left;white-space:nowrap;font-variant-numeric:tabular-nums}
 .radarwrap{display:flex;justify-content:center}
 .radarwrap svg{max-width:330px;width:100%;height:auto}
 .rpoly{fill-opacity:.16;stroke-width:2;animation:fadein 1.2s ease both}
@@ -918,16 +918,22 @@ const S={key:'laptop',ds:null,cols:[],w:[],touched:false,off:new Set(),pm:'val',
 function L(v){if(v==null)return v;if(Array.isArray(v))return v;if(typeof v==='object')return v[lang]!=null?v[lang]:(v.fa!=null?v.fa:v.en);return v}
 function nm(a){return L(a.n)||'?'}
 function short(s,n){s=String(s||'');n=n||20;return s.length>n?s.slice(0,n-1)+'…':s}
-// Sign stays outside the symbol so a loss reads "−€15", not "€-15" (which an
-// RTL line flips into a nonsense "15-€").
+// Money is a left-to-right run inside right-to-left prose, so it is wrapped in
+// Unicode isolates (LRI…PDI). Without them a range paints as "1,800-1,500EUR"
+// on an RTL line — the reader takes the ceiling for the floor, on a page whose
+// whole subject is price. Isolates survive textContent as well as innerHTML,
+// which markup would not.
+const LRI='\u2066',PDI='\u2069';
+const iso=s=>LRI+s+PDI;
+// Sign stays outside the symbol so a loss reads "−€15", not "€-15".
 function fmt(n){if(n==null)return '—';const c=(S.ds&&S.ds.cur)||'€';
- return (n<0?'−':'')+c+Number(Math.abs(n)).toLocaleString('en-US',{maximumFractionDigits:2})}
+ return iso((n<0?'−':'')+c+Number(Math.abs(n)).toLocaleString('en-US',{maximumFractionDigits:2}))}
 // Showing "€850–1.000" beats showing its midpoint as if it were a quote.
 function money(a,k){
  const r=a&&a[k+'R'];
  if(!r)return fmt(a?a[k]:null);
  const c=(S.ds&&S.ds.cur)||'€';
- return c+Number(r[0]).toLocaleString('en-US')+'–'+Number(r[1]).toLocaleString('en-US');
+ return iso(c+Number(r[0]).toLocaleString('en-US')+'–'+Number(r[1]).toLocaleString('en-US'));
 }
 function critNames(){const c=S.ds?L(S.ds.criteria):null;return Array.isArray(c)?c.slice():[]}
 function AS(){return S.ds?S.ds.assets:[]}
@@ -1045,10 +1051,10 @@ function metricList(bar){
  if(A.some(a=>a.val!=null))M.push({k:'val',t:(bar?'💶 ':'')+t('val'),get:a=>a.val,f:(v,a)=>a?money(a,'val'):fmt(v)});
  if(A.some(a=>a.price!=null))M.push({k:'price',t:(bar?'🏷️ ':'')+t('price'),get:a=>a.price,f:(v,a)=>a?money(a,'price'):fmt(v)});
  if(!fin&&A.some(a=>a.val!=null&&a.price!=null))M.push({k:'profit',t:(bar?'💰 ':'')+t('profit'),get:a=>(a.val!=null&&a.price!=null)?a.val-a.price:null,f:v=>(v>0?'+':'')+fmt(v),signed:true});
- if(A.some(a=>a.score!=null))M.push({k:'score',t:(bar?'🎯 ':'')+t('score'),get:a=>effScore(a),f:v=>Number(v).toLocaleString('en-US')});
+ if(A.some(a=>a.score!=null))M.push({k:'score',t:(bar?'🎯 ':'')+t('score'),get:a=>effScore(a),f:v=>iso(Number(v).toLocaleString('en-US'))});
  if(bar){
   const si=M.findIndex(m=>m.k==='score');if(si>=0)M.splice(si,1);   // gauges already own the score
-  critNames().forEach((c,ci)=>{if(A.some(a=>(a.crit||[])[ci]!=null))M.push({k:'c'+ci,t:'◈ '+c,get:a=>(a.crit||[])[ci],f:v=>Math.round(v)+'/100'})});
+  critNames().forEach((c,ci)=>{if(A.some(a=>(a.crit||[])[ci]!=null))M.push({k:'c'+ci,t:'◈ '+c,get:a=>(a.crit||[])[ci],f:v=>iso(Math.round(v)+'/100')})});
  }
  return M;
 }
@@ -1338,7 +1344,7 @@ function refresh(){
   if(box){
    box.style.opacity=off?'.3':'';box.classList.toggle('winb',!off&&i===W);
    const gn=document.getElementById('gn'+i);if(gn)gn.innerHTML=(i===W?'👑 ':'')+nm(a);
-   const gs=document.getElementById('gs'+i);if(gs){gs.textContent=Number(sc).toLocaleString('en-US');gs.style.color=col}
+   const gs=document.getElementById('gs'+i);if(gs){gs.textContent=iso(Number(sc).toLocaleString('en-US'));gs.style.color=col}
    const gm=document.getElementById('gm'+i);if(gm)gm.textContent=(ds.fin||off)?'':(['🥇','🥈','🥉'][ord.indexOf(i)]||'');
    const g=document.getElementById('g'+i);if(g){g.style.stroke=col;g.style.strokeDashoffset=String(Math.round(251-Math.min(sc/10000,1)*251))}
    const gp=document.getElementById('gp'+i);if(gp)gp.innerHTML=(a.val!=null?t('val')+': <b>'+money(a,'val')+'</b><br>':'')+(a.price!=null?t('price')+': <b>'+money(a,'price')+'</b> <span class="esttag">'+t('estTag')+'</span>':'');
