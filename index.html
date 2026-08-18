@@ -203,6 +203,11 @@ footer{text-align:center;color:#555;font-size:.62rem;margin-top:20px;line-height
 .askb{background:var(--vpanel);border:1px solid var(--vline);color:#bfe9da;border-radius:100px;padding:8px 14px;font-size:.68rem;cursor:pointer;font-family:inherit;transition:.18s}
 .askb:hover{border-color:var(--emerald-bright);color:#fff}
 .emptyb{text-align:center;color:var(--mut);font-size:.74rem;padding:18px;line-height:1.9}
+.emptyhero{background:var(--panel);border:1px dashed #303030;border-radius:14px;padding:34px 20px;text-align:center}
+.emptyhero .eh-ic{font-size:2.1rem;opacity:.6}
+.emptyhero b{display:block;color:#fff;font-size:.95rem;margin:11px 0 8px}
+.emptyhero p{color:var(--mut);font-size:.76rem;line-height:1.95;max-width:460px;margin:0 auto 15px}
+.emptyhero .eh-hint{margin-top:14px;font-size:.68rem;color:#666;line-height:1.8}
 /* step-up ladder */
 .step{background:var(--card);border:1px solid var(--bd);border-left:4px solid var(--bd);border-radius:11px;padding:12px 14px;margin-bottom:10px}
 .step.st-great{border-left-color:var(--win);background:linear-gradient(90deg,rgba(39,174,96,.09),transparent 55%)}
@@ -302,7 +307,7 @@ footer{text-align:center;color:#555;font-size:.62rem;margin-top:20px;line-height
 <div class="demo-divider" id="demoSec">
   <div class="ln"></div>
   <h2 data-k="demoT">🎨 نمودارهای زنده</h2>
-  <p data-k="demoP">هر تحلیلی که با Vera بگیری، همین‌جا به نمودار تبدیل می‌شود: گیج امتیاز، دایره‌ای سهم ارزش، رادار چندبعدی و مقایسه میله‌ای — و می‌توانی با وزن‌دادن به اولویت‌هایت نتیجه را زنده جابه‌جا کنی.</p>
+  <p data-k="demoP">هرچه بالا از Vera بپرسی، همین‌جا به نمودار تبدیل می‌شود — و اگر جوابی عدد نداشته باشد، همین‌جا صریح می‌گوید نتوانست.</p>
 </div>
 
 <div class="livebar">
@@ -310,8 +315,6 @@ footer{text-align:center;color:#555;font-size:.62rem;margin-top:20px;line-height
 </div>
 
 <div class="wrap">
-  <div class="try-title" data-k="tryT">👇 یک مجموعه را انتخاب کن یا از Vera بپرس</div>
-  <div class="chips" id="chips"></div>
   <div id="out"></div>
 
   <footer>
@@ -693,7 +696,9 @@ function dbgFallback(box,text){
 
 /* ───── i18n ───── */
 const T={
- fa:{heroH:'با <b>Vera</b>، ارزش واقعی هر چیزی را بدان',heroP:'قبل از هر خرید، ارزش واقعی را بسنج. Vera هر دارایی را شناسایی، تجزیه و ارزش‌گذاری می‌کند تا با پول خود، بهترین انتخاب را داشته باشی — نه کمتر، نه گران‌تر.',vp1t:'پله بالاتر',vp1d:'گاهی با کمی پول بیشتر، ارزش خیلی بالاتری می‌گیری',vp2t:'گزینه بهتر',vp2d:'شاید گزینه‌ای بهتر هست که هنوز نمی‌شناسی',vp3t:'بدون اسراف',vp3d:'گاهی ارزان‌تر، همان کار را عالی انجام می‌دهد',vTitle:'تحلیل زنده با Vera',vSub:'هر دارایی‌ای را بپرس — تجزیه، ارزش‌گذاری و مقایسه واقعی',vLive:'زنده',vWelcome:'یک نمونه را بزن یا سؤالت را بنویس — Vera جدول کامل ارزش می‌سازد.',vPh:'مثلاً: آیفون ۱۴ را با گلکسی S23 اولترا مقایسه کن',demoT:'🎨 نمودارهای زنده',demoP:'هر تحلیلی که با Vera بگیری، همین‌جا به نمودار تبدیل می‌شود: گیج امتیاز، دایره‌ای سهم ارزش، رادار چندبعدی و مقایسه میله‌ای — و می‌توانی با وزن‌دادن به اولویت‌هایت نتیجه را زنده جابه‌جا کنی.',tryT:'👇 یک مجموعه را انتخاب کن یا از Vera بپرس',footT:'HardAnalyzer • ارزش‌گذاری هوشمند با موتور Vera',score:'امتیاز Vera',val:'ارزش تخمینی',price:'قیمت آگهی',profit:'سود خریدار',analysis:'نتیجه‌گیری Vera',details:'جزئیات کامل',specs:'مشخصات',pros:'مزایا',cons:'معایب',verdict:'نتیجه',radar:'رادار چندبعدی',itembyitem:'مقایسه آیتم به آیتم',trend:'روند بازار',neutral:'داده خنثی — بدون توصیه خرید/فروش',
+ fa:{heroH:'با <b>Vera</b>، ارزش واقعی هر چیزی را بدان',heroP:'قبل از هر خرید، ارزش واقعی را بسنج. Vera هر دارایی را شناسایی، تجزیه و ارزش‌گذاری می‌کند تا با پول خود، بهترین انتخاب را داشته باشی — نه کمتر، نه گران‌تر.',vp1t:'پله بالاتر',vp1d:'گاهی با کمی پول بیشتر، ارزش خیلی بالاتری می‌گیری',vp2t:'گزینه بهتر',vp2d:'شاید گزینه‌ای بهتر هست که هنوز نمی‌شناسی',vp3t:'بدون اسراف',vp3d:'گاهی ارزان‌تر، همان کار را عالی انجام می‌دهد',vTitle:'تحلیل زنده با Vera',vSub:'هر دارایی‌ای را بپرس — تجزیه، ارزش‌گذاری و مقایسه واقعی',vLive:'زنده',vWelcome:'یک نمونه را بزن یا سؤالت را بنویس — Vera جدول کامل ارزش می‌سازد.',vPh:'مثلاً: آیفون ۱۴ را با گلکسی S23 اولترا مقایسه کن',demoT:'🎨 نمودارهای زنده',demoP:'هرچه بالا از Vera بپرسی، همین‌جا به نمودار تبدیل می‌شود — و اگر جوابی عدد نداشته باشد، همین‌جا صریح می‌گوید نتوانست.',tryT:'',
+   emptyT:'هنوز نموداری ساخته نشده',emptyP:'از Vera یک مقایسه بپرس. هر جوابی که عدد داشته باشد — قیمت، ارزش تخمینی، امتیاز — خودکار همین‌جا به نمودار تبدیل می‌شود. اینجا هیچ داده‌ی نمایشی نمی‌بینی؛ فقط چیزی که واقعاً پرسیده‌ای.',
+   emptyEg:'مثال: «Ubiquiti airFiber AF-24 را با Mimosa B24 مقایسه کن»',footT:'HardAnalyzer • ارزش‌گذاری هوشمند با موتور Vera',score:'امتیاز Vera',val:'ارزش تخمینی',price:'قیمت آگهی',profit:'سود خریدار',analysis:'نتیجه‌گیری Vera',details:'جزئیات کامل',specs:'مشخصات',pros:'مزایا',cons:'معایب',verdict:'نتیجه',radar:'رادار چندبعدی',itembyitem:'مقایسه آیتم به آیتم',trend:'روند بازار',neutral:'داده خنثی — بدون توصیه خرید/فروش',
    wTitle:'اولویت‌های تو',wSub:'وزن هر معیار را جابه‌جا کن — امتیاز، برنده و همه نمودارها زنده تغییر می‌کنند.',wReset:'بازنشانی وزن‌ها',wTag:'شخصی‌سازی‌شده',wWin:'با اولویت‌های تو، <b>{n}</b> جلو می‌افتد.',wFocus:'تمرکز روی {n}',
    pieShare:'سهم از کل',pieMix:'ترکیب معیارها',shareOf:'سهم',mixOf:'ترکیب',total:'مجموع',
    liveT:'⚡ نتیجه چت',liveNote:'این نمودارها از آخرین تحلیل Vera ساخته شده‌اند.',backDemos:'نمونه‌ها',chartReady:'📊 نمودارهای این تحلیل آماده شد — ببین',
@@ -710,7 +715,9 @@ const T={
    stepNone:'برای این مقایسه به قیمت حداقل دو گزینه نیاز است.',
    posT:'ارزش در برابر قیمت',posSub:'خط وسط یعنی «قیمت منصفانه». بالای خط ارزشی بیشتر از پولت می‌گیری، زیر خط گران‌تر از ارزشش است.',
    posFair:'قیمت منصفانه',posBargain:'ارزش بیشتر از قیمت',posOver:'گران‌تر از ارزش',posNone:'برای این نمودار هم قیمت لازم است هم ارزش تخمینی.'},
- en:{heroH:'Know the real value of anything with <b>Vera</b>',heroP:'Before any purchase, weigh the real value. Vera identifies, decomposes and values any asset so your money makes the best choice — not less, not overpriced.',vp1t:'Step Up',vp1d:'Sometimes a little more money buys far more value',vp2t:'Better Option',vp2d:'Maybe a better choice exists you don\'t know yet',vp3t:'No Waste',vp3d:'Sometimes cheaper does the same job perfectly',vTitle:'Live analysis with Vera',vSub:'Ask about any asset — real decomposition, valuation & comparison',vLive:'Live',vWelcome:'Tap a sample or type your question — Vera builds a full value table.',vPh:'e.g. compare iPhone 14 with Galaxy S23 Ultra',demoT:'🎨 Live charts',demoP:'Every analysis you run with Vera turns into charts right here: score gauges, value-share donuts, a multi-dimensional radar and bar comparisons — and you can re-weight your priorities to move the result live.',tryT:'👇 Pick a set, or just ask Vera',footT:'HardAnalyzer • Smart valuation powered by Vera',score:'Vera Score',val:'Est. Value',price:'Listing',profit:'Buyer Profit',analysis:'Vera Verdict',details:'Full Details',specs:'Specs',pros:'Pros',cons:'Cons',verdict:'Verdict',radar:'Multi-dimensional Radar',itembyitem:'Item-by-item Comparison',trend:'Market Trend',neutral:'Neutral data — no buy/sell advice',
+ en:{heroH:'Know the real value of anything with <b>Vera</b>',heroP:'Before any purchase, weigh the real value. Vera identifies, decomposes and values any asset so your money makes the best choice — not less, not overpriced.',vp1t:'Step Up',vp1d:'Sometimes a little more money buys far more value',vp2t:'Better Option',vp2d:'Maybe a better choice exists you don\'t know yet',vp3t:'No Waste',vp3d:'Sometimes cheaper does the same job perfectly',vTitle:'Live analysis with Vera',vSub:'Ask about any asset — real decomposition, valuation & comparison',vLive:'Live',vWelcome:'Tap a sample or type your question — Vera builds a full value table.',vPh:'e.g. compare iPhone 14 with Galaxy S23 Ultra',demoT:'🎨 Live charts',demoP:'Whatever you ask Vera above turns into charts here — and when an answer carries no figures, it says so plainly instead of showing something else.',tryT:'',
+   emptyT:'No charts yet',emptyP:'Ask Vera to compare something. Any answer carrying figures — price, estimated value, a score — becomes charts here automatically. Nothing on this page is sample data; you only ever see what you actually asked for.',
+   emptyEg:'Try: "Compare Ubiquiti airFiber AF-24 with Mimosa B24"',footT:'HardAnalyzer • Smart valuation powered by Vera',score:'Vera Score',val:'Est. Value',price:'Listing',profit:'Buyer Profit',analysis:'Vera Verdict',details:'Full Details',specs:'Specs',pros:'Pros',cons:'Cons',verdict:'Verdict',radar:'Multi-dimensional Radar',itembyitem:'Item-by-item Comparison',trend:'Market Trend',neutral:'Neutral data — no buy/sell advice',
    wTitle:'Your priorities',wSub:'Drag each criterion\'s weight — scores, the winner and every chart update live.',wReset:'Reset weights',wTag:'Personalized',wWin:'With your priorities, <b>{n}</b> takes the lead.',wFocus:'Focus on {n}',
    pieShare:'Share of total',pieMix:'Criteria mix',shareOf:'share',mixOf:'mix',total:'Total',
    liveT:'⚡ Chat result',liveNote:'These charts are built from Vera\'s latest analysis.',backDemos:'Samples',chartReady:'📊 Charts for this analysis are ready — take a look',
@@ -837,26 +844,10 @@ async function vSend(){
  }finally{vsend.disabled=false;vinput.focus()}
 }
 
-/* ═══════════ GRAPHIC DEMOS ═══════════ */
-const DEMO={
- laptop:{title:{fa:'💻 سه لپ‌تاپ',en:'💻 Three Laptops'},fin:false,winner:1,criteria:{fa:['کارایی','ارزش خرید','کیفیت ساخت','ارتقاءپذیری'],en:['Performance','Value','Build','Upgradability']},analysis:{fa:'لپ‌تاپ وسط <b>بهترین تعادل</b> را دارد: فقط €۲۵ بیشتر از گزینه ارزان، اما رم DDR4 و SSD سریع‌تر که ارزش را تقریباً دو برابر می‌کند.',en:'The middle laptop offers the <b>best balance</b>: only €25 more but DDR4 RAM and faster SSD nearly double the value.'},trend:{fa:'قیمت لپ‌تاپ‌های دست‌دوم نسل قدیم به‌آرامی کاهش می‌یابد.',en:'Used older-gen laptop prices are gently declining.'},assets:[
-   {n:{fa:'لپ‌تاپ DDR3 (ارزان)',en:'DDR3 Laptop (cheap)'},price:200,val:185,score:4100,crit:[40,55,60,30],specs:{fa:['Core i5 نسل ۶','۸GB DDR3','HDD 500GB'],en:['Core i5 6th gen','8GB DDR3','500GB HDD']},pros:{fa:['ارزان','سبک'],en:['Cheap','Light']},cons:{fa:['رم قدیمی','هارد کند'],en:['Old RAM','Slow disk']},vd:'FAIR'},
-   {n:{fa:'لپ‌تاپ DDR4 ⭐',en:'DDR4 Laptop ⭐'},price:225,val:340,score:7900,crit:[75,92,78,80],specs:{fa:['Core i5 نسل ۸','۱۶GB DDR4','SSD 512GB'],en:['Core i5 8th gen','16GB DDR4','512GB SSD']},pros:{fa:['رم سریع','SSD','ارزش عالی'],en:['Fast RAM','SSD','Great value']},cons:{fa:['کمی گران‌تر'],en:['Slightly pricier']},vd:'STRONG_BUY'},
-   {n:{fa:'لپ‌تاپ گیمینگ',en:'Gaming Laptop'},price:375,val:410,score:8400,crit:[90,60,82,75],specs:{fa:['Core i7','۱۶GB','RTX گرافیک'],en:['Core i7','16GB','RTX GPU']},pros:{fa:['خیلی قوی'],en:['Very powerful']},cons:{fa:['€۱۵۰ گران‌تر','سنگین'],en:['€150 pricier','Heavy']},vd:'FAIR'}]},
- phone:{title:{fa:'📱 آیفون vs سامسونگ',en:'📱 iPhone vs Samsung'},fin:false,winner:0,criteria:{fa:['دوربین','عملکرد','باتری','ارزش'],en:['Camera','Performance','Battery','Value']},analysis:{fa:'<b>آیفون ۱۴</b> با €۳۰ اختلاف، دوربین و دوام نرم‌افزاری بهتری دارد و ارزش بازفروش بالاتری حفظ می‌کند.',en:'<b>iPhone 14</b>, just €30 apart, has a better camera and software longevity, holding higher resale value.'},trend:{fa:'گوشی‌های پرچم‌دار دست‌دوم ارزش خود را خوب حفظ می‌کنند.',en:'Used flagship phones hold their value well.'},assets:[
-   {n:{fa:'iPhone 14 ⭐',en:'iPhone 14 ⭐'},price:450,val:520,score:8200,crit:[88,85,78,82],specs:{fa:['128GB','A15 Bionic','iOS طولانی'],en:['128GB','A15 Bionic','Long iOS']},pros:{fa:['دوربین عالی','بازفروش بالا'],en:['Great camera','High resale']},cons:{fa:['باتری متوسط'],en:['Average battery']},vd:'STRONG_BUY'},
-   {n:{fa:'Galaxy S23',en:'Galaxy S23'},price:420,val:440,score:7600,crit:[82,88,80,75],specs:{fa:['128GB','Snapdragon 8','صفحه AMOLED'],en:['128GB','Snapdragon 8','AMOLED']},pros:{fa:['صفحه عالی','شارژ سریع'],en:['Great screen','Fast charge']},cons:{fa:['بازفروش کمتر'],en:['Lower resale']},vd:'BUY'}]},
- apartment:{title:{fa:'🏠 دو آپارتمان',en:'🏠 Two Apartments'},fin:false,winner:0,criteria:{fa:['موقعیت','متراژ','وضعیت','نقدشوندگی'],en:['Location','Size','Condition','Liquidity']},analysis:{fa:'<b>آپارتمان مرکز زالتسبورگ</b> با وجود متراژ کمتر، به‌خاطر موقعیت عالی و تقاضای بالا، ارزش بازفروش و اجاره بهتری دارد.',en:'The <b>Salzburg city-center flat</b>, despite less space, has better resale and rental value thanks to prime location.'},trend:{fa:'قیمت مسکن مرکز زالتسبورگ سالانه حدود ۳٪ رشد دارد.',en:'Salzburg central housing rises ~3% annually.'},assets:[
-   {n:{fa:'مرکز زالتسبورگ ۷۵م ⭐',en:'Salzburg Center 75m² ⭐'},price:398000,val:420000,score:7600,crit:[92,65,80,85],specs:{fa:['۷۵ متر','ساخت ۲۰۱۲','مرکز شهر'],en:['75m²','Built 2012','City center']},pros:{fa:['موقعیت عالی','نقدشونده'],en:['Prime location','Liquid']},cons:{fa:['متراژ کمتر'],en:['Less space']},vd:'BUY'},
-   {n:{fa:'Hallein ۹۵م',en:'Hallein 95m²'},price:295000,val:305000,score:6400,crit:[62,85,82,60],specs:{fa:['۹۵ متر','ساخت ۲۰۰۵','۱۵ دقیقه قطار'],en:['95m²','Built 2005','15min train']},pros:{fa:['ارزان‌تر','بزرگ‌تر'],en:['Cheaper','Bigger']},cons:{fa:['دورتر از مرکز'],en:['Farther out']},vd:'FAIR'}]},
- car:{title:{fa:'🚗 سه خودرو',en:'🚗 Three Cars'},fin:false,winner:0,criteria:{fa:['قیمت','کارکرد','اعتبار','مصرف'],en:['Price','Mileage','Reliability','Economy']},analysis:{fa:'<b>تویوتا کرولا</b> با کارکرد کم، گارانتی فعال و اعتبار بالای هیبریدی، بهترین ارزش بلندمدت را دارد.',en:'The <b>Toyota Corolla</b>, with low mileage, active warranty and strong hybrid reliability, offers the best long-term value.'},trend:{fa:'خودروهای هیبریدی دست‌دوم ارزش خود را خوب حفظ می‌کنند.',en:'Used hybrid cars retain value well.'},assets:[
-   {n:{fa:'Toyota Corolla 2021 ⭐',en:'Toyota Corolla 2021 ⭐'},price:19500,val:23400,score:7800,crit:[78,85,92,88],specs:{fa:['۴۰هزار کیلومتر','هیبرید','گارانتی'],en:['40k km','Hybrid','Warranty']},pros:{fa:['کم‌مصرف','اعتبار بالا'],en:['Economical','Reliable']},cons:{fa:['تجهیزات پایه'],en:['Base trim']},vd:'STRONG_BUY'},
-   {n:{fa:'VW Golf 2020',en:'VW Golf 2020'},price:18900,val:19500,score:7100,crit:[75,70,80,75],specs:{fa:['۵۵هزار کیلومتر','بنزینی','شاسی محکم'],en:['55k km','Petrol','Solid build']},pros:{fa:['رانندگی عالی'],en:['Great drive']},cons:{fa:['کارکرد بیشتر'],en:['Higher km']},vd:'BUY'},
-   {n:{fa:'Škoda Octavia 2021',en:'Škoda Octavia 2021'},price:19200,val:20100,score:7300,crit:[76,78,82,80],specs:{fa:['۴۸هزار کیلومتر','جادار','اقتصادی'],en:['48k km','Spacious','Economical']},pros:{fa:['فضای زیاد'],en:['Spacious']},cons:{fa:['ارزش بازفروش متوسط'],en:['Average resale']},vd:'BUY'}]},
- stock:{title:{fa:'📈 سهام (نمونه)',en:'📈 Stocks (sample)'},fin:true,winner:-1,cur:'$',criteria:{fa:['نقدشوندگی','رشد','ثبات','سود تقسیمی'],en:['Liquidity','Growth','Stability','Dividend']},neutral:{fa:'این دو سهم صرفاً جهت <b>نمایش داده خنثی</b> هستند. هیچ‌کدام توصیه خرید نیستند — صرفاً اطلاعات واقعی.',en:'These two stocks are shown only as <b>neutral data</b>. Neither is a buy recommendation — factual info only.'},trend:{fa:'تحلیل الگوی تاریخی — پیش‌بینی آینده نیست.',en:'Historical pattern analysis — not a future prediction.'},assets:[
-   {n:{fa:'Apple (AAPL)',en:'Apple (AAPL)'},price:212,val:null,score:8200,crit:[95,82,85,40],specs:{fa:['P/E: ۳۲','بازار: NASDAQ','۵۲ هفته: $168-230'],en:['P/E: 32','NASDAQ','52w: $168-230']},pros:{fa:['نقدشوندگی بالا','اکوسیستم'],en:['High liquidity','Ecosystem']},cons:{fa:['P/E بالا'],en:['High P/E']},vd:null},
-   {n:{fa:'Microsoft (MSFT)',en:'Microsoft (MSFT)'},price:425,val:null,score:8400,crit:[94,85,88,45],specs:{fa:['P/E: ۳۵','بازار: NASDAQ','رشد ابری'],en:['P/E: 35','NASDAQ','Cloud growth']},pros:{fa:['رشد ابری','ثبات'],en:['Cloud growth','Stable']},cons:{fa:['P/E بالاتر'],en:['Higher P/E']},vd:null}]}
-};
+/* ═══════════ LIVE CHART ENGINE ═══════════
+   No canned datasets. Sample laptops sitting under a question about radio
+   links read as an answer, and a wrong answer is worse than an empty panel.
+   Everything below is built from what Vera actually said. */
 const VD={STRONG_BUY:{fa:'خرید قوی',c:'#27ae60'},BUY:{fa:'خرید',c:'#2ecc71'},FAIR:{fa:'منصفانه',c:'#f39c12'},OVERPRICED:{fa:'گران',c:'#e74c3c'},AVOID:{fa:'پرهیز',c:'#c0392b'}};
 const VDEN={STRONG_BUY:'STRONG BUY',BUY:'BUY',FAIR:'FAIR',OVERPRICED:'OVERPRICED',AVOID:'AVOID'};
 const PALETTE=['#3498db','#f39c12','#9b59b6','#1abc9c','#e67e22','#e84393'];
@@ -874,13 +865,13 @@ function short(s,n){s=String(s||'');n=n||20;return s.length>n?s.slice(0,n-1)+'�
 // Sign stays outside the symbol so a loss reads "−€15", not "€-15" (which an
 // RTL line flips into a nonsense "15-€").
 function fmt(n){if(n==null)return '—';const c=(S.ds&&S.ds.cur)||'€';
- return (n<0?'−':'')+c+Number(Math.abs(n)).toLocaleString('de-DE',{maximumFractionDigits:2})}
+ return (n<0?'−':'')+c+Number(Math.abs(n)).toLocaleString('en-US',{maximumFractionDigits:2})}
 // Showing "€850–1.000" beats showing its midpoint as if it were a quote.
 function money(a,k){
  const r=a&&a[k+'R'];
  if(!r)return fmt(a?a[k]:null);
  const c=(S.ds&&S.ds.cur)||'€';
- return c+Number(r[0]).toLocaleString('de-DE')+'–'+Number(r[1]).toLocaleString('de-DE');
+ return c+Number(r[0]).toLocaleString('en-US')+'–'+Number(r[1]).toLocaleString('en-US');
 }
 function critNames(){const c=S.ds?L(S.ds.criteria):null;return Array.isArray(c)?c.slice():[]}
 function AS(){return S.ds?S.ds.assets:[]}
@@ -998,7 +989,7 @@ function metricList(bar){
  if(A.some(a=>a.val!=null))M.push({k:'val',t:(bar?'💶 ':'')+t('val'),get:a=>a.val,f:(v,a)=>a?money(a,'val'):fmt(v)});
  if(A.some(a=>a.price!=null))M.push({k:'price',t:(bar?'🏷️ ':'')+t('price'),get:a=>a.price,f:(v,a)=>a?money(a,'price'):fmt(v)});
  if(!fin&&A.some(a=>a.val!=null&&a.price!=null))M.push({k:'profit',t:(bar?'💰 ':'')+t('profit'),get:a=>(a.val!=null&&a.price!=null)?a.val-a.price:null,f:v=>(v>0?'+':'')+fmt(v),signed:true});
- if(A.some(a=>a.score!=null))M.push({k:'score',t:(bar?'🎯 ':'')+t('score'),get:a=>effScore(a),f:v=>Number(v).toLocaleString()});
+ if(A.some(a=>a.score!=null))M.push({k:'score',t:(bar?'🎯 ':'')+t('score'),get:a=>effScore(a),f:v=>Number(v).toLocaleString('en-US')});
  if(bar){
   const si=M.findIndex(m=>m.k==='score');if(si>=0)M.splice(si,1);   // gauges already own the score
   critNames().forEach((c,ci)=>{if(A.some(a=>(a.crit||[])[ci]!=null))M.push({k:'c'+ci,t:'◈ '+c,get:a=>(a.crit||[])[ci],f:v=>Math.round(v)+'/100'})});
@@ -1230,7 +1221,7 @@ function refresh(){
   if(box){
    box.style.opacity=off?'.3':'';box.classList.toggle('winb',!off&&i===W);
    const gn=document.getElementById('gn'+i);if(gn)gn.innerHTML=(i===W?'👑 ':'')+nm(a);
-   const gs=document.getElementById('gs'+i);if(gs){gs.textContent=Number(sc).toLocaleString();gs.style.color=col}
+   const gs=document.getElementById('gs'+i);if(gs){gs.textContent=Number(sc).toLocaleString('en-US');gs.style.color=col}
    const gm=document.getElementById('gm'+i);if(gm)gm.textContent=(ds.fin||off)?'':(['🥇','🥈','🥉'][ord.indexOf(i)]||'');
    const g=document.getElementById('g'+i);if(g){g.style.stroke=col;g.style.strokeDashoffset=String(Math.round(251-Math.min(sc/10000,1)*251))}
    const gp=document.getElementById('gp'+i);if(gp)gp.innerHTML=(a.val!=null?t('val')+': <b>'+money(a,'val')+'</b><br>':'')+(a.price!=null?t('price')+': <b>'+money(a,'price')+'</b>':'');
@@ -1291,7 +1282,7 @@ function refreshPies(vis){
    lbl:Math.round(x.base)+'/100'+(S.touched?' × '+(wOf(x.i)/50).toFixed(2):'')+' · '+(tot?Math.round(x.v/tot*100):0)+'%'}));
   if(slices.length)renderDonut('dpie2',slices,(i,st)=>{
    if(i>=0&&st.slices[i])return '<div><b>'+Math.round((st.vals[i]||0)*100)+'%</b><em>'+short(st.slices[i].n,16)+'</em></div>';
-   return '<div><b>'+Number(effScore(a)).toLocaleString()+'</b><em>'+short(nm(a),16)+'</em></div>';
+   return '<div><b>'+Number(effScore(a)).toLocaleString('en-US')+'</b><em>'+short(nm(a),16)+'</em></div>';
   });
   else{document.getElementById('dpie2').innerHTML='<div class="emptyb">—</div>';delete DST.dpie2;setCenter('dpie2',-1)}
   legendPie('dpie2l',raw.map(x=>({c:CPAL[x.i%CPAL.length],n:x.c,v:Math.round(x.base)+'/100'+(tot?' · '+Math.round(x.v/tot*100)+'%':'')})));
@@ -1365,7 +1356,6 @@ function bindDemo(){
  if(lb&&!lb.dataset.bound){
   lb.dataset.bound='1';
   lb.addEventListener('click',e=>{
-   if(e.target.closest('[data-backdemo]'))return show('laptop');
    if(e.target.closest('[data-mkchart]'))return askVera(t('askNums'));
   });
  }
@@ -1399,46 +1389,46 @@ function bindDemo(){
 }
 
 /* ═══════════ DATASET SWITCHING ═══════════ */
-function show(key){
- if(key==='live'&&!S.live)key='laptop';
- const ds=key==='live'?S.live:DEMO[key];
- if(!ds)return;
- if(!ds.source)ds.source='demo';
- S.key=key;S.ds=ds;
+function show(){
+ const ds=S.live;
+ S.key=ds?'live':'';S.ds=ds||null;
+ if(!ds){renderLiveBox();renderEmpty();return}
  S.w=critNames().map(()=>50);S.touched=false;S.off=new Set();
  S.pa=(ds.winner>=0&&ds.winner<ds.assets.length)?ds.winner:0;   // open the mix on Vera's pick
  const ms=metricList(false);S.pm=ms.length?ms[0].k:'val';
  banCache='';DST.dpie1=null;DST.dpie2=null;
- document.querySelectorAll('.chip').forEach(c=>c.classList.toggle('active',c.dataset.k===key));
  renderLiveBox();
  renderDemo();
  bindDemo();
 }
+// Nothing to show is a state worth designing, not a gap to fill with samples.
+function renderEmpty(){
+ const out=document.getElementById('out');if(!out)return;
+ const asked=vHistory.some(m=>m.role==='user');
+ out.innerHTML='<div class="emptyhero"><div class="eh-ic">📊</div>'+
+  '<b>'+t('emptyT')+'</b><p>'+t('emptyP')+'</p>'+
+  (asked?'<button class="askb" data-mkchart="1">'+t('makeChart')+'</button>':'')+
+  '<div class="eh-hint">'+t('emptyEg')+'</div></div>';
+ bindDemo();
+}
+
 /* Charts must always say which question they answer. Leaving an older set on
    screen after a new answer is worse than showing nothing: it reads as the
    reply to what was just asked. So the question is carried with the dataset,
    printed above the charts, and an answer that produced nothing to plot says
    so out loud instead of letting the stale set speak for it. */
-function applyLive(ds,q){S.live=ds;S.live.q=q||'';S.stale='';buildChips();show('live');renderLiveBox()}
-function markLiveStale(q){if(!S.live)return;S.stale=q||'';renderLiveBox()}
+function applyLive(ds,q){S.live=ds;S.live.q=q||'';S.stale='';ds.source=ds.source||'chat';show()}
+function markLiveStale(q){S.stale=q||'';S.live?renderLiveBox():renderEmpty()}
 function renderLiveBox(){
  const box=document.getElementById('livebox');if(!box)return;
- if(S.key!=='live'||!S.live){box.classList.remove('on');return}
+ if(!S.live){box.classList.remove('on');return}
  box.classList.add('on');
  box.classList.toggle('stale',!!S.stale);
  const q=S.live.q||L(S.live.title)||'';
  box.innerHTML='<span class="ic">'+(S.stale?'⚠️':'⚡')+'</span>'+
   '<span class="livetxt"><i>'+(S.stale?t('liveStale'):t('liveFrom'))+'</i> «'+short(escHTML(q),90)+'»'+
   (S.stale?'<br><button class="livemake" data-mkchart="1">'+t('makeChart')+'</button>':'')+'</span>'+
-  '<button data-backdemo="1">'+t('backDemos')+'</button>';
-}
-function buildChips(){
- const c=document.getElementById('chips');if(!c)return;
- c.innerHTML='';
- const mk=(key,label,cls)=>{const ch=document.createElement('div');ch.className='chip'+(cls||'');ch.dataset.k=key;ch.textContent=label;ch.onclick=()=>show(key);c.appendChild(ch)};
- if(S.live)mk('live',t('liveT')+' · '+short(S.live.q||L(S.live.title)||'',26),' live');
- Object.keys(DEMO).forEach(k=>mk(k,L(DEMO[k].title)));
- c.querySelectorAll('.chip').forEach(x=>x.classList.toggle('active',x.dataset.k===S.key));
+  '';
 }
 
 function toggleLang(){
@@ -1447,13 +1437,12 @@ function toggleLang(){
  document.getElementById('langBtn').textContent=lang==='fa'?'EN':'FA';
  document.querySelectorAll('[data-k]').forEach(el=>el.innerHTML=t(el.dataset.k));
  const ph=document.getElementById('vinput');if(ph)ph.placeholder=T[lang].vPh;
- buildChips();buildVChips();show(S.key);
+ buildVChips();show();
 }
 
 /* init */
 buildVChips();
-buildChips();
-show('laptop');
+show();
 </script>
 </body>
 </html>
