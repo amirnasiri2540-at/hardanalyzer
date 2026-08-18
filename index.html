@@ -198,6 +198,15 @@ footer{text-align:center;color:#555;font-size:.62rem;margin-top:20px;line-height
 .askb{background:var(--vpanel);border:1px solid var(--vline);color:#bfe9da;border-radius:100px;padding:8px 14px;font-size:.68rem;cursor:pointer;font-family:inherit;transition:.18s}
 .askb:hover{border-color:var(--emerald-bright);color:#fff}
 .emptyb{text-align:center;color:var(--mut);font-size:.74rem;padding:18px;line-height:1.9}
+/* spec matrix: one row per feature, so the eye compares across not down */
+.cmp td.speck{color:#bbb;font-weight:600;font-size:.62rem;text-align:start;background:#171717}
+.cmp td.diffcell{background:rgba(52,152,219,.07)}
+.cmp tr.same td{opacity:.42}
+.cmp tr.same td.speck{opacity:.6}
+.difftog{margin-inline-start:auto;font-size:.62rem!important;padding:4px 11px!important}
+.difftog.on{border-color:var(--blu);color:var(--blu);background:rgba(52,152,219,.12)}
+.sec h3{display:flex;align-items:center;gap:8px}
+.diffhint{font-size:.62rem;color:var(--mut);line-height:1.8;margin-top:9px;text-align:center}
 /* only rendered under ?debug=1 */
 .dbgline{margin-top:10px;padding:8px 10px;border:1px dashed #3d5a50;border-radius:8px;background:#0a1a15;color:#7fb3a1;font-family:'Courier New',monospace;font-size:.62rem;line-height:1.9;direction:ltr;text-align:left;word-break:break-word}
 .dbgline button{margin-top:6px;background:#12291f;border:1px solid var(--vline);color:#bfe9da;border-radius:10px;padding:4px 10px;font-size:.62rem;cursor:pointer;font-family:inherit}
@@ -658,13 +667,15 @@ const T={
    pieShare:'سهم از کل',pieMix:'ترکیب معیارها',shareOf:'سهم',mixOf:'ترکیب',total:'مجموع',
    liveT:'⚡ نتیجه چت',liveNote:'این نمودارها از آخرین تحلیل Vera ساخته شده‌اند.',backDemos:'نمونه‌ها',chartReady:'📊 نمودارهای این تحلیل آماده شد — ببین',
    askWhy:'چرا این برنده شد؟',askAlt:'گزینه بهتری هم هست؟',askW:'با اولویت‌های من دوباره تحلیل کن',askTitle:'ادامه بده با Vera',
-   noVis:'همه گزینه‌ها خاموش‌اند — یکی را از راهنما روشن کن.',demoTag:'DEMO',liveTag:'LIVE'},
+   noVis:'همه گزینه‌ها خاموش‌اند — یکی را از راهنما روشن کن.',demoTag:'DEMO',liveTag:'LIVE',
+   diffOnly:'فقط تفاوت‌ها',diffHint:'{d} ویژگی فرق دارند، {s} ویژگی یکسان‌اند. سطرهای کم‌رنگ همان‌هایی‌اند که در انتخاب تو اثری ندارند.'},
  en:{heroH:'Know the real value of anything with <b>Vera</b>',heroP:'Before any purchase, weigh the real value. Vera identifies, decomposes and values any asset so your money makes the best choice — not less, not overpriced.',vp1t:'Step Up',vp1d:'Sometimes a little more money buys far more value',vp2t:'Better Option',vp2d:'Maybe a better choice exists you don\'t know yet',vp3t:'No Waste',vp3d:'Sometimes cheaper does the same job perfectly',vTitle:'Live analysis with Vera',vSub:'Ask about any asset — real decomposition, valuation & comparison',vLive:'Live',vWelcome:'Tap a sample or type your question — Vera builds a full value table.',vPh:'e.g. compare iPhone 14 with Galaxy S23 Ultra',demoT:'🎨 Live charts',demoP:'Every analysis you run with Vera turns into charts right here: score gauges, value-share donuts, a multi-dimensional radar and bar comparisons — and you can re-weight your priorities to move the result live.',tryT:'👇 Pick a set, or just ask Vera',footT:'HardAnalyzer • Smart valuation powered by Vera',score:'Vera Score',val:'Est. Value',price:'Listing',profit:'Buyer Profit',analysis:'Vera Verdict',details:'Full Details',specs:'Specs',pros:'Pros',cons:'Cons',verdict:'Verdict',radar:'Multi-dimensional Radar',itembyitem:'Item-by-item Comparison',trend:'Market Trend',neutral:'Neutral data — no buy/sell advice',
    wTitle:'Your priorities',wSub:'Drag each criterion\'s weight — scores, the winner and every chart update live.',wReset:'Reset weights',wTag:'Personalized',wWin:'With your priorities, <b>{n}</b> takes the lead.',wFocus:'Focus on {n}',
    pieShare:'Share of total',pieMix:'Criteria mix',shareOf:'share',mixOf:'mix',total:'Total',
    liveT:'⚡ Chat result',liveNote:'These charts are built from Vera\'s latest analysis.',backDemos:'Samples',chartReady:'📊 Charts for this analysis are ready — take a look',
    askWhy:'Why did this win?',askAlt:'Is there a better option?',askW:'Re-analyze with my priorities',askTitle:'Keep going with Vera',
-   noVis:'All options are off — switch one back on from the legend.',demoTag:'DEMO',liveTag:'LIVE'}
+   noVis:'All options are off — switch one back on from the legend.',demoTag:'DEMO',liveTag:'LIVE',
+   diffOnly:'Differences only',diffHint:'{d} specs differ, {s} are identical. The dimmed rows are the ones that cannot change your mind.'}
 };
 let lang='fa';
 const t=k=>T[lang][k]||k;
@@ -802,7 +813,7 @@ const WINC='#27ae60';
 
 /* One store drives every chart: which dataset, which assets are on, how the
    user weighted the criteria, which slice each donut is showing. */
-const S={key:'laptop',ds:null,cols:[],w:[],touched:false,off:new Set(),pm:'val',pa:0,live:null};
+const S={key:'laptop',ds:null,cols:[],w:[],touched:false,off:new Set(),pm:'val',pa:0,live:null,diffOnly:false};
 
 // Demo data carries {fa,en} bilingual fields; chat data arrives as plain strings.
 function L(v){if(v==null)return v;if(Array.isArray(v))return v;if(typeof v==='object')return v[lang]!=null?v[lang]:(v.fa!=null?v.fa:v.en);return v}
@@ -968,17 +979,60 @@ function weightsHTML(crit){
  '<span class="wtag" id="wtag">'+t('wTag')+'</span></div></div>';
 }
 function ulHTML(arr,cls){arr=arr||[];return arr.length?'<ul class="'+cls+'">'+arr.map(x=>'<li>'+x+'</li>').join('')+'</ul>':'—'}
+
+/* ═══════════ SPEC MATRIX ═══════════
+   Vera returns specs as "CPU: …" lines, one blob per option. Read down two
+   blobs and you are doing the alignment by eye, which is the work the page is
+   supposed to do. Split the labels out, put matching ones on one row, and the
+   comparison becomes a glance instead of a chore. */
+function specPair(s){
+ s=String(s||'').trim();
+ const i=s.indexOf(':');
+ if(i>0&&i<=34){
+  const k=s.slice(0,i).trim(),v=s.slice(i+1).trim();
+  if(k&&v&&!/[.!?؟]$/.test(k))return{k,v};
+ }
+ return{k:'',v:s};
+}
+const specKey=k=>k.toLowerCase().replace(/\s+/g,' ').trim();
+const normSpec=v=>String(v).toLowerCase().replace(/\s+/g,' ').replace(/[.،,;؛]+$/,'').trim();
+function specRows(){
+ const order=[],map={};
+ AS().forEach((a,ai)=>{
+  (L(a.specs)||[]).forEach(s=>{
+   const p=specPair(s);if(!p.k)return;
+   const kk=specKey(p.k);
+   if(!map[kk]){map[kk]={label:p.k,vals:{}};order.push(kk)}
+   if(map[kk].vals[ai]==null)map[kk].vals[ai]=p.v;
+  });
+ });
+ return order.map(kk=>map[kk]);
+}
+function specLoose(ai){
+ const a=AS()[ai];
+ return a?(L(a.specs)||[]).map(specPair).filter(p=>!p.k).map(p=>p.v):[];
+}
 function tableHTML(){
  const A=AS(),ds=S.ds,has=f=>A.some(a=>(L(a[f])||[]).length);
  let th='';A.forEach((a,i)=>th+='<th data-i="'+i+'" style="border-top:3px solid '+S.cols[i]+'"></th>');
- const row=(lbl,fn)=>{let tds='';A.forEach((a,i)=>tds+='<td data-i="'+i+'">'+fn(a)+'</td>');return '<tr><td class="lbl">'+lbl+'</td>'+tds+'</tr>'};
+ const row=(lbl,fn)=>{let tds='';A.forEach((a,i)=>tds+='<td data-i="'+i+'">'+fn(a,i)+'</td>');return '<tr><td class="lbl">'+lbl+'</td>'+tds+'</tr>'};
  let rows='';
- if(has('specs'))rows+=row(t('specs'),a=>(L(a.specs)||[]).join('<br>')||'—');
+ const sp=specRows();
+ sp.forEach(r=>{
+  let tds='';
+  A.forEach((a,i)=>{const v=r.vals[i]==null?'—':r.vals[i];tds+='<td data-i="'+i+'" data-v="'+normSpec(v)+'">'+v+'</td>'});
+  rows+='<tr data-sp="1"><td class="lbl speck">'+r.label+'</td>'+tds+'</tr>';
+ });
+ const loose=A.map((_,i)=>specLoose(i));
+ if(loose.some(x=>x.length))rows+=row(t('specs'),(a,i)=>loose[i].join('<br>')||'—');
+ if(!sp.length&&!loose.some(x=>x.length)&&has('specs'))rows+=row(t('specs'),a=>(L(a.specs)||[]).join('<br>')||'—');
  if(has('pros'))rows+=row(t('pros'),a=>ulHTML(L(a.pros),'pl'));
  if(has('cons'))rows+=row(t('cons'),a=>ulHTML(L(a.cons),'pl mn'));
  if(!ds.fin&&A.some(a=>a.vd))rows+=row(t('verdict'),a=>{if(!a.vd||!VD[a.vd])return '—';const v=VD[a.vd];return '<span class="vd" style="color:'+v.c+';border-color:'+v.c+'">'+(lang==='fa'?v.fa:VDEN[a.vd])+'</span>'});
  if(!rows)return '';
- return '<div class="sec"><h3>📋 '+t('details')+'</h3><div class="mwrap"><table class="cmp" id="dtbl"><tr><td class="lbl"></td>'+th+'</tr>'+rows+'</table></div></div>';
+ const diffBtn=sp.length?'<button class="wbtn difftog" data-diff="1">'+t('diffOnly')+'</button>':'';
+ return '<div class="sec"><h3>📋 '+t('details')+diffBtn+'</h3><div class="mwrap"><table class="cmp" id="dtbl"><tr><td class="lbl"></td>'+th+'</tr>'+rows+'</table></div>'+
+  (sp.length?'<div class="diffhint" id="diffhint"></div>':'')+'</div>';
 }
 function metaHTML(){
  const ds=S.ds,trend=L(ds.trend),live=ds.source&&ds.source!=='demo';
@@ -1047,6 +1101,7 @@ function refresh(){
   const th=document.querySelector('#dtbl th[data-i="'+i+'"]');
   if(th){th.innerHTML=(!ds.fin&&i===W?'👑 ':'')+nm(a);th.style.borderTop='3px solid '+col;th.style.opacity=off?'.4':''}
  });
+ refreshSpecs(vis);
  metricList(true).forEach(m=>{
   let mx=1;vis.forEach(i=>{const v=m.get(A[i]);if(v!=null&&Math.abs(v)>mx)mx=Math.abs(v)});
   let any=false;
@@ -1099,6 +1154,28 @@ function refreshPies(vis){
   else{document.getElementById('dpie2').innerHTML='<div class="emptyb">—</div>';delete DST.dpie2;setCenter('dpie2',-1)}
   legendPie('dpie2l',raw.map(x=>({c:CPAL[x.i%CPAL.length],n:x.c,v:Math.round(x.base)+'/100'+(tot?' · '+Math.round(x.v/tot*100)+'%':'')})));
  }
+}
+// A row every option answers identically carries no decision value, so it is
+// dimmed, counted, and hideable. What is left is the reason to pick one.
+function refreshSpecs(vis){
+ const trs=document.querySelectorAll('#dtbl tr[data-sp]');
+ if(!trs.length)return;
+ let same=0;
+ trs.forEach(tr=>{
+  const vals=vis.map(i=>{const td=tr.querySelector('td[data-i="'+i+'"]');return td?(td.dataset.v||''):''});
+  const eq=vals.length>1&&vals.every(v=>v===vals[0]);
+  if(eq)same++;
+  tr.classList.toggle('same',eq);
+  tr.style.display=(S.diffOnly&&eq)?'none':'';
+  vis.forEach(i=>{const td=tr.querySelector('td[data-i="'+i+'"]');if(td)td.classList.toggle('diffcell',!eq&&vals.length>1)});
+  AS().forEach((_,i)=>{const td=tr.querySelector('td[data-i="'+i+'"]');if(td)td.style.display=S.off.has(i)?'none':''});
+ });
+ document.querySelectorAll('#dtbl th[data-i], #dtbl tr:not([data-sp]) td[data-i]').forEach(el=>{
+  el.style.display=S.off.has(+el.dataset.i)?'none':'';
+ });
+ const btn=document.querySelector('.difftog');if(btn)btn.classList.toggle('on',S.diffOnly);
+ const hint=document.getElementById('diffhint');
+ if(hint)hint.textContent=t('diffHint').replace('{d}',trs.length-same).replace('{s}',same);
 }
 function legendPie(id,items){
  const el=document.getElementById(id);if(!el)return;
@@ -1153,6 +1230,7 @@ function bindDemo(){
   const sa=q('.segb[data-a]');if(sa){S.pa=+sa.dataset.a;return refresh()}
   const fb=q('[data-focus]');if(fb)return focusCrit(+fb.dataset.focus);
   if(q('[data-wreset]'))return resetWeights();
+  if(q('[data-diff]')){S.diffOnly=!S.diffOnly;return refresh()}
   const ak=q('[data-ask]');if(ak)return doAsk(ak.dataset.ask);
  });
  out.addEventListener('input',e=>{
