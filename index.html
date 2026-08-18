@@ -142,6 +142,11 @@ footer{text-align:center;color:#555;font-size:.62rem;margin-top:20px;line-height
 .livebar{max-width:760px;margin:0 auto;padding:0 14px}
 .livebox{display:none;background:linear-gradient(135deg,rgba(52,211,166,.12),rgba(52,211,166,.03));border:1px solid rgba(52,211,166,.4);border-radius:12px;padding:11px 14px;font-size:.72rem;color:#9fe6cd;line-height:1.8;align-items:center;gap:10px;margin-bottom:12px}
 .livebox.on{display:flex}
+.livebox.stale{background:linear-gradient(135deg,rgba(243,156,18,.12),rgba(243,156,18,.03));border-color:rgba(243,156,18,.45);color:#e8c48a}
+.livebox .livetxt{line-height:1.9}
+.livebox .livetxt i{font-style:normal;opacity:.85}
+.livebox .livemake{margin:7px 0 0;margin-inline-start:0;background:#2a1f0d;border-color:rgba(243,156,18,.5);color:#f0c987}
+.livebox .livemake:hover{border-color:var(--los)}
 .livebox .ic{font-size:1.05rem;flex-shrink:0}
 .livebox button{margin-inline-start:auto;background:#0f261f;border:1px solid var(--vline);color:#bfe9da;border-radius:16px;padding:5px 12px;font-size:.64rem;cursor:pointer;font-family:inherit;white-space:nowrap}
 .livebox button:hover{border-color:var(--emerald-bright)}
@@ -198,6 +203,36 @@ footer{text-align:center;color:#555;font-size:.62rem;margin-top:20px;line-height
 .askb{background:var(--vpanel);border:1px solid var(--vline);color:#bfe9da;border-radius:100px;padding:8px 14px;font-size:.68rem;cursor:pointer;font-family:inherit;transition:.18s}
 .askb:hover{border-color:var(--emerald-bright);color:#fff}
 .emptyb{text-align:center;color:var(--mut);font-size:.74rem;padding:18px;line-height:1.9}
+/* step-up ladder */
+.step{background:var(--card);border:1px solid var(--bd);border-left:4px solid var(--bd);border-radius:11px;padding:12px 14px;margin-bottom:10px}
+.step.st-great{border-left-color:var(--win);background:linear-gradient(90deg,rgba(39,174,96,.09),transparent 55%)}
+.step.st-fair{border-left-color:var(--los)}
+.step.st-pricey{border-left-color:#e67e22;background:linear-gradient(90deg,rgba(230,126,34,.07),transparent 55%)}
+.step.st-waste{border-left-color:var(--bad);background:linear-gradient(90deg,rgba(231,76,60,.09),transparent 55%)}
+.stepnames{font-size:.72rem;color:#fff;font-weight:bold;margin-bottom:10px;line-height:1.6}
+.stepnames .arrow{color:var(--mut);font-weight:normal;margin:0 3px}
+.sbrow{display:flex;align-items:center;gap:8px;margin-bottom:5px}
+.sblbl{width:44px;font-size:.62rem;color:#aaa;text-align:right}
+.sbtrack{flex:1;background:#191919;height:11px;border-radius:6px;overflow:hidden}
+.sbfill{height:100%;border-radius:6px;transition:width .6s cubic-bezier(.25,.46,.45,.94)}
+.sbfill.cost{background:#e67e22}.sbfill.gain{background:var(--win)}
+.sbrow b{width:52px;font-size:.64rem;font-family:'Courier New',monospace;text-align:left;color:#ddd}
+.stepfoot{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-top:9px}
+.stepvd{font-size:.62rem;font-weight:bold;padding:3px 10px;border-radius:11px;border:1px solid;white-space:nowrap}
+.st-great .stepvd{color:var(--win);border-color:var(--win)}
+.st-fair .stepvd{color:var(--los);border-color:var(--los)}
+.st-pricey .stepvd{color:#e67e22;border-color:#e67e22}
+.st-waste .stepvd{color:var(--bad);border-color:var(--bad)}
+.stepwhy{font-size:.64rem;color:var(--mut);line-height:1.7}
+
+/* value-against-price plot */
+.poswrap{display:flex;flex-direction:column;align-items:center}
+.poswrap svg{max-width:360px;width:100%;height:auto;overflow:visible}
+.pospt{cursor:pointer;transition:r .15s}
+.pospt:hover{r:11}
+.poskey{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;margin-top:10px;font-size:.62rem}
+.pk.good{color:#7fd6a8}.pk.bad{color:#e0a06a}.pk.fairk{color:#888}
+
 /* spec matrix: one row per feature, so the eye compares across not down */
 .cmp td.speck{color:#bbb;font-weight:600;font-size:.62rem;text-align:start;background:#171717}
 .cmp td.diffcell{background:rgba(52,152,219,.07)}
@@ -271,11 +306,7 @@ footer{text-align:center;color:#555;font-size:.62rem;margin-top:20px;line-height
 </div>
 
 <div class="livebar">
-  <div class="livebox" id="livebox">
-    <span class="ic">⚡</span>
-    <span data-k="liveNote">این نمودارها از آخرین تحلیل Vera ساخته شده‌اند.</span>
-    <button onclick="show('laptop')" data-k="backDemos">نمونه‌ها</button>
-  </div>
+  <div class="livebox" id="livebox"></div>
 </div>
 
 <div class="wrap">
@@ -666,16 +697,36 @@ const T={
    wTitle:'اولویت‌های تو',wSub:'وزن هر معیار را جابه‌جا کن — امتیاز، برنده و همه نمودارها زنده تغییر می‌کنند.',wReset:'بازنشانی وزن‌ها',wTag:'شخصی‌سازی‌شده',wWin:'با اولویت‌های تو، <b>{n}</b> جلو می‌افتد.',wFocus:'تمرکز روی {n}',
    pieShare:'سهم از کل',pieMix:'ترکیب معیارها',shareOf:'سهم',mixOf:'ترکیب',total:'مجموع',
    liveT:'⚡ نتیجه چت',liveNote:'این نمودارها از آخرین تحلیل Vera ساخته شده‌اند.',backDemos:'نمونه‌ها',chartReady:'📊 نمودارهای این تحلیل آماده شد — ببین',
+   liveFrom:'نمودارهای این سؤال:',liveStale:'⚠️ پاسخ تازه‌ات نمودار نداشت. چیزی که پایین می‌بینی هنوز مربوط به این سؤال است:',
+   makeChart:'📊 برای سؤال تازه نمودار بساز',
+   askNums:'برای همین مقایسه یک جدول عددی بده: قیمت، ارزش تخمینی، امتیاز از ۱۰۰، و سه تا چهار معیار که هرکدام برای هر گزینه نمره‌ای از ۱۰۰ داشته باشد. فقط عدد، بدون توضیح اضافه در خانه‌های جدول.',
    askWhy:'چرا این برنده شد؟',askAlt:'گزینه بهتری هم هست؟',askW:'با اولویت‌های من دوباره تحلیل کن',askTitle:'ادامه بده با Vera',
    noVis:'همه گزینه‌ها خاموش‌اند — یکی را از راهنما روشن کن.',demoTag:'DEMO',liveTag:'LIVE',
-   diffOnly:'فقط تفاوت‌ها',diffHint:'{d} ویژگی فرق دارند، {s} ویژگی یکسان‌اند. سطرهای کم‌رنگ همان‌هایی‌اند که در انتخاب تو اثری ندارند.'},
+   diffOnly:'فقط تفاوت‌ها',diffHint:'{d} ویژگی فرق دارند، {s} ویژگی یکسان‌اند. سطرهای کم‌رنگ همان‌هایی‌اند که در انتخاب تو اثری ندارند.',
+   stepT:'پله بالاتر',stepSub:'گزینه‌ها از ارزان به گران چیده شده‌اند. هر پله می‌گوید با چند درصد پول بیشتر، چند درصد ارزش بیشتر می‌گیری.',
+   stepPrice:'قیمت',stepScore:'امتیاز',stepGreat:'پله ارزشمند',stepFair:'منصفانه',stepPricey:'پله گران',stepWaste:'اسراف',
+   stepWhyGreat:'ارزشی که می‌گیری بیشتر از پولی است که می‌دهی.',stepWhyFair:'تقریباً همان‌قدر که می‌دهی، می‌گیری.',
+   stepWhyPricey:'پول خیلی بیشتر، ارزش کمی بیشتر.',stepWhyWaste:'گران‌تر است ولی بهتر نیست. نپر.',
+   stepNone:'برای این مقایسه به قیمت حداقل دو گزینه نیاز است.',
+   posT:'ارزش در برابر قیمت',posSub:'خط وسط یعنی «قیمت منصفانه». بالای خط ارزشی بیشتر از پولت می‌گیری، زیر خط گران‌تر از ارزشش است.',
+   posFair:'قیمت منصفانه',posBargain:'ارزش بیشتر از قیمت',posOver:'گران‌تر از ارزش',posNone:'برای این نمودار هم قیمت لازم است هم ارزش تخمینی.'},
  en:{heroH:'Know the real value of anything with <b>Vera</b>',heroP:'Before any purchase, weigh the real value. Vera identifies, decomposes and values any asset so your money makes the best choice — not less, not overpriced.',vp1t:'Step Up',vp1d:'Sometimes a little more money buys far more value',vp2t:'Better Option',vp2d:'Maybe a better choice exists you don\'t know yet',vp3t:'No Waste',vp3d:'Sometimes cheaper does the same job perfectly',vTitle:'Live analysis with Vera',vSub:'Ask about any asset — real decomposition, valuation & comparison',vLive:'Live',vWelcome:'Tap a sample or type your question — Vera builds a full value table.',vPh:'e.g. compare iPhone 14 with Galaxy S23 Ultra',demoT:'🎨 Live charts',demoP:'Every analysis you run with Vera turns into charts right here: score gauges, value-share donuts, a multi-dimensional radar and bar comparisons — and you can re-weight your priorities to move the result live.',tryT:'👇 Pick a set, or just ask Vera',footT:'HardAnalyzer • Smart valuation powered by Vera',score:'Vera Score',val:'Est. Value',price:'Listing',profit:'Buyer Profit',analysis:'Vera Verdict',details:'Full Details',specs:'Specs',pros:'Pros',cons:'Cons',verdict:'Verdict',radar:'Multi-dimensional Radar',itembyitem:'Item-by-item Comparison',trend:'Market Trend',neutral:'Neutral data — no buy/sell advice',
    wTitle:'Your priorities',wSub:'Drag each criterion\'s weight — scores, the winner and every chart update live.',wReset:'Reset weights',wTag:'Personalized',wWin:'With your priorities, <b>{n}</b> takes the lead.',wFocus:'Focus on {n}',
    pieShare:'Share of total',pieMix:'Criteria mix',shareOf:'share',mixOf:'mix',total:'Total',
    liveT:'⚡ Chat result',liveNote:'These charts are built from Vera\'s latest analysis.',backDemos:'Samples',chartReady:'📊 Charts for this analysis are ready — take a look',
+   liveFrom:'Charts for:',liveStale:'⚠️ Your latest answer had nothing to chart. What is below still belongs to:',
+   makeChart:'📊 Chart my latest question',
+   askNums:'Give me a numeric table for this comparison: price, estimated value, a score out of 100, and three or four criteria each scored out of 100 per option. Figures only in the cells, no prose.',
    askWhy:'Why did this win?',askAlt:'Is there a better option?',askW:'Re-analyze with my priorities',askTitle:'Keep going with Vera',
    noVis:'All options are off — switch one back on from the legend.',demoTag:'DEMO',liveTag:'LIVE',
-   diffOnly:'Differences only',diffHint:'{d} specs differ, {s} are identical. The dimmed rows are the ones that cannot change your mind.'}
+   diffOnly:'Differences only',diffHint:'{d} specs differ, {s} are identical. The dimmed rows are the ones that cannot change your mind.',
+   stepT:'Step up',stepSub:'Options ordered cheapest to dearest. Each step says what percentage more you pay, and what percentage more you get.',
+   stepPrice:'Price',stepScore:'Score',stepGreat:'Worth the step',stepFair:'Fair',stepPricey:'Pricey step',stepWaste:'Waste',
+   stepWhyGreat:'You gain more than you pay for.',stepWhyFair:'You get about what you pay for.',
+   stepWhyPricey:'A lot more money for a little more value.',stepWhyWaste:'Costs more and is not better. Skip it.',
+   stepNone:'This needs a price on at least two options.',
+   posT:'Value against price',posSub:'The line is fair price. Above it you get more value than you pay; below it you are paying over the odds.',
+   posFair:'fair price',posBargain:'value above price',posOver:'priced above value',posNone:'This needs both a price and an estimated value.'}
 };
 let lang='fa';
 const t=k=>T[lang][k]||k;
@@ -776,7 +827,8 @@ async function vSend(){
   vHistory.push({role:'assistant',content:shown});
   try{
    const ds=datasetFromReply(reply,shown,usedContract);
-   if(ds){applyLive(ds);vChartCTA(bub)}
+   if(ds){applyLive(ds,text);vChartCTA(bub)}
+   else markLiveStale(text);
    vDiagLine(bub,reply);
   }catch(e){}                                    // a chart failure must never eat the answer
  }catch(err){
@@ -813,7 +865,7 @@ const WINC='#27ae60';
 
 /* One store drives every chart: which dataset, which assets are on, how the
    user weighted the criteria, which slice each donut is showing. */
-const S={key:'laptop',ds:null,cols:[],w:[],touched:false,off:new Set(),pm:'val',pa:0,live:null,diffOnly:false};
+const S={key:'laptop',ds:null,cols:[],w:[],touched:false,off:new Set(),pm:'val',pa:0,live:null,diffOnly:false,stale:''};
 
 // Demo data carries {fa,en} bilingual fields; chat data arrives as plain strings.
 function L(v){if(v==null)return v;if(Array.isArray(v))return v;if(typeof v==='object')return v[lang]!=null?v[lang]:(v.fa!=null?v.fa:v.en);return v}
@@ -961,6 +1013,93 @@ function barsHTML(){
   A.map((a,i)=>'<div class="brow" data-i="'+i+'" data-m="'+m.k+'"><div class="bname tg" data-i="'+i+'">'+short(nm(a),16)+'</div><div class="btrack"><div class="bfill"></div></div><div class="bval"></div></div>').join('')+
   '</div>').join('')+'</div>';
 }
+/* ═══════════ THE TWO QUESTIONS A BUYER ACTUALLY ASKS ═══════════
+   "Is this worth what they want for it?" and "if I spend a bit more, do I get
+   meaningfully more?" — the two lines printed at the top of this page. A share
+   of total is neither, so these two carry the section. */
+
+// Step up: options cheapest first, each gap expressed as percent paid against
+// percent gained. Unitless, so "13% dearer, 93% better" reads on its own.
+function stepData(){
+ const A=AS();
+ const vis=visIdx().filter(i=>A[i].price!=null&&A[i].price>0&&effScore(A[i])>0).sort((x,y)=>A[x].price-A[y].price);
+ if(vis.length<2)return null;
+ const steps=[];
+ for(let k=1;k<vis.length;k++){
+  const a=A[vis[k-1]],b=A[vis[k]];
+  const dp=b.price-a.price;if(dp<=0)continue;
+  const sa=effScore(a),sb=effScore(b);
+  const pPct=dp/a.price*100,sPct=sa>0?(sb-sa)/sa*100:0;
+  const ratio=pPct>0?sPct/pPct:0;
+  const verdict=sPct<=0?'waste':ratio>=1?'great':ratio>=.5?'fair':'pricey';
+  steps.push({from:vis[k-1],to:vis[k],dp,pPct,sPct,ratio,verdict,
+   dv:(a.val!=null&&b.val!=null)?b.val-a.val:null});
+ }
+ return steps.length?steps:null;
+}
+function stepHTML(){
+ return '<div class="sec"><h3>🔼 '+t('stepT')+'</h3><div class="wsub">'+t('stepSub')+'</div><div id="dsteps"></div></div>';
+}
+function refreshSteps(){
+ const box=document.getElementById('dsteps');if(!box)return;
+ const steps=stepData(),A=AS();
+ if(!steps){box.innerHTML='<div class="emptyb">'+t('stepNone')+'</div>';return}
+ const mx=Math.max.apply(null,steps.map(s=>Math.max(s.pPct,Math.abs(s.sPct))).concat([1]));
+ const pc=n=>(n>0?'+':'')+Math.round(n)+'%';
+ box.innerHTML=steps.map(s=>{
+  const w=v=>Math.min(100,Math.max(Math.abs(v)/mx*100,2)).toFixed(1)+'%';
+  return '<div class="step st-'+s.verdict+'">'+
+   '<div class="stepnames">'+short(nm(A[s.from]),18)+' <span class="arrow">←</span> '+short(nm(A[s.to]),18)+'</div>'+
+   '<div class="sbrow"><span class="sblbl">'+t('stepPrice')+'</span><div class="sbtrack"><div class="sbfill cost" style="width:'+w(s.pPct)+'"></div></div><b>'+pc(s.pPct)+'</b></div>'+
+   '<div class="sbrow"><span class="sblbl">'+t('stepScore')+'</span><div class="sbtrack"><div class="sbfill gain" style="width:'+w(s.sPct)+'"></div></div><b>'+pc(s.sPct)+'</b></div>'+
+   '<div class="stepfoot"><span class="stepvd">'+t('step'+s.verdict.charAt(0).toUpperCase()+s.verdict.slice(1))+'</span>'+
+   '<span class="stepwhy">'+t('stepWhy'+s.verdict.charAt(0).toUpperCase()+s.verdict.slice(1))+' ('+fmt(s.dp)+' '+(lang==='fa'?'بیشتر':'more')+')</span></div>'+
+   '</div>';
+ }).join('');
+}
+
+// Value against price, with the fair-price diagonal. Both axes share one scale
+// so the line really is 45 degrees and "above it" means what it looks like.
+function posHTML(){
+ return '<div class="sec"><h3>🎯 '+t('posT')+'</h3><div class="wsub">'+t('posSub')+'</div><div class="poswrap" id="dpos"></div></div>';
+}
+function refreshPos(){
+ const box=document.getElementById('dpos');if(!box)return;
+ const A=AS(),vis=visIdx().filter(i=>A[i].price!=null&&A[i].val!=null);
+ if(vis.length<1){box.innerHTML='<div class="emptyb">'+t('posNone')+'</div>';return}
+ const all=[];vis.forEach(i=>{all.push(A[i].price,A[i].val)});
+ let lo=Math.min.apply(null,all),hi=Math.max.apply(null,all);
+ const pad=(hi-lo)*.18||Math.max(hi*.18,1);
+ lo=Math.max(0,lo-pad);hi=hi+pad;
+ const W=340,H=260,ml=52,mr=16,mt=16,mb=38;
+ const px=v=>ml+(v-lo)/(hi-lo)*(W-ml-mr);
+ const py=v=>H-mb-(v-lo)/(hi-lo)*(H-mt-mb);
+ let g='<rect x="'+ml+'" y="'+mt+'" width="'+(W-ml-mr)+'" height="'+(H-mt-mb)+'" fill="none" stroke="#242424"/>';
+ // the fair-price diagonal, plus a wash marking the side where value beats price
+ g+='<polygon points="'+px(lo)+','+py(lo)+' '+px(hi)+','+py(hi)+' '+px(lo)+','+py(hi)+'" fill="rgba(39,174,96,.07)"/>';
+ g+='<line x1="'+px(lo)+'" y1="'+py(lo)+'" x2="'+px(hi)+'" y2="'+py(hi)+'" stroke="#4a4a4a" stroke-dasharray="5 4"/>';
+ [0,.5,1].forEach(f=>{
+  const v=lo+(hi-lo)*f;
+  g+='<text x="'+(ml-6)+'" y="'+(py(v)+3.5)+'" text-anchor="end" fill="#777" font-size="9">'+fmt(Math.round(v))+'</text>';
+  g+='<text x="'+px(v)+'" y="'+(H-mb+15)+'" text-anchor="middle" fill="#777" font-size="9">'+fmt(Math.round(v))+'</text>';
+ });
+ g+='<text x="'+(ml+(W-ml-mr)/2)+'" y="'+(H-4)+'" text-anchor="middle" fill="#999" font-size="10">'+t('price')+'</text>';
+ g+='<text transform="translate(13,'+(mt+(H-mt-mb)/2)+') rotate(-90)" text-anchor="middle" fill="#999" font-size="10">'+t('val')+'</text>';
+ const W_=winIdx();
+ vis.forEach(i=>{
+  const a=A[i],x=px(a.price),y=py(a.val),good=a.val>=a.price;
+  g+='<circle class="pospt" data-i="'+i+'" cx="'+x.toFixed(1)+'" cy="'+y.toFixed(1)+'" r="'+(i===W_?9:7)+'" fill="'+S.cols[i]+'" stroke="'+(i===W_?'#fff':'#0d0d0d')+'" stroke-width="2"/>';
+  g+='<text x="'+x.toFixed(1)+'" y="'+(y-13).toFixed(1)+'" text-anchor="middle" fill="'+(good?'#7fd6a8':'#e0a06a')+'" font-size="9.5">'+short(nm(a),14)+'</text>';
+ });
+ box.innerHTML='<svg viewBox="0 0 '+W+' '+H+'">'+g+'</svg>'+
+  '<div class="poskey"><span class="pk good">▲ '+t('posBargain')+'</span><span class="pk fairk">╌ '+t('posFair')+'</span><span class="pk bad">▼ '+t('posOver')+'</span></div>';
+ box.querySelectorAll('.pospt').forEach(el=>{
+  const a=A[+el.dataset.i];
+  el.addEventListener('mouseover',e=>tipShow(e,'<b>'+nm(a)+'</b><br>'+t('price')+': '+money(a,'price')+'<br>'+t('val')+': '+money(a,'val')+'<br>'+t('profit')+': '+(a.val-a.price>0?'+':'')+fmt(a.val-a.price)));
+  el.addEventListener('mousemove',tipMove);
+  el.addEventListener('mouseout',tipHide);
+ });
+}
 function piesHTML(){
  const ms=metricList(false),crit=critNames();
  if(!ms.length&&!crit.length)return '';
@@ -1066,6 +1205,7 @@ function renderDemo(){
  let h='<div id="dban"></div>';
  if(A.some(a=>a.score!=null))h+='<div class="sec"><h3>🎯 '+t('score')+tag+'</h3>'+legendHTML()+'<div class="grow">'+A.map((a,i)=>gaugeHTML(a,i)).join('')+'</div></div>';
  if(crit.length)h+=weightsHTML(crit);
+ h+=stepHTML()+posHTML();
  h+=piesHTML()+barsHTML();
  if(crit.length>=3)h+='<div class="sec"><h3>🕸️ '+t('radar')+'</h3>'+legendHTML()+'<div class="radarwrap" id="dradar"></div></div>';
  const an=L(ds.analysis);
@@ -1119,6 +1259,8 @@ function refresh(){
   const mb=document.querySelector('.mblock[data-mb="'+m.k+'"]');if(mb)mb.style.display=any?'':'none';
  });
  refreshPies(vis);
+ refreshSteps();
+ refreshPos();
 }
 function refreshPies(vis){
  const A=AS(),ms=metricList(false),crit=critNames();
@@ -1219,6 +1361,14 @@ function doAsk(kind){
  askVera(q);
 }
 function bindDemo(){
+ const lb=document.getElementById('livebox');
+ if(lb&&!lb.dataset.bound){
+  lb.dataset.bound='1';
+  lb.addEventListener('click',e=>{
+   if(e.target.closest('[data-backdemo]'))return show('laptop');
+   if(e.target.closest('[data-mkchart]'))return askVera(t('askNums'));
+  });
+ }
  const out=document.getElementById('out');if(!out||out.dataset.bound)return;
  out.dataset.bound='1';
  out.addEventListener('click',e=>{
@@ -1260,17 +1410,33 @@ function show(key){
  const ms=metricList(false);S.pm=ms.length?ms[0].k:'val';
  banCache='';DST.dpie1=null;DST.dpie2=null;
  document.querySelectorAll('.chip').forEach(c=>c.classList.toggle('active',c.dataset.k===key));
- const lb=document.getElementById('livebox');if(lb)lb.classList.toggle('on',key==='live');
+ renderLiveBox();
  renderDemo();
  bindDemo();
 }
-// Called when a Vera reply carried enough structure to draw.
-function applyLive(ds){S.live=ds;buildChips();show('live')}
+/* Charts must always say which question they answer. Leaving an older set on
+   screen after a new answer is worse than showing nothing: it reads as the
+   reply to what was just asked. So the question is carried with the dataset,
+   printed above the charts, and an answer that produced nothing to plot says
+   so out loud instead of letting the stale set speak for it. */
+function applyLive(ds,q){S.live=ds;S.live.q=q||'';S.stale='';buildChips();show('live');renderLiveBox()}
+function markLiveStale(q){if(!S.live)return;S.stale=q||'';renderLiveBox()}
+function renderLiveBox(){
+ const box=document.getElementById('livebox');if(!box)return;
+ if(S.key!=='live'||!S.live){box.classList.remove('on');return}
+ box.classList.add('on');
+ box.classList.toggle('stale',!!S.stale);
+ const q=S.live.q||L(S.live.title)||'';
+ box.innerHTML='<span class="ic">'+(S.stale?'⚠️':'⚡')+'</span>'+
+  '<span class="livetxt"><i>'+(S.stale?t('liveStale'):t('liveFrom'))+'</i> «'+short(escHTML(q),90)+'»'+
+  (S.stale?'<br><button class="livemake" data-mkchart="1">'+t('makeChart')+'</button>':'')+'</span>'+
+  '<button data-backdemo="1">'+t('backDemos')+'</button>';
+}
 function buildChips(){
  const c=document.getElementById('chips');if(!c)return;
  c.innerHTML='';
  const mk=(key,label,cls)=>{const ch=document.createElement('div');ch.className='chip'+(cls||'');ch.dataset.k=key;ch.textContent=label;ch.onclick=()=>show(key);c.appendChild(ch)};
- if(S.live)mk('live',t('liveT')+(S.live.title?' · '+short(S.live.title,26):''),' live');
+ if(S.live)mk('live',t('liveT')+' · '+short(S.live.q||L(S.live.title)||'',26),' live');
  Object.keys(DEMO).forEach(k=>mk(k,L(DEMO[k].title)));
  c.querySelectorAll('.chip').forEach(x=>x.classList.toggle('active',x.dataset.k===S.key));
 }
